@@ -81,15 +81,13 @@ export default function FeaturesPage() {
 
       <section className="bg-gradient-to-br from-[#1b37b6] via-[#132c98] to-[#0c1f74] py-16 text-white">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 md:grid-cols-[1.1fr_1fr]">
-          <div className="rounded-3xl bg-white/10 p-2">
-            <Image
-              src="/feature-automation.svg"
-              alt="AI automation"
-              width={640}
-              height={420}
-              className="h-auto w-full rounded-2xl"
-            />
-          </div>
+          <Image
+            src="/feature-automation.png"
+            alt="AI automation"
+            width={557}
+            height={513}
+            className="h-auto w-full rounded-2xl shadow-2xl"
+          />
           <div>
             <h2 className="text-2xl font-semibold leading-snug">
               AI-driven automation
@@ -120,19 +118,13 @@ export default function FeaturesPage() {
           </p>
         </div>
         <div className="mx-auto mt-10 grid w-full max-w-6xl items-center gap-10 px-6 md:grid-cols-[1fr_1.1fr]">
-          <div className="relative">
-            <Image
-              src="/feature-steps.svg"
-              alt="Steps preview"
-              width={520}
-              height={420}
-              className="h-auto w-full rounded-2xl"
-            />
-            <div className="absolute bottom-6 left-6 rounded-xl bg-[#0f172a] px-4 py-3 text-xs text-white shadow-lg">
-              <p className="font-semibold">Tax Filed</p>
-              <p className="text-white/70">Quick Notification of your Tax Filed</p>
-            </div>
-          </div>
+          <Image
+            src="/feature-steps.png"
+            alt="Steps preview"
+            width={542}
+            height={621}
+            className="h-auto w-full rounded-2xl shadow-2xl"
+          />
           <div className="space-y-5">
             {steps.map((step, index) => (
               <div key={step.title} className="flex items-start gap-4">

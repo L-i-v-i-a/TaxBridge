@@ -26,11 +26,11 @@ export default function AboutPage() {
       <section className="py-16">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 md:grid-cols-[1.1fr_1fr]">
           <Image
-            src="/about-hero.svg"
+            src="/about-hero.png"
             alt="About TaxBridge"
-            width={640}
-            height={420}
-            className="h-auto w-full rounded-2xl"
+            width={541}
+            height={493}
+            className="h-auto w-full rounded-2xl shadow-xl"
           />
           <div>
             <h2 className="text-2xl font-semibold text-[#102b9a]">About Us</h2>
@@ -75,11 +75,11 @@ export default function AboutPage() {
             </div>
           </div>
           <Image
-            src="/about-team.svg"
+            src="/about-team.png"
             alt="Team collaboration"
-            width={620}
-            height={420}
-            className="h-auto w-full rounded-2xl"
+            width={616}
+            height={585}
+            className="h-auto w-full rounded-2xl shadow-xl"
           />
         </div>
       </section>
