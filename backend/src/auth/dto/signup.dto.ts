@@ -3,9 +3,19 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsEmail, IsOptional, IsDateString, MinLength } from 'class-validator';
 
 export class SignupDto {
-  @ApiProperty({ example: 'Olivia Adebayo', description: 'Full name' })
+  @ApiProperty({ example: 'Olivia', description: 'First name' })
   @IsString()
-  name: string;
+  firstName: string;
+
+  @ApiProperty({ example: 'Adebayo', description: 'Last name' })
+  @IsString()
+  lastName: string;
+
+  // legacy full-name field (optional) kept for backward compatibility
+  @ApiPropertyOptional({ example: 'Olivia Adebayo', description: 'Full name (optional, will be derived from first/last if provided)' })
+  @IsOptional()
+  @IsString()
+  name?: string;
 
   @ApiProperty({ example: 'olivia_ade', minLength: 4 })
   @IsString()

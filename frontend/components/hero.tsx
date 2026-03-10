@@ -1,5 +1,5 @@
 import React from 'react';
-import Nav from '../nav/nav';
+import Nav from './nav';
 export default function Hero() {
     return (
         <div className="min-h-screen flex flex-col items-center justify-start px-6 pt-0 pb-10">

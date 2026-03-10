@@ -23,7 +23,7 @@ export default function Nav() {
             <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/pricing">
               Pricing
             </Link>
-            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/about-us">
+            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/about">
               About us
             </Link>
             <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/contact">

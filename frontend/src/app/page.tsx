@@ -1,8 +1,8 @@
 
-import Hero from "./components/Hero/hero";
-import Nav from "./components/nav/nav";
+import Hero from "../../components/hero";
+import Nav from "../../components/nav";
 
-import Price from "./pages/price";
+
 
 export default function Home() {
   return (
@@ -21,8 +21,6 @@ export default function Home() {
           <Hero />
         </section>
       </div>
-
-      <Price />
     </main>
   );
 }
