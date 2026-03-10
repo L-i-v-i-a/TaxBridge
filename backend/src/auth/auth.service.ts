@@ -55,6 +55,22 @@ export class AuthService {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
+
+    // Send welcome email after successful login (non-blocking)
+    if (this.resend) {
+      try {
+        await this.resend.emails.send({
+          from: 'Taxbridge <no-reply@yourdomain.com>',
+          to: [email],
+          subject: 'Welcome back to Taxbridge!',
+          html: `<p>Hi ${user.name},</p><p>Welcome back! You've successfully logged in to your Taxbridge account.</p><p>Happy filing!</p>`,
+        });
+      } catch (err) {
+        console.error('Welcome email failed to send:', err);
+        // Don't fail login if email fails
+      }
+    }
+
     return this.signToken(user.id, user.email);
   }
 

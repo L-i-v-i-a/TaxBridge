@@ -57,7 +57,7 @@ describe('AuthService', () => {
     const email = 'a@b.com';
     const password = 'pass';
     // configure mock user and bcrypt compare
-    const mockUser = { id: '1', email, password: 'hashed' };
+    const mockUser = { id: '1', email, password: 'hashed', name: 'Test' };
     jest.spyOn(service['prisma'].user, 'findUnique').mockResolvedValue(mockUser);
     jest.spyOn(bcrypt, 'compare').mockResolvedValue(true);
 
