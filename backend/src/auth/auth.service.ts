@@ -1,26 +1,31 @@
-// src/auth/auth.service.ts
-import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-
 import * as bcrypt from 'bcrypt';
-
-import { Resend } from 'resend';
-
-import { PrismaService } from '../prisma/prisma.service'; // adjust path if needed
+import { PrismaService } from '../prisma.service'; // adjust path if needed
 import { SignupDto } from './dto/signup.dto';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { Resend } from 'resend';
 
 @Injectable()
 export class AuthService {
+  private resend: Resend | null = null;
+
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
-  ) {}
+  ) {
+    // Safe initialization – runs after .env is loaded
+    const apiKey = this.config.get<string>('RESEND_API_KEY');
 
-  // 1. signup – must exist and match controller call
+    if (apiKey) {
+      this.resend = new Resend(apiKey);
+      console.log('✅ Resend initialized with API key');
+    } else {
+      console.warn('⚠️ RESEND_API_KEY not found in environment – email sending disabled');
+    }
+  }
+
   async signup(dto: SignupDto) {
     const existing = await this.prisma.user.findFirst({
       where: { OR: [{ email: dto.email }, { username: dto.username }] },
@@ -29,7 +34,7 @@ export class AuthService {
 
     const hashed = await bcrypt.hash(dto.password, 10);
 
-    const user = await this.prisma.user.create({
+    await this.prisma.user.create({
       data: {
         name: dto.name,
         username: dto.username,
@@ -41,10 +46,10 @@ export class AuthService {
       },
     });
 
-    return this.signToken(user.id, user.email);
+    // do not issue token on signup – keep client flow simple
+    return { message: 'Signup successful' };
   }
 
-  // 2. login
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -53,30 +58,37 @@ export class AuthService {
     return this.signToken(user.id, user.email);
   }
 
-  // 3. forgotPassword
   async forgotPassword(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new BadRequestException('Email not found');
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    const expires = new Date(Date.now() + 10 * 60 * 1000);
 
     await this.prisma.user.update({
       where: { email },
       data: { otp, otpExpiresAt: expires },
     });
 
-    await resend.emails.send({
-      from: 'Taxbridge <no-reply@yourdomain.com>', // update domain after verification
-      to: [email],
-      subject: 'Taxbridge Password Reset OTP',
-      html: `<p>Your OTP is: <strong>${otp}</strong></p><p>Valid for 10 minutes.</p>`,
-    });
+    if (!this.resend) {
+      console.warn('Email sending skipped – Resend not configured');
+      return { message: 'OTP would be sent (email service not configured in this environment)' };
+    }
 
-    return { message: 'OTP sent to your email' };
+    try {
+      await this.resend.emails.send({
+        from: 'Taxbridge <no-reply@yourdomain.com>',
+        to: [email],
+        subject: 'Your Taxbridge Password Reset OTP',
+        html: `<p>Your OTP is: <strong>${otp}</strong></p><p>Valid for 10 minutes.</p>`,
+      });
+      return { message: 'OTP sent to your email' };
+    } catch (err) {
+      console.error('Resend email error:', err);
+      throw new InternalServerErrorException('Failed to send reset email');
+    }
   }
 
-  // 4. resetPassword
   async resetPassword(email: string, otp: string, newPassword: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (
@@ -97,7 +109,6 @@ export class AuthService {
     return { message: 'Password reset successful' };
   }
 
-  // 5. changePassword
   async changePassword(userId: string, oldPassword: string, newPassword: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new UnauthorizedException('User not found');
@@ -115,7 +126,6 @@ export class AuthService {
     return { message: 'Password changed successfully' };
   }
 
-  // 6. getProfile
   async getProfile(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -133,22 +143,17 @@ export class AuthService {
     return user;
   }
 
-  // 7. updateProfile (basic version – add file handling later)
   async updateProfile(userId: string, dto: any, file?: Express.Multer.File) {
     let profilePicture: string | undefined;
 
     if (file) {
-      // For now just log – in production use Cloudinary/S3
       console.log('Uploaded file:', file.originalname);
-      profilePicture = `/uploads/${file.filename}`; // assumes diskStorage
+      profilePicture = `/uploads/${file.filename}`;
     }
 
     const updated = await this.prisma.user.update({
       where: { id: userId },
-      data: {
-        ...dto,
-        profilePicture,
-      },
+      data: { ...dto, profilePicture },
       select: {
         id: true,
         name: true,
@@ -162,7 +167,6 @@ export class AuthService {
     return updated;
   }
 
-  // Helper
   private signToken(id: string, email: string) {
     const payload = { sub: id, email };
     return {
