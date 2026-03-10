@@ -5,9 +5,10 @@ import { AppService } from './app.service';
 
 import { FeaturesModule } from './features/features.module';
 import { RefundCalculatorModule } from './refund-calculator/refund-calculator.module';  // Add this
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [FeaturesModule, RefundCalculatorModule],  // Add here
+  imports: [FeaturesModule, RefundCalculatorModule, AuthModule],  // Add here
   controllers: [AppController],
   providers: [AppService],
 })
