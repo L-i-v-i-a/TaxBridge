@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { FeaturesModule } from './features/features.module';
 import { RefundCalculatorModule } from './refund-calculator/refund-calculator.module';
 import { ContactModule } from './contact/contact.module';
+import { PricingModule } from './pricing/pricing.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ContactModule } from './contact/contact.module';
     RefundCalculatorModule,
     AuthModule,
     ContactModule,
+    PricingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

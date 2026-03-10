@@ -45,3 +45,14 @@ model Subscriber {
   email        String   @unique
   subscribedAt DateTime @default(now())
 }
+
+model PricingPlan {
+  id        String   @id @default(uuid())
+  title     String
+  features  String[] // array of feature strings
+  price     Float
+  discount  Float?   // optional discount percentage or amount
+  type      String   // 'monthly' or 'yearly'
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

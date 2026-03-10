@@ -105,8 +105,8 @@ describe('AuthService', () => {
 
   it('refreshTokens should verify and return new pair', async () => {
     // generate a real jwt using service helper
-    const tokens = service['signTokens']('1', 'a@b.com');
-    const spy = jest.spyOn(service['prisma'].user, 'findUnique').mockResolvedValue({ id: '1', email: 'a@b.com' } as any);
+    const tokens = service['signTokens']('1', 'a@b.com', false);
+    const spy = jest.spyOn(service['prisma'].user, 'findUnique').mockResolvedValue({ id: '1', email: 'a@b.com', isAdmin: false } as any);
     const res = await service.refreshTokens(tokens.refresh_token);
     expect(res).toHaveProperty('access_token');
     expect(res).toHaveProperty('refresh_token');

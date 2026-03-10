@@ -15,13 +15,22 @@ export class AdminGuard implements CanActivate {
     if (!token) return false;
 
     try {
-      const payload = this.jwt.verify(token);
+      const payload: any = this.jwt.verify(token);
+      console.log('AdminGuard payload:', payload);
+      // first check admin flag in token
+      if (payload.isAdmin) {
+        console.log('AdminGuard approved by token flag');
+        return true;
+      }
+      // fallback to database in case token lacks flag
       const user = await this.prisma.user.findUnique({
         where: { id: payload.sub },
         select: { isAdmin: true },
       });
+      console.log('AdminGuard db user check:', user);
       return user?.isAdmin === true;
-    } catch {
+    } catch (err) {
+      console.error('AdminGuard jwt verify error:', err);
       return false;
     }
   }
