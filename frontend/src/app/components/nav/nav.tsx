@@ -35,7 +35,7 @@ export default function Nav() {
             <button className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
               Login
             </button>
-            <button className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium">
+            <button className="bg-white text-[#0D23AD] hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium">
               Sign Up
             </button>
           </div>
