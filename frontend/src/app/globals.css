@@ -1,17 +1,14 @@
 @import "tailwindcss";
 
 :root {
-<<<<<<< HEAD
   --background: #f5f6fb;
   --foreground: #0b0f1f;
   --primary: #102b9a;
   --primary-dark: #0c1f74;
   --muted: #6b7280;
-=======
-  --background: #ffffff;
-  --foreground: #171717;
-  --brand: #1d4ed8; /* unified blue used across the pricing page */
->>>>>>> e9f1eb7 (Move Pricing component into folder, restructure pages, and update styling)
+
+  /* Pricing page brand color */
+  --brand: #1d4ed8;
 }
 
 @theme inline {
