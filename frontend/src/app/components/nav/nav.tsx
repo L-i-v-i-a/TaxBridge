@@ -1,3 +1,4 @@
+import Link from 'next/link';
 export default function Nav() {
   return (
     <section>
@@ -6,28 +7,28 @@ export default function Nav() {
         <div className="flex justify-between h-16">
           {/* Logo/Brand */}
           <div className="flex items-center">
-            <a className="text-xl font-bold text-white hover:text-gray-300" href="/home">
+            <Link className="text-xl font-bold text-white hover:text-gray-300" href="/">
               Taxbridge
-            </a>
+            </Link>
           </div>
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <a className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/home">
+            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/home">
               Home
-            </a>
-            <a className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/features">
+            </Link>
+            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/features">
               Features
-            </a>
-            <a className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/pricing">
+            </Link>
+            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/pricing">
               Pricing
-            </a>
-            <a className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/about-us">
+            </Link>
+            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/about-us">
               About us
-            </a>
-            <a className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/contact">
+            </Link>
+            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/contact">
               Contact
-            </a>
+            </Link>
           </div>
 
           
