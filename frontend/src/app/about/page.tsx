@@ -1,9 +1,9 @@
 ﻿import Image from "next/image";
-import MarketingNavbar from "@/components/marketing/MarketingNavbar";
-import MarketingFooter from "@/components/marketing/MarketingFooter";
-import NewsletterSection from "@/components/marketing/NewsletterSection";
-import CtaSection from "@/components/marketing/CtaSection";
-import FaqAndBenefits from "@/components/marketing/FaqAndBenefits";
+import MarketingNavbar from "@/app/components/marketing/MarketingNavbar";
+import MarketingFooter from "@/app/components/marketing/MarketingFooter";
+import NewsletterSection from "@/app/components/marketing/NewsletterSection";
+import CtaSection from "@/app/components/marketing/CtaSection";
+import FaqAndBenefits from "@/app/components/marketing/FaqAndBenefits";
 
 const principles = [
   {

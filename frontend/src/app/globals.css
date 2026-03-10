@@ -6,6 +6,9 @@
   --primary: #102b9a;
   --primary-dark: #0c1f74;
   --muted: #6b7280;
+
+  /* Pricing page brand color */
+  --brand: #1d4ed8;
 }
 
 @theme inline {

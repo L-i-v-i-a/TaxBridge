@@ -40,7 +40,7 @@ export class AuthController {
 
   @Post('signup')
   @ApiOperation({ summary: 'Register a new user' })
-  @ApiResponse({ status: 201, description: 'User created, returns JWT' })
+  @ApiResponse({ status: 201, description: 'User created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input or email/username taken' })
   async signup(@Body() dto: SignupDto) {
     return this.authService.signup(dto);
