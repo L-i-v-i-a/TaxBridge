@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { FeaturesModule } from './features/features.module';
 import { RefundCalculatorModule } from './refund-calculator/refund-calculator.module';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RefundCalculatorModule } from './refund-calculator/refund-calculator.mo
     FeaturesModule,
     RefundCalculatorModule,
     AuthModule,
+    ContactModule,
   ],
   controllers: [AppController],
   providers: [AppService],

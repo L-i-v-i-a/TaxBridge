@@ -8,6 +8,7 @@ import {
   Req,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -29,6 +30,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginDto } from './dto/login.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SignupDto } from './dto/signup.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
@@ -47,11 +49,37 @@ export class AuthController {
   }
 
   @Post('login')
-  @ApiOperation({ summary: 'Login user and get JWT' })
-  @ApiResponse({ status: 200, description: 'JWT token' })
+  @ApiOperation({ summary: 'Login user and get JWT + refresh token' })
+  @ApiResponse({ status: 200, description: 'Login successful with tokens and admin status' })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
+  @ApiBody({
+    description: 'Provide either email or username with password',
+    schema: {
+      type: 'object',
+      properties: {
+        email: { type: 'string', format: 'email' },
+        username: { type: 'string' },
+        password: { type: 'string' },
+      },
+      required: ['password'],
+    },
+    type: LoginDto,
+  })
   async login(@Body() dto: LoginDto) {
-    return this.authService.login(dto.email, dto.password);
+    const identifier = dto.email ?? dto.username;
+    if (!identifier) {
+      // this should be caught by class-validator but add runtime safety
+      throw new BadRequestException('Email or username must be provided');
+    }
+    return this.authService.login(identifier, dto.password);
+  }
+
+  @Post('refresh')
+  @ApiOperation({ summary: 'Refresh access token using refresh token' })
+  @ApiResponse({ status: 200, description: 'New tokens returned' })
+  @ApiResponse({ status: 401, description: 'Invalid refresh token' })
+  async refresh(@Body() dto: RefreshTokenDto) {
+    return this.authService.refreshTokens(dto.refreshToken);
   }
 
   @Post('forgot-password')
@@ -105,7 +133,17 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        name: { type: 'string', example: 'New Name' },
+        firstName: { type: 'string', example: 'Olivia' },
+        lastName: { type: 'string', example: 'Adebayo' },
+        ein: { type: 'string', example: '12-3456789' },
+        numberOfDependents: { type: 'number', example: 2 },
+        occupation: { type: 'string', example: 'Engineer' },
+        streetAddress: { type: 'string', example: '123 Main St' },
+        zipCode: { type: 'string', example: '90210' },
+        city: { type: 'string', example: 'Los Angeles' },
+        state: { type: 'string', example: 'CA' },
+        country: { type: 'string', example: 'USA' },
+        filingStatus: { type: 'string', example: 'single' },
         username: { type: 'string' },
         phone: { type: 'string' },
         profilePicture: {
