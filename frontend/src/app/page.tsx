@@ -1,7 +1,5 @@
-
+import Price from "./pages/price";
 
 export default function Home() {
-  return (
-    <h1>Welcome to My App</h1>
-  );
+  return <Price />;
 }

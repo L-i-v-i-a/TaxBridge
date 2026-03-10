@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --brand: #1d4ed8; /* unified blue used across the pricing page */
 }
 
 @theme inline {
