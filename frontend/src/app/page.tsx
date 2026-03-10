@@ -1,7 +1,13 @@
 
+import Hero from "./components/Hero/hero";
+import Nav from "./components/nav/nav";
+
 
 export default function Home() {
   return (
-    <h1>Welcome to My App</h1>
+    <>
+      <Nav />
+      <Hero />
+    </>
   );
 }
