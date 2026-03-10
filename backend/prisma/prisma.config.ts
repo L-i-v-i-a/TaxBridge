@@ -1,13 +1,14 @@
-// prisma.config.ts
-import "dotenv/config";           // loads .env file
-import { defineConfig, env } from "prisma/config";
+// prisma.config.ts (root level)
+import "dotenv/config";
+
+import { defineConfig } from "prisma/config";
 
 export default defineConfig({
-  schema: "prisma/schema.prisma",  // path relative to this file
+  schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
   },
   datasource: {
-    url: env("DATABASE_URL"),      // reads from .env
+    url: process.env.DATABASE_URL,
   },
 });
