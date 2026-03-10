@@ -3,11 +3,13 @@ import { ContactService } from './contact.service';
 import { ContactController } from './contact.controller';
 import { PrismaService } from '../prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+// JwtService will be provided by AuthModule
 import { AdminGuard } from '../auth/admin.guard';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  providers: [ContactService, PrismaService, ConfigService, JwtService, AdminGuard],
+  imports: [AuthModule],
+  providers: [ContactService, PrismaService, ConfigService, AdminGuard],
   controllers: [ContactController],
 })
 export class ContactModule {}

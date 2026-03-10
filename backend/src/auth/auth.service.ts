@@ -105,8 +105,10 @@ export class AuthService {
       }
     }
 
-    const tokens = this.signTokens(user.id, user.email);
-    return { message: 'Login successful', isAdmin: user.isAdmin, ...tokens };
+    // sign tokens with admin flag included
+    const accessToken = this.jwt.sign({ sub: user.id, email: user.email, isAdmin: user.isAdmin }, { expiresIn: '15m' });
+    const refreshToken = this.jwt.sign({ sub: user.id }, { expiresIn: '7d' });
+    return { message: 'Login successful', isAdmin: user.isAdmin, access_token: accessToken, refresh_token: refreshToken };
   }
 
   async forgotPassword(email: string) {
@@ -253,8 +255,8 @@ export class AuthService {
    * Return an object with both access and refresh tokens.
    * Access tokens are short lived; refresh tokens last longer.
    */
-  private signTokens(id: string, email: string) {
-    const accessPayload = { sub: id, email };
+  private signTokens(id: string, email: string, isAdmin: boolean) {
+    const accessPayload = { sub: id, email, isAdmin };
     const refreshPayload = { sub: id };
     const accessToken = this.jwt.sign(accessPayload, {
       expiresIn: '15m',
@@ -273,7 +275,7 @@ export class AuthService {
       const decoded: any = this.jwt.verify(token);
       const user = await this.prisma.user.findUnique({ where: { id: decoded.sub } });
       if (!user) throw new UnauthorizedException('User not found');
-      return this.signTokens(user.id, user.email);
+      return this.signTokens(user.id, user.email, user.isAdmin);
     } catch (err) {
       throw new UnauthorizedException('Invalid refresh token');
     }
