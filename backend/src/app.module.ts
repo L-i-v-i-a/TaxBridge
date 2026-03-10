@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+import { FeaturesModule } from './features/features.module';
+import { RefundCalculatorModule } from './refund-calculator/refund-calculator.module';  // Add this
+
 @Module({
-  imports: [],
+  imports: [FeaturesModule, RefundCalculatorModule],  // Add here
   controllers: [AppController],
   providers: [AppService],
 })
