@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PrismaModule } from '../prisma.module';
 import { JwtStrategy } from './jwt.strategy';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { JwtStrategy } from './jwt.strategy';
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, GoogleStrategy],
   controllers: [AuthController],
   exports: [AuthService, JwtModule],
 })

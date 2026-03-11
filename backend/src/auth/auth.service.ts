@@ -111,6 +111,44 @@ export class AuthService {
     return { message: 'Login successful', isAdmin: user.isAdmin, access_token: accessToken, refresh_token: refreshToken };
   }
 
+  async validateGoogleUser(googleUser: { googleId: string; email: string; firstName?: string; lastName?: string }) {
+    let user = await this.prisma.user.findFirst({
+      where: { OR: [{ googleId: googleUser.googleId }, { email: googleUser.email }] },
+    });
+
+    if (!user) {
+      // Create new user
+      const username = googleUser.email.split('@')[0] + Math.random().toString(36).substring(7); // generate unique username
+      user = await this.prisma.user.create({
+        data: {
+          googleId: googleUser.googleId,
+          email: googleUser.email,
+          firstName: googleUser.firstName,
+          lastName: googleUser.lastName,
+          name: `${googleUser.firstName} ${googleUser.lastName}`.trim(),
+          username,
+          dateOfBirth: new Date('2000-01-01'), // default, can be updated later
+          password: '', // no password for Google users
+          isVerified: true, // Google accounts are verified
+        },
+      });
+    } else if (!user.googleId) {
+      // Link Google ID to existing user
+      user = await this.prisma.user.update({
+        where: { id: user.id },
+        data: { googleId: googleUser.googleId },
+      });
+    }
+
+    return user;
+  }
+
+  async generateTokensForUser(user: any) {
+    const accessToken = this.jwt.sign({ sub: user.id, email: user.email, isAdmin: user.isAdmin }, { expiresIn: '15m' });
+    const refreshToken = this.jwt.sign({ sub: user.id }, { expiresIn: '7d' });
+    return { access_token: accessToken, refresh_token: refreshToken };
+  }
+
   async forgotPassword(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new BadRequestException('Email not found');

@@ -26,6 +26,7 @@ import { extname } from 'path';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard'; // create this guard
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '@nestjs/passport';
 
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -72,6 +73,24 @@ export class AuthController {
       throw new BadRequestException('Email or username must be provided');
     }
     return this.authService.login(identifier, dto.password);
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  @ApiOperation({ summary: 'Initiate Google OAuth login/signup' })
+  @ApiResponse({ status: 302, description: 'Redirect to Google' })
+  async googleAuth() {
+    // Passport handles the redirect
+  }
+
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  @ApiOperation({ summary: 'Google OAuth callback' })
+  @ApiResponse({ status: 200, description: 'Login/signup successful with tokens' })
+  async googleAuthRedirect(@Req() req) {
+    const user = req.user;
+    const tokens = await this.authService.generateTokensForUser(user);
+    return { message: 'Google login successful', isAdmin: user.isAdmin, ...tokens };
   }
 
   @Post('refresh')
