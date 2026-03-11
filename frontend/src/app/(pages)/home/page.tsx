@@ -6,6 +6,7 @@ import NewsletterSection from "../../../../components/NewsletterSection"
 import ReadyToStartSection from "../../../../components/ReadyToStartSection"
 import SiteFooter from "../../../../components/SiteFooter"
 import WhoWeAre from "../../../../components/features/whoWeAre"
+import TaskFilling from "../../../../components/features/TaskFilling"
 
 
 const faqItems = [
@@ -44,10 +45,12 @@ export default function HomePage() {
       >
     <Nav/>
     <Hero/>
+    <WhoWeAre/>
+    <TaskFilling/>
     <FaqHighlightSection items={faqItems} />
     <NewsletterSection/>
     <ReadyToStartSection/>
-    <WhoWeAre/>
+    
     <SiteFooter/>
    
     </div>
