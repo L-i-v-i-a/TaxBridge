@@ -3,7 +3,7 @@ import Nav from './nav';
 export default function Hero() {
     return (
         <div className="min-h-screen flex flex-col items-center justify-start px-6 pt-0 pb-10">
-            <div className="w-190 max-w-7xl">
+            <div className="w-full max-w-7xl h-24 relative p-12">
                 <h1 className="text-2xl font-bold text-left text-[#5FF7E2] leading-tight mb-2">
                     TAX FILLING THAT ACTUALLY FITS YOUR LIFE
                 </h1>
@@ -24,9 +24,47 @@ export default function Hero() {
                         Get Started
                     </button>
                 </form>
-                
-                
+                <div className='py-8'>
+                <h1> Simplify financial management and make tax filling effortless...</h1>
+                </div>
+                {/* testimonial card moved to top right */}
+            <div className='absolute top-0 right-0 left-180 bg-white w-auto flex flex-col text-2xl text-black justify-start items-start gap-6 rounded-md py-2 p-4'>
+                <form action="card" className='flex items-center gap-4 py-2 righ-0 p-4 w-auto'>
+                    {/* use existing public image asset */}
+                    <div className='flex flex-col top-6 w-auto p-2 '>
+                        <div className='flex items-center gap-6'>
+                            <img
+                             src="/ellipse.png"
+                              alt="profile" 
+                              className='rounded-full w-16 h-16 object-cover'/>
+                            <h1 className='font-bold'>Sarah • CPA</h1>
+                        </div>
+                        <div className='flex flex-col justify-center font-sm'>
+                        <p>SaraInstant Refund Calculatorh • CPA</p>
+                        </div>
+                        <button className='bg-[#F0F0F0] rounded-md py-6 px-8 flex flex-col items-center justify-center text-green-500 font-bold mt-6'>
+                            $2,485
+                        
+                            <span className='text-black font-normal text-sm'>Estimated federal refund</span>
+                        </button>
+                        <h1 className='font-sm'>Annual Income</h1>
+                        <button className='bg-[#F0F0F0] rounded-md py-6 px-8 flex flex-col 
+                        items-center items-start text-gray-500 font-sm mt-6'>5000</button>
+                        <h1 className='font-sm'>Federal Tax Withheld</h1>
+                        <button className='bg-[#F0F0F0] rounded-md py-6 px-8 flex flex-col 
+                        items-center items-start text-gray-500 font-sm mt-6'>5000</button>
+                        <button className='bg-[#0D23AD] rounded-full py-6 px-6 flex flex-col items-center mt-6 
+                        text-white hover:bg-blue-700 hover:scale-105 transition-transform duration-300'>Calculate</button>
+                    </div>
+                </form>
             </div>
+            </div>
+            <section>
+                <img 
+                src="/cpa.png" 
+                alt="cpa-meeting" />
+            </section>
         </div>
     );
+    
 }

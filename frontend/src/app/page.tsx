@@ -1,26 +1,30 @@
+'use client';
 
-import Hero from "../../components/hero";
-import Nav from "../../components/nav";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
+export default function Home() {
+  const router = useRouter();
 
+  useEffect(() => {
+    // Set a timer to navigate after 3 seconds
+    const timer = setTimeout(() => {
+      router.push('/home');
+    }, 3000);
+
+    // Cleanup the timer if the component unmounts early
+    return () => clearTimeout(timer);
+  }, [router]);
 
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white">
-      <div
-        className="bg-[#0D23AD] text-white relative overflow-hidden"
-        style={{
-          backgroundImage: "url(/image.png)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundBlendMode: "overlay",
-        }}
-      >
-        <Nav />
-        <section className="max-w-7xl mx-auto px-6 py-24 text">
-          <Hero />
-        </section>
+    <main className="flex min-h-screen items-center justify-center bg-[#0D23AD]">
+      <div className="text-center">
+        <h1 className="animate-fade-in-out text-4xl font-bold text-white">
+         TAXBRIDGE<br/>
+         US Tax Calculation Software
+        </h1>
       </div>
 
     
