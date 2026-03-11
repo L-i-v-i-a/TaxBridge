@@ -15,9 +15,6 @@ export default function Home() {
     // Cleanup the timer if the component unmounts early
     return () => clearTimeout(timer);
   }, [router]);
-
-
-export default function Home() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#0D23AD]">
       <div className="text-center">

@@ -1,70 +1,83 @@
 import React from 'react';
 import Nav from './nav';
+
 export default function Hero() {
-    return (
-        <div className="min-h-screen flex flex-col items-center justify-start px-6 pt-0 pb-10">
-            <div className="w-full max-w-7xl h-24 relative p-12">
-                <h1 className="text-2xl font-bold text-left text-[#5FF7E2] leading-tight mb-2">
-                    TAX FILLING THAT ACTUALLY FITS YOUR LIFE
-                </h1>
-                <p className="text-3xl text-left text-white font-bold">
-                   <span> Real humans on demand + AI accuracy.
-                    <br />
-                    Fully compliant refund without the stress.
-                    </span>
-                </p>
-                <form className='bg-white w-xl mt-8 rounded-md p-4 flex items-center justify-between space-x-2'>
-                    <div className='flex items-center gap-2'>
-                        <svg width="38" height="36" viewBox="0 0 38 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" clipRule="evenodd" d="M32.1697 35.6969H6.82387C5.01407 35.6969 3.27839 34.978 1.99867 33.6982C0.718942 32.4185 0 30.6828 0 28.873V3.41608C0 1.33577 2.05886 0.0158367 3.87011 0.643633C4.13007 0.733318 4.38158 0.864597 4.62464 1.03747L4.96583 1.28118C5.79572 1.87003 6.78854 2.18554 7.80612 2.18379C8.8237 2.18205 9.81543 1.86313 10.6433 1.27143C11.8054 0.444404 13.1963 0 14.6226 0C16.0489 0 17.4398 0.444404 18.6019 1.27143C19.4297 1.86313 20.4215 2.18205 21.4391 2.18379C22.4566 2.18554 23.4495 1.87003 24.2793 1.28118L24.6205 1.03747C26.5566 -0.346803 29.2452 1.03747 29.2452 3.41608V18.1498H36.069C36.4569 18.1498 36.8288 18.3039 37.103 18.5781C37.3773 18.8523 37.5313 19.2242 37.5313 19.6121V30.3353C37.5313 31.7573 36.9664 33.121 35.9609 34.1265C34.9554 35.132 33.5917 35.6969 32.1697 35.6969ZM29.7326 21.0743V30.3353C29.7326 30.9816 29.9894 31.6015 30.4464 32.0586C30.9035 32.5156 31.5233 32.7724 32.1697 32.7724C32.8161 32.7724 33.4359 32.5156 33.893 32.0586C34.35 31.6015 34.6068 30.9816 34.6068 30.3353V21.0743H29.7326ZM21.4465 12.7882C21.4465 12.4004 21.2924 12.0284 21.0182 11.7542C20.7439 11.48 20.372 11.3259 19.9842 11.3259H8.28613C7.89832 11.3259 7.52639 11.48 7.25216 11.7542C6.97793 12.0284 6.82387 12.4004 6.82387 12.7882C6.82387 13.176 6.97793 13.5479 7.25216 13.8222C7.52639 14.0964 7.89832 14.2504 8.28613 14.2504H19.9842C20.372 14.2504 20.7439 14.0964 21.0182 13.8222C21.2924 13.5479 21.4465 13.176 21.4465 12.7882ZM19.4968 18.6372C19.4968 18.2494 19.3427 17.8775 19.0685 17.6032C18.7943 17.329 18.4223 17.175 18.0345 17.175H8.28613C7.89832 17.175 7.52639 17.329 7.25216 17.6032C6.97793 17.8775 6.82387 18.2494 6.82387 18.6372C6.82387 19.025 6.97793 19.397 7.25216 19.6712C7.52639 19.9454 7.89832 20.0995 8.28613 20.0995H18.0345C18.4223 20.0995 18.7943 19.9454 19.0685 19.6712C19.3427 19.397 19.4968 19.025 19.4968 18.6372ZM19.9842 23.024C20.372 23.024 20.7439 23.1781 21.0182 23.4523C21.2924 23.7265 21.4465 24.0984 21.4465 24.4863C21.4465 24.8741 21.2924 25.246 21.0182 25.5202C20.7439 25.7945 20.372 25.9485 19.9842 25.9485H8.28613C7.89832 25.9485 7.52639 25.7945 7.25216 25.5202C6.97793 25.246 6.82387 24.8741 6.82387 24.4863C6.82387 24.0984 6.97793 23.7265 7.25216 23.4523C7.52639 23.1781 7.89832 23.024 8.28613 23.024H19.9842Z" fill="#0D23AD"/>
-                        </svg>
-                        <h1 className='text-[#0D23AD] font-bold text-lg'>Try TaxBridge for Free</h1>
-                    </div>
-                    <button className="bg-[#0D23AD] text-white hover:bg-blue-400 px-6 py-3 rounded-md text-lg font-medium justify-center flex">
-                        Get Started
-                    </button>
-                </form>
-                <div className='py-8'>
-                <h1> Simplify financial management and make tax filling effortless...</h1>
-                </div>
-                {/* testimonial card moved to top right */}
-            <div className='absolute top-0 right-0 left-180 bg-white w-auto flex flex-col text-2xl text-black justify-start items-start gap-6 rounded-md py-2 p-4'>
-                <form action="card" className='flex items-center gap-4 py-2 righ-0 p-4 w-auto'>
-                    {/* use existing public image asset */}
-                    <div className='flex flex-col top-6 w-auto p-2 '>
-                        <div className='flex items-center gap-6'>
-                            <img
-                             src="/ellipse.png"
-                              alt="profile" 
-                              className='rounded-full w-16 h-16 object-cover'/>
-                            <h1 className='font-bold'>Sarah • CPA</h1>
-                        </div>
-                        <div className='flex flex-col justify-center font-sm'>
-                        <p>SaraInstant Refund Calculatorh • CPA</p>
-                        </div>
-                        <button className='bg-[#F0F0F0] rounded-md py-6 px-8 flex flex-col items-center justify-center text-green-500 font-bold mt-6'>
-                            $2,485
-                        
-                            <span className='text-black font-normal text-sm'>Estimated federal refund</span>
-                        </button>
-                        <h1 className='font-sm'>Annual Income</h1>
-                        <button className='bg-[#F0F0F0] rounded-md py-6 px-8 flex flex-col 
-                        items-center items-start text-gray-500 font-sm mt-6'>5000</button>
-                        <h1 className='font-sm'>Federal Tax Withheld</h1>
-                        <button className='bg-[#F0F0F0] rounded-md py-6 px-8 flex flex-col 
-                        items-center items-start text-gray-500 font-sm mt-6'>5000</button>
-                        <button className='bg-[#0D23AD] rounded-full py-6 px-6 flex flex-col items-center mt-6 
-                        text-white hover:bg-blue-700 hover:scale-105 transition-transform duration-300'>Calculate</button>
-                    </div>
-                </form>
+  return (
+    <div className="min-h-screen bg-[#0D23AD] flex flex-col items-center">
+      {/* Navbar would go here */}
+      
+
+      <main className="w-full max-w-7xl px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        
+        {/* Left Column: Text & CTA */}
+        <div className="flex flex-col space-y-8">
+          <div>
+            <h1 className="text-[#5FF7E2] font-bold tracking-wider text-sm mb-4">
+              TAX FILING THAT ACTUALLY FITS YOUR LIFE
+            </h1>
+            <h2 className="text-4xl md:text-6xl text-white font-extrabold leading-[1.1]">
+              Real humans on demand <br /> 
+              <span className="text-white/80">+ AI accuracy.</span>
+            </h2>
+            <p className="text-xl text-blue-100 mt-6 max-w-lg">
+              Fully compliant refund without the stress. Simplify financial management and make tax filing effortless.
+            </p>
+          </div>
+
+          {/* Email/Get Started Bar */}
+          <div className="bg-white p-2 rounded-xl flex items-center shadow-2xl max-w-xl">
+            <div className="flex items-center gap-3 px-4 flex-1">
+              <svg width="47" height="47" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M37.0439 41.9181H11.6981C9.88828 41.9181 8.1526 41.1992 6.87287 39.9194C5.59315 38.6397 4.87421 36.904 4.87421 35.0942V9.63727C4.87421 7.55696 6.93307 6.23703 8.74432 6.86482C9.00428 6.95451 9.25578 7.08579 9.49884 7.25866L9.84004 7.50237C10.6699 8.09123 11.6627 8.40673 12.6803 8.40498C13.6979 8.40324 14.6896 8.08432 15.5175 7.49262C16.6796 6.6656 18.0705 6.22119 19.4968 6.22119C20.9231 6.22119 22.314 6.6656 23.4761 7.49262C24.304 8.08432 25.2957 8.40324 26.3133 8.40498C27.3308 8.40673 28.3237 8.09123 29.1536 7.50237L29.4947 7.25866C31.4308 5.87439 34.1194 7.25866 34.1194 9.63727V24.371H40.9433C41.3311 24.371 41.703 24.525 41.9772 24.7993C42.2515 25.0735 42.4055 25.4454 42.4055 25.8332V36.5565C42.4055 37.9785 41.8406 39.3422 40.8351 40.3477C39.8296 41.3532 38.4659 41.9181 37.0439 41.9181ZM34.6068 27.2955V36.5565C34.6068 37.2028 34.8636 37.8227 35.3206 38.2798C35.7777 38.7368 36.3975 38.9936 37.0439 38.9936C37.6903 38.9936 38.3101 38.7368 38.7672 38.2798C39.2242 37.8227 39.481 37.2028 39.481 36.5565V27.2955H34.6068ZM26.3207 19.0094C26.3207 18.6216 26.1666 18.2496 25.8924 17.9754C25.6182 17.7012 25.2462 17.5471 24.8584 17.5471H13.1603C12.7725 17.5471 12.4006 17.7012 12.1264 17.9754C11.8521 18.2496 11.6981 18.6216 11.6981 19.0094C11.6981 19.3972 11.8521 19.7691 12.1264 20.0433C12.4006 20.3176 12.7725 20.4716 13.1603 20.4716H24.8584C25.2462 20.4716 25.6182 20.3176 25.8924 20.0433C26.1666 19.7691 26.3207 19.3972 26.3207 19.0094ZM24.371 24.8584C24.371 24.4706 24.2169 24.0987 23.9427 23.8244C23.6685 23.5502 23.2965 23.3961 22.9087 23.3961H13.1603C12.7725 23.3961 12.4006 23.5502 12.1264 23.8244C11.8521 24.0987 11.6981 24.4706 11.6981 24.8584C11.6981 25.2462 11.8521 25.6182 12.1264 25.8924C12.4006 26.1666 12.7725 26.3207 13.1603 26.3207H22.9087C23.2965 26.3207 23.6685 26.1666 23.9427 25.8924C24.2169 25.6182 24.371 25.2462 24.371 24.8584ZM24.8584 29.2452C25.2462 29.2452 25.6182 29.3992 25.8924 29.6735C26.1666 29.9477 26.3207 30.3196 26.3207 30.7074C26.3207 31.0953 26.1666 31.4672 25.8924 31.7414C25.6182 32.0156 25.2462 32.1697 24.8584 32.1697H13.1603C12.7725 32.1697 12.4006 32.0156 12.1264 31.7414C11.8521 31.4672 11.6981 31.0953 11.6981 30.7074C11.6981 30.3196 11.8521 29.9477 12.1264 29.6735C12.4006 29.3992 12.7725 29.2452 13.1603 29.2452H24.8584Z" fill="#0D23AD"/>
+                </svg>
+
+              <span className="text-[#0D23AD] font-semibold">Try TaxBridge for Free</span>
             </div>
-            </div>
-            <section>
-                <img 
-                src="/cpa.png" 
-                alt="cpa-meeting" />
-            </section>
+            <button className="bg-[#0D23AD] text-white px-8 py-4 rounded-lg font-bold hover:bg-blue-800 transition-colors">
+              Get Started
+            </button>
+          </div>
         </div>
-    );
-    
+
+        {/* Right Column: Calculator Card */}
+        <div className="flex justify-center lg:justify-end">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl text-black">
+            <div className="flex items-center gap-4 mb-8">
+              <img
+                src="/ellipse.png"
+                alt="profile"
+                className="rounded-full w-14 h-14 object-cover border-2 border-blue-100"
+              />
+              <div>
+                <h3 className="font-bold text-lg">Sarah • CPA</h3>
+                <p className="text-gray-500 text-sm">SaraInstant Refund Calculatorh • CPA</p>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl p-6 text-center mb-8 border border-gray-100">
+              <span className="text-green-600 text-4xl font-black block">$2,485</span>
+              <span className="text-gray-500 text-sm">Estimated federal refund</span>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs font-bold uppercase text-gray-400 ml-1">Annual Income</label>
+                <div className="bg-gray-100 p-4 rounded-xl font-bold text-gray-700 mt-1">$50,000</div>
+              </div>
+              
+              <div>
+                <label className="text-xs font-bold uppercase text-gray-400 ml-1">Federal Tax Withheld</label>
+                <div className="bg-gray-100 p-4 rounded-xl font-bold text-gray-700 mt-1">$5,000</div>
+              </div>
+
+              <button className="w-full bg-[#0D23AD] text-white py-5 rounded-2xl font-bold text-lg mt-4 hover:bg-blue-800 shadow-lg shadow-blue-200 transition-all active:scale-[0.98]">
+                Calculate
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  );
 }
