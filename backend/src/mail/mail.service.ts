@@ -36,7 +36,7 @@ export class MailService {
       subject: `Action Required: Filing ${filingId} - ${reason}`,
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-          <h3 style="color: #d9534f;">⚠️ Filing Requires Attention</h3>
+          <h3 style="color: #d9534f;">⚠️ Filing Requires Attention Immediately</h3>
           <p><strong>Filing ID:</strong> ${filingId}</p>
           <p><strong>User Email:</strong> ${userEmail}</p>
           <p><strong>Reason:</strong> ${reason}</p>
