@@ -126,7 +126,7 @@ export default function Pricing() {
             />
           </button>
           <span className="text-sm font-semibold text-slate-500">Yearly</span>
-          <span className="rounded-full bg-[var(--brand)] px-3 py-1 text-xs font-semibold text-white">
+          <span className="rounded-full bg-[#0D23AD] px-3 py-1 text-xs font-semibold text-white">
             Save 35%
           </span>
         </div>
@@ -194,7 +194,7 @@ export default function Pricing() {
               <div className="mt-8 flex flex-col gap-3">
                 <button
                   type="button"
-                  className="inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white bg-[var(--brand)] transition hover:bg-[var(--brand)]/90"
+                  className="inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white bg-[#0D23AD] transition hover:bg-[var(--brand)]/90"
                 >
                   Start Free Trial
                 </button>
@@ -211,7 +211,7 @@ export default function Pricing() {
       <div
         ref={bottomRef}
         className={
-          "mt-20 bg-[var(--brand)] py-20 transition-all duration-700 ease-out " +
+          "mt-20 bg-[#0D23AD] py-20 transition-all duration-700 ease-out " +
           (bottomInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8")
         }
       >
@@ -259,26 +259,22 @@ export default function Pricing() {
               </div>
             </div>
 
-            <div className="relative overflow-hidden rounded-lg bg-[var(--brand)] p-10 text-white shadow-sm">
-              <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-              <h3 className="text-2xl font-semibold">TaxBridge Makes Tax Filing Effortless</h3>
-              <p className="mt-4 max-w-md text-sm text-white/80">
-                Empowering individuals and businesses to take control of their taxes using intelligent technology and trusted human guidance.
-              </p>
+            <div className="relative overflow-hidden rounded-lg bg-[#0D23AD] p-10 text-white shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+                <h3 className="text-2xl font-semibold">TaxBridge Makes Tax Filing Effortless</h3>
+                <p className="mt-4 max-w-md text-sm text-white/80">
+                  Empowering individuals and businesses to take control of their taxes using intelligent technology and trusted human guidance.
+                </p>
+              </div>
 
-              <div className="mt-8 space-y-4">
+              <div className="mt-8 flex-1 space-y-4">
                 <div className="flex items-start gap-3">
                   <span className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2" />
                       <path
-                        d="M5 12H19"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M12 5V19"
+                        d="M8 12l3 3 5-5"
                         stroke="currentColor"
                         strokeWidth="2"
                         strokeLinecap="round"
@@ -296,22 +292,9 @@ export default function Pricing() {
                 <div className="flex items-start gap-3">
                   <span className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2" />
                       <path
-                        d="M4 4H20V20H4V4Z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M8 12H16"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M11 16H13"
+                        d="M8 12l3 3 5-5"
                         stroke="currentColor"
                         strokeWidth="2"
                         strokeLinecap="round"
@@ -328,27 +311,6 @@ export default function Pricing() {
                 </div>
               </div>
 
-              <div className="mt-10 rounded-lg bg-white/10 p-6">
-                <p className="text-sm font-semibold text-white">Subscribe to our newsletter</p>
-                <p className="mt-1 text-sm text-white/80">Get latest news on your inbox.</p>
-                <form className="mt-4 flex flex-col gap-3 sm:flex-row">
-                  <label className="sr-only" htmlFor="newsletter-email">
-                    Email address
-                  </label>
-                  <input
-                    id="newsletter-email"
-                    type="email"
-                    placeholder="Enter your email"
-                    className="flex-1 rounded-xl border border-white/30 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/60 focus:border-white/60 focus:outline-none focus:ring-2 focus:ring-white/30"
-                  />
-                  <button
-                    type="submit"
-                    className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-[var(--brand)] shadow-sm transition hover:bg-white/90"
-                  >
-                    Subscribe
-                  </button>
-                </form>
-              </div>
             </div>
           </div>
         </div>
