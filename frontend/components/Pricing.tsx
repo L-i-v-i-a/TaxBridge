@@ -75,7 +75,7 @@ export default function Pricing() {
   const [expanded, setExpanded] = useState(0);
 
   return (
-    <section className="bg-[#F7F9FF] py-16">
+    <section className="bg-white py-16">
       <div className="mx-auto max-w-6xl px-4">
         <div className="text-center">
           <p className= "mt-3 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Pricing &amp; Plans</p>
@@ -89,8 +89,8 @@ export default function Pricing() {
             type="button"
             onClick={() => setBilling(billing === "monthly" ? "yearly" : "monthly")}
             className={
-              "relative h-8 w-14 rounded-full bg-slate-200 transition " +
-              (billing === "yearly" ? "bg-[var(--brand)]" : "bg-slate-200")
+              "relative h-8 w-14 rounded-full transition " +
+              (billing === "yearly" ? "bg-[var(--brand)]" : "bg-[var(--brand)]/30")
             }
           >
             <span
@@ -117,11 +117,6 @@ export default function Pricing() {
                   : "border-slate-200")
               }
             >
-              {plan.featured ? (
-                <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--brand)] px-4 py-1 text-xs font-semibold text-white">
-                  Most Popular
-                </div>
-              ) : null}
               <div className="mt-6 flex flex-col gap-2">
                 <h3 className="text-lg font-semibold text-slate-900">{plan.name}</h3>
                 <p className="text-sm text-slate-500">{plan.description}</p>
@@ -139,10 +134,10 @@ export default function Pricing() {
                 billed {billing}
               </p>
 
-              <ul className="mt-6 space-y-3 text-sm text-slate-600">
+              <ul className="mt-6 flex-1 space-y-3 text-sm text-slate-600">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex gap-3">
-                    <span className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--brand)]/10 text-[var(--brand)]">
+                    <span className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M9 12.5L11.5 15L16 10"
@@ -163,43 +158,45 @@ export default function Pricing() {
                 ))}
               </ul>
 
-              <button
-                type="button"
-                className={
-                  "mt-8 inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition " +
-                  (plan.featured
-                    ? "bg-[var(--brand)] text-white hover:bg-[var(--brand)]/90"
-                    : "bg-slate-900 text-white hover:bg-slate-800")
-                }
-              >
-                Start Free Trial
-              </button>
+              <div className="mt-8 flex flex-col gap-3">
+                <button
+                  type="button"
+                  className={
+                    "inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition " +
+                    (plan.featured
+                      ? "bg-[var(--brand)] text-white hover:bg-[var(--brand)]/90"
+                      : "bg-slate-900 text-white hover:bg-slate-800")
+                  }
+                >
+                  Start Free Trial
+                </button>
 
-              <p className="mt-3 text-center text-xs text-slate-400">
-                No credit card required
-              </p>
+                <p className="text-center text-xs text-slate-400">
+                  No credit card required
+                </p>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="mt-20 bg-gradient-to-b from-[var(--brand)]/10 via-white to-white py-20">
+      <div className="mt-20 bg-[var(--brand)] py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid gap-12 lg:grid-cols-2">
-            <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+            <div className="rounded-3xl bg-white p-8 shadow-xl">
               <h3 className="text-lg font-semibold text-slate-900">How to setup my TaxBridge Account?</h3>
-              <div className="mt-6 space-y-4">
+              <div className="mt-6 divide-y divide-slate-200">
                 {faqs.map((faq, index) => {
                   const isOpen = expanded === index;
                   return (
-                    <div key={faq.question} className="rounded-2xl border border-slate-200 bg-slate-50">
+                    <div key={faq.question} className="py-4">
                       <button
                         type="button"
                         onClick={() => setExpanded(isOpen ? -1 : index)}
-                        className="flex w-full items-center justify-between px-5 py-4 text-left"
+                        className="flex w-full items-center justify-between text-left"
                       >
                         <span className="text-sm font-medium text-slate-900">{faq.question}</span>
-                        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-slate-700 shadow-sm">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-500 shadow-sm">
                           <svg
                             width="16"
                             height="16"
@@ -218,7 +215,7 @@ export default function Pricing() {
                         </span>
                       </button>
                       {isOpen ? (
-                        <div className="px-5 pb-5 text-sm leading-relaxed text-slate-600">
+                        <div className="mt-3 text-sm leading-relaxed text-slate-700">
                           {faq.answer}
                         </div>
                       ) : null}
