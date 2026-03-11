@@ -1,5 +1,7 @@
 import React from 'react';
 import Nav from './nav';
+import Image from 'next/image';
+import WhoWeAre from './features/whoWeAre';
 
 export default function Hero() {
   return (
