@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const plans = [
   {
@@ -73,9 +73,34 @@ const faqs = [
 export default function Pricing() {
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
   const [expanded, setExpanded] = useState(0);
+  const [cardsInView, setCardsInView] = useState(false);
+  const [bottomInView, setBottomInView] = useState(false);
+  const cardsRef = useRef<HTMLDivElement | null>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target === cardsRef.current) {
+            setCardsInView(entry.isIntersecting);
+          }
+          if (entry.target === bottomRef.current) {
+            setBottomInView(entry.isIntersecting);
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+
+    if (cardsRef.current) observer.observe(cardsRef.current);
+    if (bottomRef.current) observer.observe(bottomRef.current);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section className="bg-white py-16">
+    <section className="bg-white font-sans py-16">
       <div className="mx-auto max-w-6xl px-4">
         <div className="text-center">
           <p className= "mt-3 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Pricing &amp; Plans</p>
@@ -106,12 +131,20 @@ export default function Pricing() {
           </span>
         </div>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+        <div
+          ref={cardsRef}
+          className={
+            "mt-12 grid gap-6 lg:grid-cols-3 transition-all duration-700 ease-out " +
+            (cardsInView
+              ? "opacity-100 scale-100 translate-y-0"
+              : "opacity-0 scale-95 translate-y-8")
+          }
+        >
           {plans.map((plan) => (
             <div
               key={plan.name}
               className={
-                "relative flex flex-col overflow-hidden rounded-3xl border bg-white p-8 shadow-sm " +
+                "relative flex flex-col overflow-hidden rounded-lg border bg-white p-8 shadow-sm " +
                 (plan.featured
                   ? "border-[var(--brand)]/20 ring-1 ring-[var(--brand)]/20"
                   : "border-slate-200")
@@ -161,12 +194,7 @@ export default function Pricing() {
               <div className="mt-8 flex flex-col gap-3">
                 <button
                   type="button"
-                  className={
-                    "inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition " +
-                    (plan.featured
-                      ? "bg-[var(--brand)] text-white hover:bg-[var(--brand)]/90"
-                      : "bg-slate-900 text-white hover:bg-slate-800")
-                  }
+                  className="inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white bg-[var(--brand)] transition hover:bg-[var(--brand)]/90"
                 >
                   Start Free Trial
                 </button>
@@ -180,10 +208,16 @@ export default function Pricing() {
         </div>
       </div>
 
-      <div className="mt-20 bg-[var(--brand)] py-20">
+      <div
+        ref={bottomRef}
+        className={
+          "mt-20 bg-[var(--brand)] py-20 transition-all duration-700 ease-out " +
+          (bottomInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8")
+        }
+      >
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid gap-12 lg:grid-cols-2">
-            <div className="rounded-3xl bg-white p-8 shadow-xl">
+            <div className="rounded-lg bg-white p-8 shadow-xl">
               <h3 className="text-lg font-semibold text-slate-900">How to setup my TaxBridge Account?</h3>
               <div className="mt-6 divide-y divide-slate-200">
                 {faqs.map((faq, index) => {
@@ -225,7 +259,7 @@ export default function Pricing() {
               </div>
             </div>
 
-            <div className="relative overflow-hidden rounded-3xl bg-[var(--brand)] p-10 text-white shadow-sm">
+            <div className="relative overflow-hidden rounded-lg bg-[var(--brand)] p-10 text-white shadow-sm">
               <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
               <h3 className="text-2xl font-semibold">TaxBridge Makes Tax Filing Effortless</h3>
               <p className="mt-4 max-w-md text-sm text-white/80">
@@ -294,7 +328,7 @@ export default function Pricing() {
                 </div>
               </div>
 
-              <div className="mt-10 rounded-2xl bg-white/10 p-6">
+              <div className="mt-10 rounded-lg bg-white/10 p-6">
                 <p className="text-sm font-semibold text-white">Subscribe to our newsletter</p>
                 <p className="mt-1 text-sm text-white/80">Get latest news on your inbox.</p>
                 <form className="mt-4 flex flex-col gap-3 sm:flex-row">
