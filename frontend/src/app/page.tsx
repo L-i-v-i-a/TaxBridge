@@ -16,6 +16,8 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, [router]);
 
+
+export default function Home() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#0D23AD]">
       <div className="text-center">
@@ -25,17 +27,7 @@ export default function Home() {
         </h1>
       </div>
 
-      <style jsx>{`
-        @keyframes fadeInOut {
-          0% { opacity: 0; transform: translateY(10px); }
-          20% { opacity: 1; transform: translateY(0); }
-          80% { opacity: 1; transform: translateY(0); }
-          100% { opacity: 0; transform: translateY(-10px); }
-        }
-        .animate-fade-in-out {
-          animation: fadeInOut 3s ease-in-out forwards;
-        }
-      `}</style>
+    
     </main>
   );
 }
