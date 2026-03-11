@@ -5,8 +5,8 @@ export default function AboutHeroSection() {
   return (
     <section className="mx-auto max-w-6xl px-6 py-16">
       <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
-        <div className="order-2 lg:order-1">
-          <div className="overflow-hidden rounded-3xl bg-white p-3 shadow-md">
+        <div className="order-2 lg:order-1 animate-fade-in" style={{ animationDelay: "120ms" }}>
+          <div className="overflow-hidden rounded-3xl bg-white p-3 shadow-md animate-float-soft transition-transform duration-500 hover:scale-[1.02]">
             <Image
               src="/about-hero.png"
               alt="TaxBridge team collaborating"
@@ -16,7 +16,7 @@ export default function AboutHeroSection() {
             />
           </div>
         </div>
-        <div className="order-1 lg:order-2">
+        <div className="order-1 lg:order-2 animate-fade-up" style={{ animationDelay: "60ms" }}>
           <h1 className="text-2xl font-semibold text-[#0D23AD] sm:text-3xl">About Us</h1>
           <p className="mt-3 text-sm text-slate-600">
             TaxBridge was founded to solve one of the most frustrating challenges in personal and business

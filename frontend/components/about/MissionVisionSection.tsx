@@ -4,7 +4,7 @@ export default function MissionVisionSection() {
   return (
     <section className="mx-auto max-w-6xl px-6 py-16">
       <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
-        <div>
+        <div className="animate-fade-up" style={{ animationDelay: "60ms" }}>
           <h2 className="text-2xl font-semibold text-[#0D23AD] sm:text-3xl">
             We Make Complex Tax Processes Easy For Everyone.
           </h2>
@@ -49,13 +49,13 @@ export default function MissionVisionSection() {
           </div>
         </div>
 
-        <div>
+        <div className="animate-fade-in" style={{ animationDelay: "140ms" }}>
           <Image
             src="/about-team.png"
             alt="TaxBridge team meeting"
             width={620}
             height={520}
-            className="h-auto w-full rounded-3xl object-cover shadow-md"
+            className="h-auto w-full rounded-3xl object-cover shadow-md transition-transform duration-500 hover:scale-[1.02]"
           />
         </div>
       </div>

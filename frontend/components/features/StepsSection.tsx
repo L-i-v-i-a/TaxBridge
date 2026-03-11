@@ -26,7 +26,7 @@ const steps = [
 export default function StepsSection() {
   return (
     <section className="mx-auto max-w-6xl px-6 py-16">
-      <div className="text-center">
+      <div className="text-center animate-fade-up" style={{ animationDelay: "60ms" }}>
         <h2 className="text-2xl font-semibold text-[#0B0F1F] sm:text-3xl">
           4 Easy steps to Get started
         </h2>
@@ -36,8 +36,8 @@ export default function StepsSection() {
       </div>
 
       <div className="mt-10 grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
-        <div className="relative">
-          <div className="overflow-hidden rounded-3xl bg-[#EDF2FF] p-3">
+        <div className="relative animate-fade-in" style={{ animationDelay: "120ms" }}>
+          <div className="overflow-hidden rounded-3xl bg-[#EDF2FF] p-3 animate-float-soft transition-transform duration-500 hover:scale-[1.02]">
             <Image
               src="/feature-steps.png"
               alt="TaxBridge steps preview"
@@ -67,7 +67,11 @@ export default function StepsSection() {
 
         <div className="space-y-5">
           {steps.map((step, index) => (
-            <div key={step.title} className="flex gap-4">
+            <div
+              key={step.title}
+              className="flex gap-4 animate-fade-up"
+              style={{ animationDelay: `${180 + index * 120}ms` }}
+            >
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0D23AD] text-xs font-semibold text-white">
                 {index + 1}
               </div>

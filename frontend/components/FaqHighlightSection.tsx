@@ -11,7 +11,10 @@ export default function FaqHighlightSection({ items }: FaqHighlightSectionProps)
   return (
     <section className="bg-[#0D23AD] text-white">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 lg:grid-cols-[1.1fr_1fr]">
-        <div className="rounded-3xl bg-white p-6 text-[#0B0F1F] shadow-lg">
+        <div
+          className="animate-fade-up rounded-3xl bg-white p-6 text-[#0B0F1F] shadow-lg transition-transform duration-300 hover:-translate-y-1"
+          style={{ animationDelay: "80ms" }}
+        >
           {items.map((faq, index) => (
             <details
               key={faq.question}
@@ -20,14 +23,14 @@ export default function FaqHighlightSection({ items }: FaqHighlightSectionProps)
             >
               <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-[#0B0F1F]">
                 {faq.question}
-                <span className="text-slate-400 transition group-open:rotate-180">⌄</span>
+                <span className="text-slate-400 transition group-open:rotate-180">&darr;</span>
               </summary>
               <p className="mt-3 text-xs text-slate-500">{faq.answer}</p>
             </details>
           ))}
         </div>
 
-        <div>
+        <div className="animate-fade-up" style={{ animationDelay: "160ms" }}>
           <h3 className="text-xl font-semibold">TaxBridge Makes Tax Filing Effortless</h3>
           <p className="mt-3 text-sm text-white/80">
             Empowering individuals and businesses to take control of their taxes using intelligent
@@ -36,7 +39,7 @@ export default function FaqHighlightSection({ items }: FaqHighlightSectionProps)
           <div className="mt-6 space-y-4">
             <div className="flex items-start gap-3">
               <span className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-xs">
-                ✓
+                &#10003;
               </span>
               <div>
                 <p className="text-sm font-semibold">24/7 Availability</p>
@@ -48,7 +51,7 @@ export default function FaqHighlightSection({ items }: FaqHighlightSectionProps)
             </div>
             <div className="flex items-start gap-3">
               <span className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-xs">
-                ✓
+                &#10003;
               </span>
               <div>
                 <p className="text-sm font-semibold">AI Chatbot</p>
