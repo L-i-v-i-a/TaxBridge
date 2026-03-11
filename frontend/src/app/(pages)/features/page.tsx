@@ -10,8 +10,15 @@ import SiteFooter from "../../../../components/SiteFooter";
 const faqItems = [
   {
     question: "How to setup my Taxbridge Account?",
-    answer:
-      "The process comes easy with direct expression steps, whereby you start by signing up, after sign up, you confirm your email and login.",
+    answer: (
+      <>
+        The process comes easy with direct expression steps,
+        <br />
+        whereby you start by signing up, after sign up,
+        <br />
+        you confirm your email and login.
+      </>
+    ),
   },
   {
     question: "How Can I file my tax?",
