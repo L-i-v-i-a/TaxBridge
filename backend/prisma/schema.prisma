@@ -57,3 +57,50 @@ model PricingPlan {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+enum FilingStatus {
+  PENDING
+  UNDER_REVIEW
+  COMPLETED
+  REJECTED
+  NEEDS_INFO
+}
+
+enum ServiceType {
+  CALCULATION_ONLY   // "Calculate Tax" Button
+  EXPERT_GUIDED      // "File Tax" Button
+  FULL_FILING        // "Calculate and File Tax" Button
+}
+
+model TaxFiling {
+  id          String        @id @default(uuid())
+  filingId    String        @unique
+  userId      String
+  
+  // Core Data
+  serviceType ServiceType   @default(FULL_FILING)
+  taxYear     Int           @default(2024)
+  type        String?
+  status      FilingStatus  @default(PENDING)
+  amount      Float?
+  
+  // Form Data (Stored as JSON)
+  personalInfo   Json?
+  incomeDetails  Json?
+  deductions     Json?
+  
+  // Relations
+  documents   Document[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Document {
+  id        String @id @default(uuid())
+  name      String
+  url       String
+  type      String?
+  filingId  String
+  filing    TaxFiling @relation(fields: [filingId], references: [id], onDelete: Cascade)
+}

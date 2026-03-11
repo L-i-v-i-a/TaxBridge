@@ -35,3 +35,10 @@ h5,
 h6 {
   font-family: var(--font-poppins), system-ui, -apple-system, sans-serif;
 }
+
+.hero-background {
+  background-image: url(/image.png);
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+}

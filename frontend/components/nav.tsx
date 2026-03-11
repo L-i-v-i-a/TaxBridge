@@ -1,48 +1,61 @@
-import Link from 'next/link';
+import Link from "next/link";
+
 export default function Nav() {
   return (
-    <section>
-    <nav className="max-w-7xl mx-auto px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          {/* Logo/Brand */}
-          <div className="flex items-center">
-            <Link className="text-xl font-bold text-white hover:text-gray-300" href="/">
-              Taxbridge
-            </Link>
-          </div>
+    <header className="bg-[#0D23AD]">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <Link className="text-xl font-semibold text-white" href="/">
+          Taxbridge
+        </Link>
 
-          {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/home">
-              Home
-            </Link>
-            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/features">
-              Features
-            </Link>
-            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/pricing">
-              Pricing
-            </Link>
-            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/about">
-              About us
-            </Link>
-            <Link className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium" href="/contact">
-              Contact
-            </Link>
-          </div>
-
-          
-          <div className="flex items-center space-x-4">
-            <button className="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
-              Login
-            </button>
-            <button className="bg-white text-[#0D23AD] hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium">
-              Sign Up
-            </button>
-          </div>
+        <div className="hidden items-center gap-8 text-sm text-white md:flex">
+          <Link className="transition hover:text-white/80" href="/home">
+            Home
+          </Link>
+          <Link className="transition hover:text-white/80" href="/features">
+            Features
+          </Link>
+          <Link className="transition hover:text-white/80" href="/pricing">
+            Price
+          </Link>
+          <Link className="transition hover:text-white/80" href="/about">
+            About Us
+          </Link>
+          <Link className="transition hover:text-white/80" href="/contact">
+            Contact
+          </Link>
         </div>
+
+        <div className="flex items-center gap-4">
+          <Link className="text-sm text-white transition hover:text-white/80" href="/signup">
+            Signup
+          </Link>
+          <Link
+            className="rounded-md bg-white px-4 py-2 text-sm font-semibold text-[#0D23AD] shadow-sm transition hover:bg-white/90"
+            href="/login"
+          >
+            Login
+          </Link>
+        </div>
+      </nav>
+
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-6 pb-4 text-xs text-white/80 md:hidden">
+        <Link className="transition hover:text-white" href="/home">
+          Home
+        </Link>
+        <Link className="transition hover:text-white" href="/features">
+          Features
+        </Link>
+        <Link className="transition hover:text-white" href="/pricing">
+          Price
+        </Link>
+        <Link className="transition hover:text-white" href="/about">
+          About Us
+        </Link>
+        <Link className="transition hover:text-white" href="/contact">
+          Contact
+        </Link>
       </div>
-    </nav>
-    </section>
+    </header>
   );
 }
