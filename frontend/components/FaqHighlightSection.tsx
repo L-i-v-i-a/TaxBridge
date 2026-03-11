@@ -36,7 +36,16 @@ export default function FaqHighlightSection({ items }: FaqHighlightSectionProps)
           <div className="mt-6 space-y-4">
             <div className="flex items-start gap-3">
               <span className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-xs">
-                ✓
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2" />
+                  <path
+                    d="M8 12l3 3 5-5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </span>
               <div>
                 <p className="text-sm font-semibold">24/7 Availability</p>
@@ -48,7 +57,16 @@ export default function FaqHighlightSection({ items }: FaqHighlightSectionProps)
             </div>
             <div className="flex items-start gap-3">
               <span className="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-xs">
-                ✓
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2" />
+                  <path
+                    d="M8 12l3 3 5-5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </span>
               <div>
                 <p className="text-sm font-semibold">AI Chatbot</p>
