@@ -59,11 +59,11 @@ export default function Hero() {
                 </form>
             </div>
             </div>
-            <section>
+            {/* <section>
                 <img 
                 src="/cpa.png" 
                 alt="cpa-meeting" />
-            </section>
+            </section> */}
         </div>
     );
     

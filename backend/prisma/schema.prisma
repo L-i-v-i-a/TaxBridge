@@ -8,7 +8,23 @@ datasource db {
 
 model User {
   id             String   @id @default(uuid())
-  name           String
+
+  // personal name fields
+  name           String?            // legacy full name (computed or optional)
+  firstName      String?
+  lastName       String?
+
+  // extended tax-profile fields
+  ein                    String?      // Employer Identification Number
+  numberOfDependents     Int?
+  occupation             String?
+  streetAddress          String?
+  zipCode                String?
+  city                   String?
+  state                  String?
+  country                String?
+  filingStatus           String?
+
   username       String   @unique
   phone          String?  @unique
   email          String   @unique
@@ -17,8 +33,74 @@ model User {
   ssn            String?  
   profilePicture String?  // URL or path
   isVerified     Boolean  @default(false)
+  isAdmin        Boolean  @default(false)  // new: admin flag
+  googleId       String?  @unique  // Google OAuth ID
   otp            String?  
   otpExpiresAt   DateTime?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model Subscriber {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  subscribedAt DateTime @default(now())
+}
+
+model PricingPlan {
+  id        String   @id @default(uuid())
+  title     String
+  features  String[] // array of feature strings
+  price     Float
+  discount  Float?   // optional discount percentage or amount
+  type      String   // 'monthly' or 'yearly'
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum FilingStatus {
+  PENDING
+  UNDER_REVIEW
+  COMPLETED
+  REJECTED
+  NEEDS_INFO
+}
+
+enum ServiceType {
+  CALCULATION_ONLY   // "Calculate Tax" Button
+  EXPERT_GUIDED      // "File Tax" Button
+  FULL_FILING        // "Calculate and File Tax" Button
+}
+
+model TaxFiling {
+  id          String        @id @default(uuid())
+  filingId    String        @unique
+  userId      String
+  
+  // Core Data
+  serviceType ServiceType   @default(FULL_FILING)
+  taxYear     Int           @default(2024)
+  type        String?
+  status      FilingStatus  @default(PENDING)
+  amount      Float?
+  
+  // Form Data (Stored as JSON)
+  personalInfo   Json?
+  incomeDetails  Json?
+  deductions     Json?
+  
+  // Relations
+  documents   Document[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Document {
+  id        String @id @default(uuid())
+  name      String
+  url       String
+  type      String?
+  filingId  String
+  filing    TaxFiling @relation(fields: [filingId], references: [id], onDelete: Cascade)
 }

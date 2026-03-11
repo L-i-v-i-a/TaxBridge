@@ -8,6 +8,10 @@ import { PrismaModule } from './prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { FeaturesModule } from './features/features.module';
 import { RefundCalculatorModule } from './refund-calculator/refund-calculator.module';
+import { ContactModule } from './contact/contact.module';
+import { PricingModule } from './pricing/pricing.module';
+import { AiModule } from './npx/ai/ai.module';
+import { AiService } from './ai/ai.service';
 
 @Module({
   imports: [
@@ -23,8 +27,11 @@ import { RefundCalculatorModule } from './refund-calculator/refund-calculator.mo
     FeaturesModule,
     RefundCalculatorModule,
     AuthModule,
+    ContactModule,
+    PricingModule,
+    AiModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AiService],
 })
 export class AppModule {}
