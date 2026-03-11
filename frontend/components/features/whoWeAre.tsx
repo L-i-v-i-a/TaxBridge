@@ -20,7 +20,7 @@ const WhoWeAre: React.FC = () => {
         {/* Left Side: Image */}
         <div className="relative h-[400px] w-full overflow-hidden rounded-3xl shadow-xl">
           <Image
-            src="/taxbridge-team.jpg" // Replace with your actual image path
+            src="/cpa.png" // Replace with your actual image path
             alt="TaxBridge team working"
             fill
             className="object-cover"

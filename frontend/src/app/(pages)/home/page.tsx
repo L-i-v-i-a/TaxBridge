@@ -47,8 +47,9 @@ export default function HomePage() {
     <FaqHighlightSection items={faqItems} />
     <NewsletterSection/>
     <ReadyToStartSection/>
-    <SiteFooter/>
     <WhoWeAre/>
+    <SiteFooter/>
+   
     </div>
     </>
   )
