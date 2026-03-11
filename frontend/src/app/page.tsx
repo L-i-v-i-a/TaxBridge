@@ -1,6 +1,7 @@
 
-import Hero from "./components/Hero/hero";
-import Nav from "./components/nav/nav";
+import Hero from "../../components/hero";
+import Nav from "../../components/nav";
+
 
 
 

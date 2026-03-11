@@ -1,7 +1,10 @@
+import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';  // ← Add these imports
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { PrismaService } from './prisma.service';
+import * as bcrypt from 'bcrypt';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -37,5 +40,29 @@ async function bootstrap() {
   // ── Swagger setup ends here ──
 
   await app.listen(3000);  // or 3001 if you changed the port
+
+  // Create default admin user if not exists
+  const prisma = app.get(PrismaService);
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (adminEmail) {
+    const existingAdmin = await prisma.user.findFirst({
+      where: { email: adminEmail, isAdmin: true },
+    });
+    if (!existingAdmin) {
+      const hashed = await bcrypt.hash('admin123', 10);
+      await prisma.user.create({
+        data: {
+          firstName: 'Admin',
+          lastName: 'User',
+          username: 'admin',
+          email: adminEmail,
+          dateOfBirth: new Date('1990-01-01'),
+          password: hashed,
+          isAdmin: true,
+        },
+      });
+      console.log('✅ Default admin user created');
+    }
+  }
 }
 bootstrap();
