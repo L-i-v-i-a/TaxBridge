@@ -3,6 +3,8 @@ import Nav from "../../../../components/nav"
 import NewsletterSection from "../../../../components/NewsletterSection"
 import ReadyToStartSection from "../../../../components/ReadyToStartSection"
 import SiteFooter from "../../../../components/SiteFooter"
+import ContactUs from "../../../../components/contactus/contactus"
+
 
 const faqItems = [
   {
@@ -32,6 +34,7 @@ export default function ContactPage() {
     <>
     <Nav/>
     <FaqHighlightSection items={faqItems} />
+    <ContactUs/>
     <NewsletterSection/>
     <ReadyToStartSection/>
     <SiteFooter/>
