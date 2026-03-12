@@ -7,7 +7,7 @@ export default function TaxFiling() {
         
         {/* LEFT COLUMN: Text Content */}
         <div className="flex-1 flex flex-col gap-8">
-          <h1 className="font-bold text-5xl lg:text-7xl leading-[1.1] tracking-tight">
+          <h1 className="font-bold text-7xl lg:text-5xl leading-[1.1] tracking-tight">
             Tax filing shouldn't <br className="hidden lg:block" />
             be stressful or <br className="hidden lg:block" />
             confusing
@@ -53,7 +53,7 @@ export default function TaxFiling() {
       This 'crops' the YouTube title bar and logo out of view.
     */}
     <iframe 
-      className="absolute top-1/2 left-1/2 w-[150%] h-[170%] -translate-x-1/2 -translate-y-1/2"
+      className="absolute top-1/2 left-1/2 w-[120%] h-[110%] -translate-x-1/2 -translate-y-1/2"
       src="https://www.youtube.com/embed/qDXaWY4H0Es?autoplay=0&rel=0&modestbranding=1&controls=1&showinfo=0&iv_load_policy=3" 
       title="YouTube video player" 
       frameBorder="0" 
