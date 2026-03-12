@@ -6,6 +6,7 @@ import FaqHighlightSection from "../../../../components/FaqHighlightSection";
 import NewsletterSection from "../../../../components/NewsletterSection";
 import ReadyToStartSection from "../../../../components/ReadyToStartSection";
 import SiteFooter from "../../../../components/SiteFooter";
+import TaskFilling from "../../../../components/features/TaskFilling";
 
 const faqItems = [
   {
@@ -39,6 +40,7 @@ export default function FeaturesPage() {
       <FeatureHighlightSection />
       <StepsSection />
       <FaqHighlightSection items={faqItems} />
+      <TaskFilling/>
       <NewsletterSection />
       <ReadyToStartSection />
       <SiteFooter />
