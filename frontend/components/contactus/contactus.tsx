@@ -1,3 +1,5 @@
+"use client"; // Add this if using Next.js App Router and planning to handle form state
+
 import React from 'react';
 import { Mail, MapPin, Phone } from 'lucide-react';
 
