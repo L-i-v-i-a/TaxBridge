@@ -33,9 +33,9 @@ export default function ContactPage() {
   return (
     <>
     <Nav/>
-    <FaqHighlightSection items={faqItems} />
     <ContactUs/>
-    <NewsletterSection/>
+    <FaqHighlightSection items={faqItems} />
+  <NewsletterSection/>
     <ReadyToStartSection/>
     <SiteFooter/>
     </>
