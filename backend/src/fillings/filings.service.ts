@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, InternalServerErrorException, ForbiddenException } from '@nestjs/common';
 
 import { ServiceType, FilingStatus } from '@prisma/client';
 
@@ -7,6 +7,7 @@ import { AiService } from '../ai/ai.service';
 import { MailService } from '../mail/mail.service';
 
 import { CreateFilingDto } from './dto/create-filing.dto';
+import { UpdateFilingDto } from './dto/update-filing.dto';
 
 @Injectable()
 export class FilingsService {
@@ -133,6 +134,24 @@ export class FilingsService {
     throw new InternalServerErrorException('Invalid Service Type provided');
   }
 
+  // NEW: Admin Update Method
+  async updateFiling(adminId: string, filingId: string, dto: UpdateFilingDto) {
+    // 1. Verify the user is an Admin
+    const admin = await this.prisma.user.findUnique({ where: { id: adminId } });
+    
+    if (!admin || !admin.isAdmin) {
+      throw new ForbiddenException('Only administrators can update filings');
+    }
+
+    // 2. Update the filing
+    return this.prisma.taxFiling.update({
+      where: { id: filingId },
+      data: {
+        status: dto.status,
+        amount: dto.amount,
+      },
+    });
+  }
   async getUserFilings(userId: string) {
     return this.prisma.taxFiling.findMany({
       where: { userId },

@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Query, UseInterceptors, UploadedFiles, Request, UseGuards, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Patch, Param, Get, Body, Query, UseInterceptors, UploadedFiles, Request, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -7,6 +7,7 @@ import { ServiceType } from '@prisma/client';
 import { FilingsService } from './filings.service';
 
 import { CreateFilingDto } from './dto/create-filing.dto';
+import { UpdateFilingDto } from './dto/update-filing.dto';
 
 @Controller('filings')
 @UseGuards(AuthGuard('jwt'))
@@ -21,10 +22,7 @@ export class FilingsController {
     @UploadedFiles() files: Express.Multer.File[],
     @Query('serviceType') serviceType: ServiceType
   ) {
-    // FIX: Changed from req.user.userId to req.user.sub
     const userId = req.user?.sub; 
-
-    console.log('Extracted User ID:', userId); // Log to verify
 
     if (!userId) {
        throw new UnauthorizedException('User ID not found in token');
@@ -35,7 +33,6 @@ export class FilingsController {
 
   @Get()
   async findAll(@Request() req) {
-    // FIX: Changed from req.user.userId to req.user.sub
     const userId = req.user?.sub;
     
     if (!userId) {
@@ -43,5 +40,15 @@ export class FilingsController {
     }
     
     return this.filingsService.getUserFilings(userId);
+  }
+
+  @Patch(':id')
+  async updateFiling(
+    @Request() req,
+    @Param('id') filingId: string,
+    @Body() updateFilingDto: UpdateFilingDto
+  ) {
+    const adminId = req.user?.sub;
+    return this.filingsService.updateFiling(adminId, filingId, updateFilingDto);
   }
 }
