@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 
 import { ServiceType, FilingStatus } from '@prisma/client';
 
@@ -22,23 +22,31 @@ export class FilingsService {
     files: Express.Multer.File[],
     serviceType: ServiceType
   ) {
-    // 1. Generate Filing ID
+    
+    if (!userId) {
+      throw new UnauthorizedException('User ID is missing. Authentication failed.');
+    }
+
+    // 1. Generate ID and Extract Year
     const count = await this.prisma.taxFiling.count();
     const filingId = `F${new Date().getFullYear()}-${String(count + 1).padStart(3, '0')}`;
+    
+    // Ensure we have a tax year, default to current year if missing
+    const taxYear = dto.taxYear || new Date().getFullYear();
 
-    // 2. Prepare Base Data
+    // 2. Prepare Data Object
     const filingData: any = {
-      userId,
-      filingId,
-      serviceType,
-      taxYear: dto.taxYear || 2024,
+      userId: userId,
+      filingId: filingId,
+      serviceType: serviceType,
+      taxYear: taxYear,
       type: dto.type || 'Federal',
       personalInfo: dto.personalInfo,
       incomeDetails: dto.incomeDetails,
       deductions: dto.deductions,
     };
 
-    // Handle File Uploads
+    // Map uploaded files
     if (files && files.length > 0) {
       filingData.documents = {
         create: files.map(f => ({
@@ -49,70 +57,80 @@ export class FilingsService {
       };
     }
 
-    // --- LOGIC FOR BUTTON 1: CALCULATION ONLY ---
+    // --- LOGIC HANDLERS ---
+
+    // A. CALCULATION ONLY
     if (serviceType === ServiceType.CALCULATION_ONLY) {
-      const aiResult = await this.ai.calculateTax(dto.incomeDetails, dto.deductions);
+      // FIX: Pass taxYear as the first argument
+      const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, dto.deductions);
 
       if (aiResult.success) {
-        filingData.status = FilingStatus.COMPLETED;
-        filingData.amount = aiResult.amount;
-        const filing = await this.prisma.taxFiling.create({ data: filingData });
-        return { message: "Calculation Successful", data: filing };
+        return this.prisma.taxFiling.create({
+          data: {
+            ...filingData,
+            status: FilingStatus.COMPLETED,
+            amount: aiResult.amount
+          }
+        });
       } else {
-        // AI Failed -> Notify Admin
-        filingData.status = FilingStatus.UNDER_REVIEW;
-        const filing = await this.prisma.taxFiling.create({ data: filingData });
+        const filing = await this.prisma.taxFiling.create({
+          data: { ...filingData, status: FilingStatus.UNDER_REVIEW }
+        });
         
         await this.mailer.sendAdminNotification(
-          filingId, 
-          `AI Calculation Failed: ${aiResult.error}`, 
+          filingId,
+          `AI Calculation Failed: ${aiResult.error}`,
           dto.personalInfo?.email
         );
-
-        return { message: "Complex data detected. Expert assigned for manual review.", data: filing };
+        
+        return filing;
       }
     }
 
-    // --- LOGIC FOR BUTTON 2: EXPERT GUIDED ---
+    // B. EXPERT GUIDED
     if (serviceType === ServiceType.EXPERT_GUIDED) {
-      filingData.status = FilingStatus.UNDER_REVIEW;
-      const filing = await this.prisma.taxFiling.create({ data: filingData });
-
-      // Immediate Admin Notification for Expert Review
+      const filing = await this.prisma.taxFiling.create({
+        data: { ...filingData, status: FilingStatus.UNDER_REVIEW }
+      });
+      
       await this.mailer.sendAdminNotification(
-        filingId, 
-        'New Expert Guided Filing Request', 
+        filingId,
+        'New Expert Guided Request',
         dto.personalInfo?.email
       );
-
-      return { message: "Submission received. An expert has been assigned.", data: filing };
+      
+      return filing;
     }
 
-    // --- LOGIC FOR BUTTON 3: CALCULATE AND FILE TAX ---
+    // C. FULL FILING
     if (serviceType === ServiceType.FULL_FILING) {
-      const aiResult = await this.ai.calculateTax(dto.incomeDetails, dto.deductions);
+      // FIX: Pass taxYear as the first argument
+      const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, dto.deductions);
 
       if (aiResult.success) {
-        filingData.status = FilingStatus.COMPLETED; // Or PENDING_AUTHORIZATION
-        filingData.amount = aiResult.amount;
-        const filing = await this.prisma.taxFiling.create({ data: filingData });
-        return { message: "Tax Calculated and Filed Successfully.", data: filing };
+        return this.prisma.taxFiling.create({
+          data: {
+            ...filingData,
+            status: FilingStatus.COMPLETED,
+            amount: aiResult.amount
+          }
+        });
       } else {
-        // AI Failed -> Admin must manually file
-        filingData.status = FilingStatus.NEEDS_INFO;
-        const filing = await this.prisma.taxFiling.create({ data: filingData });
-
+        const filing = await this.prisma.taxFiling.create({
+          data: { ...filingData, status: FilingStatus.NEEDS_INFO }
+        });
+        
         await this.mailer.sendAdminNotification(
-          filingId, 
-          'End-to-End Filing Failed AI Check - Manual Intervention Required', 
+          filingId,
+          'Manual Filing Intervention Required',
           dto.personalInfo?.email
         );
-
-        return { message: "Submission received. Our team is reviewing to finalize.", data: filing };
+        
+        return filing;
       }
     }
 
-    return { message: "Service type not recognized" };
+    throw new InternalServerErrorException('Invalid Service Type provided');
   }
 
   async getUserFilings(userId: string) {

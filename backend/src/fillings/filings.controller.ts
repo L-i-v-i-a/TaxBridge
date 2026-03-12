@@ -1,38 +1,47 @@
-import { Controller, Post, Get, Body, Query, UseInterceptors, UploadedFiles, Request, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Body, Query, UseInterceptors, UploadedFiles, Request, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth } from '@nestjs/swagger/dist/decorators/api-bearer.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 import { ServiceType } from '@prisma/client';
-
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 import { FilingsService } from './filings.service';
 
 import { CreateFilingDto } from './dto/create-filing.dto';
 
 @Controller('filings')
+@UseGuards(AuthGuard('jwt'))
 export class FilingsController {
   constructor(private readonly filingsService: FilingsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @UseInterceptors(FilesInterceptor('documents', 10))
-  async handleTaxAction(
+  async create(
     @Request() req,
     @Body() createFilingDto: CreateFilingDto,
     @UploadedFiles() files: Express.Multer.File[],
     @Query('serviceType') serviceType: ServiceType
   ) {
-    // Extract userId from JWT (mocked here for demo)
-    const userId = req.user?.id || 'user_123';
-    
+    // FIX: Changed from req.user.userId to req.user.sub
+    const userId = req.user?.sub; 
+
+    console.log('Extracted User ID:', userId); // Log to verify
+
+    if (!userId) {
+       throw new UnauthorizedException('User ID not found in token');
+    }
+
     return this.filingsService.createFiling(userId, createFilingDto, files, serviceType);
   }
 
   @Get()
-  async getHistory(@Request() req) {
-    const userId = req.user?.id || 'user_123';
+  async findAll(@Request() req) {
+    // FIX: Changed from req.user.userId to req.user.sub
+    const userId = req.user?.sub;
+    
+    if (!userId) {
+       throw new UnauthorizedException('User ID not found in token');
+    }
+    
     return this.filingsService.getUserFilings(userId);
   }
 }
