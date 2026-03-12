@@ -7,11 +7,15 @@ import {
   UseInterceptors,
   UploadedFiles,
   Request,
+  UseGuards,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth } from '@nestjs/swagger/dist/decorators/api-bearer.decorator';
 import { Request as ExpressRequest } from 'express';
 
 import { ServiceType } from '@prisma/client';
+
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 import { FilingsService } from './filings.service';
 
@@ -22,6 +26,8 @@ export class FilingsController {
   constructor(private readonly filingsService: FilingsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @UseInterceptors(FilesInterceptor('documents', 10))
   async handleTaxAction(
     @Request() req: ExpressRequest & { user?: { id?: string } },

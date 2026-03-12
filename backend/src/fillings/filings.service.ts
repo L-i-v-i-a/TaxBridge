@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 
 import { ServiceType, FilingStatus, Prisma } from '@prisma/client';
 
+import { PrismaService } from '../prisma.service';
 import { AiService } from '../ai/ai.service';
 import { MailService } from '../mail/mail.service';
-import { PrismaService } from '../prisma.service';
 
 import { CreateFilingDto } from './dto/create-filing.dto';
 

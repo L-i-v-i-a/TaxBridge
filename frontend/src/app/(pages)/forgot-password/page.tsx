@@ -17,7 +17,7 @@ export default function ForgotPasswordPage() {
           className="mt-8 space-y-6"
           onSubmit={(event) => {
             event.preventDefault();
-            router.push("/forgot-password/otp");
+            router.push("/forgot-password/reset");
           }}
         >
           <div>

@@ -12,8 +12,8 @@ export default function AuthLeftPanel() {
           className="object-cover opacity-25"
         />
       </div>
-      <div className="relative z-10 flex h-full flex-col justify-center px-10 py-12 min-[1440px]:px-[40px]">
-        <div className="mb-10 flex items-center">
+      <div className="relative z-10 flex h-full flex-col justify-start px-10 py-12 min-[1440px]:px-[40px]">
+        <div className="mb-24 flex items-center">
           <Link
             href="/"
             className="rounded-full border border-white/60 px-4 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-white hover:border-white cursor-pointer"
@@ -31,14 +31,6 @@ export default function AuthLeftPanel() {
         <p className="mt-6 text-sm font-semibold uppercase tracking-[0.2em] text-[#5FF7E2] min-[1440px]:text-[20px] min-[1440px]:leading-[32px]">
           Tax Filing That Actually Fits Your Life
         </p>
-      </div>
-      <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-3">
-        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/40 text-white">
-          &larr;
-        </span>
-        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/40 text-white">
-          &rarr;
-        </span>
       </div>
     </div>
   );

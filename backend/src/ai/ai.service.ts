@@ -78,6 +78,7 @@ export class AiService {
         response_format: { type: 'json_object' },
       });
 
+      // FIX: Extract content safely
       const content = response.choices[0].message.content;
       if (!content) {
         return { success: false, error: 'Empty AI response' };
