@@ -40,7 +40,6 @@ export default function FeaturesPage() {
       <FeatureHighlightSection />
       <StepsSection />
       <FaqHighlightSection items={faqItems} />
-      <TaskFilling/>
       <NewsletterSection />
       <ReadyToStartSection />
       <SiteFooter />
