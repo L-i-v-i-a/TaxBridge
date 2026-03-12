@@ -85,13 +85,24 @@ export default function Hero() {
 
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-bold uppercase text-gray-400 ml-1">Annual Income</label>
-                <div className="bg-gray-100 p-4 rounded-xl font-bold text-gray-700 mt-1">$50,000</div>
+                Annual Income
+               
+                <div className="bg-gray-100 p-4 rounded-xl font-bold text-gray-700 mt-1">
+                   <input 
+                type='text'
+                placeholder='5000'
+                 className="text-xl font-bold uppercase placeholder-gray-400 focus:outline-none focus:ring-0 border-none ml-1"/>
+                </div>
               </div>
               
               <div>
-                <label className="text-xs font-bold uppercase text-gray-400 ml-1">Federal Tax Withheld</label>
-                <div className="bg-gray-100 p-4 rounded-xl font-bold text-gray-700 mt-1">$5,000</div>
+               Federal Tax Withheld
+                 <div className="bg-gray-100 p-4 rounded-xl font-bold text-gray-700 mt-1">
+                   <input 
+                type='text'
+                placeholder='5000'
+                 className="text-xl font-bold uppercase placeholder-gray-400 focus:outline-none focus:ring-0 border-none ml-1text-xl font-bold uppercase text-gray-400 ml-1"/>
+                </div>
               </div>
 
               <button className="w-full bg-[#0D23AD] text-white py-5 rounded-2xl font-bold text-lg mt-4 cursor-pointer hover:bg-blue-800 shadow-lg shadow-blue-200 transition-all active:scale-[0.98]">
