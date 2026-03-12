@@ -48,7 +48,14 @@ export class AiService {
         response_format: { type: "json_object" },
       });
 
+      // FIX: Extract content safely
       const content = response.choices[0].message.content;
+
+      // FIX: Check if content is not null before parsing
+      if (!content) {
+        return { success: false, error: "AI returned an empty response" };
+      }
+
       const result = JSON.parse(content);
 
       return {
