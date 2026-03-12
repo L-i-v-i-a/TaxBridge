@@ -12,14 +12,15 @@ export class RefundCalculatorService {
     let estimatedTaxLiability = 0;
 
     if (annualIncome <= 11600) {
-      estimatedTaxLiability = annualIncome * 0.10;
+      estimatedTaxLiability = annualIncome * 0.1;
     } else if (annualIncome <= 47150) {
       estimatedTaxLiability = 1160 + (annualIncome - 11600) * 0.12;
     } else if (annualIncome <= 100525) {
       estimatedTaxLiability = 5426 + (annualIncome - 47150) * 0.22;
     } else {
       // Simplified for higher – add more brackets later
-      estimatedTaxLiability = 5426 + (100525 - 47150) * 0.22 + (annualIncome - 100525) * 0.24;
+      estimatedTaxLiability =
+        5426 + (100525 - 47150) * 0.22 + (annualIncome - 100525) * 0.24;
     }
 
     // Refund = withheld - liability (positive = refund, negative = owe)
@@ -27,12 +28,13 @@ export class RefundCalculatorService {
 
     return {
       estimatedRefund: Math.round(estimatedRefund),
-      currency: '$',  // Change to '₦' later for Nigeria
+      currency: '$', // Change to '₦' later for Nigeria
       annualIncome,
       federalTaxWithheld,
-      message: estimatedRefund > 0 
-        ? `Estimated refund: $${Math.abs(estimatedRefund).toLocaleString()}`
-        : `You may owe: $${Math.abs(estimatedRefund).toLocaleString()}`,
+      message:
+        estimatedRefund > 0
+          ? `Estimated refund: $${Math.abs(estimatedRefund).toLocaleString()}`
+          : `You may owe: $${Math.abs(estimatedRefund).toLocaleString()}`,
     };
   }
 }

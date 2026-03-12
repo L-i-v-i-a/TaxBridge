@@ -21,7 +21,9 @@ async function bootstrap() {
   // ── Swagger setup starts here ──
   const config = new DocumentBuilder()
     .setTitle('Taxbridge API')
-    .setDescription('API for Taxbridge tax filing platform - Smart AI + Human experts')
+    .setDescription(
+      'API for Taxbridge tax filing platform - Smart AI + Human experts',
+    )
     .setVersion('1.0')
     .addTag('refund-calculator', 'Endpoints for refund estimation')
     .addTag('features', 'Core features listing')
@@ -39,7 +41,7 @@ async function bootstrap() {
   });
   // ── Swagger setup ends here ──
 
-  await app.listen(3000);  // or 3001 if you changed the port
+  await app.listen(3000); // or 3001 if you changed the port
 
   // Create default admin user if not exists
   const prisma = app.get(PrismaService);
@@ -65,4 +67,4 @@ async function bootstrap() {
     }
   }
 }
-bootstrap();
+void bootstrap();

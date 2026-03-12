@@ -1,5 +1,15 @@
-import { Controller, Post, Get, Body, Query, UseInterceptors, UploadedFiles, Request } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Query,
+  UseInterceptors,
+  UploadedFiles,
+  Request,
+} from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { Request as ExpressRequest } from 'express';
 
 import { ServiceType } from '@prisma/client';
 
@@ -14,19 +24,26 @@ export class FilingsController {
   @Post()
   @UseInterceptors(FilesInterceptor('documents', 10))
   async handleTaxAction(
-    @Request() req,
+    @Request() req: ExpressRequest & { user?: { id?: string } },
     @Body() createFilingDto: CreateFilingDto,
     @UploadedFiles() files: Express.Multer.File[],
-    @Query('serviceType') serviceType: ServiceType
+    @Query('serviceType') serviceType: ServiceType,
   ) {
     // Extract userId from JWT (mocked here for demo)
     const userId = req.user?.id || 'user_123';
-    
-    return this.filingsService.createFiling(userId, createFilingDto, files, serviceType);
+
+    return this.filingsService.createFiling(
+      userId,
+      createFilingDto,
+      files,
+      serviceType,
+    );
   }
 
   @Get()
-  async getHistory(@Request() req) {
+  async getHistory(
+    @Request() req: ExpressRequest & { user?: { id?: string } },
+  ) {
     const userId = req.user?.id || 'user_123';
     return this.filingsService.getUserFilings(userId);
   }

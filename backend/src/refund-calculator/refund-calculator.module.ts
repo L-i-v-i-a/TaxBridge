@@ -4,6 +4,6 @@ import { RefundCalculatorService } from './refund-calculator.service';
 
 @Module({
   controllers: [RefundCalculatorController],
-  providers: [RefundCalculatorService]
+  providers: [RefundCalculatorService],
 })
 export class RefundCalculatorModule {}

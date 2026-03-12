@@ -1,4 +1,9 @@
-import { IsString, IsObject, IsOptional, IsNumber, IsEnum, ValidateNested } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsNumber,
+  ValidateNested,
+} from 'class-validator';
 
 import { Type } from 'class-transformer';
 
@@ -46,7 +51,7 @@ class DeductionDto {
 
   @IsString()
   hasDependents: string;
-  
+
   @IsOptional()
   @IsNumber()
   donationAmount: number;

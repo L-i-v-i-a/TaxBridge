@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config'; 
+import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -17,13 +17,13 @@ import { AiService } from './ai/ai.service';
   imports: [
     // ConfigModule should be imported FIRST (and made global)
     ConfigModule.forRoot({
-      isGlobal: true,              // Makes ConfigService injectable everywhere without importing ConfigModule again
-      envFilePath: '.env',         // Explicitly load your .env file
+      isGlobal: true, // Makes ConfigService injectable everywhere without importing ConfigModule again
+      envFilePath: '.env', // Explicitly load your .env file
       ignoreEnvFile: process.env.NODE_ENV === 'production', // Optional: skip .env in prod if using real env vars
       validationSchema: undefined, // Add Joi/Zod validation later if needed
     }),
 
-    PrismaModule,            // should be listed before feature modules
+    PrismaModule, // should be listed before feature modules
     FeaturesModule,
     RefundCalculatorModule,
     AuthModule,

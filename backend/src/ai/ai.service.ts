@@ -9,6 +9,33 @@ interface AiResult {
   error?: string;
 }
 
+type AiResponse = {
+  success: boolean;
+  amount?: number;
+  error?: string | null;
+};
+
+const isAiResponse = (value: unknown): value is AiResponse => {
+  if (!value || typeof value !== 'object') return false;
+  const record = value as Record<string, unknown>;
+  if (typeof record.success !== 'boolean') return false;
+  if (
+    record.amount !== undefined &&
+    typeof record.amount !== 'number' &&
+    record.amount !== null
+  ) {
+    return false;
+  }
+  if (
+    record.error !== undefined &&
+    typeof record.error !== 'string' &&
+    record.error !== null
+  ) {
+    return false;
+  }
+  return true;
+};
+
 @Injectable()
 export class AiService {
   private openai: OpenAI;
@@ -20,7 +47,10 @@ export class AiService {
     }
   }
 
-  async calculateTax(incomeDetails: any, deductions: any): Promise<AiResult> {
+  async calculateTax(
+    incomeDetails: { withholdingAmount?: string | number } | null,
+    deductions: unknown,
+  ): Promise<AiResult> {
     // If no API key is set, use Mock Logic for testing
     if (!this.openai) {
       return this.mockCalculation(incomeDetails, deductions);
@@ -43,34 +73,55 @@ export class AiService {
       `;
 
       const response = await this.openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
-        response_format: { type: "json_object" },
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' },
       });
 
       const content = response.choices[0].message.content;
-      const result = JSON.parse(content);
-
+      if (!content) {
+        return { success: false, error: 'Empty AI response' };
+      }
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(content);
+      } catch {
+        return { success: false, error: 'Invalid AI response format' };
+      }
+      if (!isAiResponse(parsed)) {
+        return { success: false, error: 'Unexpected AI response schema' };
+      }
       return {
-        success: result.success,
-        amount: result.amount,
-        error: result.error
+        success: parsed.success,
+        amount: typeof parsed.amount === 'number' ? parsed.amount : undefined,
+        error: typeof parsed.error === 'string' ? parsed.error : undefined,
       };
-
     } catch (error) {
-      console.error("OpenAI Error:", error);
-      return { success: false, error: "AI Service failed to process request" };
+      console.error('OpenAI Error:', error);
+      return { success: false, error: 'AI Service failed to process request' };
     }
   }
 
   // Fallback Mock Logic
-  private async mockCalculation(incomeDetails: any, deductions: any): Promise<AiResult> {
-    await new Promise(r => setTimeout(r, 500)); // Simulate delay
-    
+  private async mockCalculation(
+    incomeDetails: { withholdingAmount?: string | number } | null,
+    deductions: unknown,
+  ): Promise<AiResult> {
+    await new Promise((r) => setTimeout(r, 500)); // Simulate delay
+
+    const hasDeductions = Boolean(deductions);
+    const rate = hasDeductions ? 0.12 : 0.15;
     // Simple mock: if income exists, succeed. Else fail.
     if (incomeDetails?.withholdingAmount) {
-       return { success: true, amount: parseFloat(incomeDetails.withholdingAmount) * 0.15 };
+      const baseAmount =
+        typeof incomeDetails.withholdingAmount === 'string'
+          ? parseFloat(incomeDetails.withholdingAmount)
+          : incomeDetails.withholdingAmount;
+      return {
+        success: true,
+        amount: baseAmount * rate,
+      };
     }
-    return { success: false, error: "Insufficient data for calculation" };
+    return { success: false, error: 'Insufficient data for calculation' };
   }
 }
