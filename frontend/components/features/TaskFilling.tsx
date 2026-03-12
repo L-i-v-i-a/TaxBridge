@@ -40,12 +40,11 @@ export default function TaxFiling() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Professional Video Frame */}
        {/* RIGHT COLUMN: Professional Video Frame */}
 <div className="flex-1 w-full max-w-2xl relative">
   
   {/* Decorative Background Glow */}
-  <div className="absolute -inset-4 bg-gradient-to-tr from-[#5FF7E2]/20 to-[#473BF0]/30 blur-2xl rounded-[40px] opacity-50" />
+  <div className="absolute -inset-4 bg-gradient-to-tr from-[#5FF7E2]/20 to-[#473BF0]/30 blur-2xl rounded-[20px] opacity-50" />
 
   {/* Main Video Container: 'overflow-hidden' is key here */}
   <div className="relative w-full aspect-video rounded-none overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] bg-black border border-white/10">
@@ -54,7 +53,7 @@ export default function TaxFiling() {
       This 'crops' the YouTube title bar and logo out of view.
     */}
     <iframe 
-      className="absolute top-1/2 left-1/2 w-[150%] h-[150%] -translate-x-1/2 -translate-y-1/2"
+      className="absolute top-1/2 left-1/2 w-[150%] h-[170%] -translate-x-1/2 -translate-y-1/2"
       src="https://www.youtube.com/embed/qDXaWY4H0Es?autoplay=0&rel=0&modestbranding=1&controls=1&showinfo=0&iv_load_policy=3" 
       title="YouTube video player" 
       frameBorder="0" 
