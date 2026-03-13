@@ -5,33 +5,39 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma.module';
 
+import { AiModule } from './ai/ai.module';
 import { AuthModule } from './auth/auth.module';
-import { FeaturesModule } from './features/features.module';
-import { RefundCalculatorModule } from './refund-calculator/refund-calculator.module';
 import { ContactModule } from './contact/contact.module';
+import { FeaturesModule } from './features/features.module';
+import { FilingsModule } from './fillings/filings.module';
+import { MailModule } from './mail/mail.module';
+import { PaystackModule } from './paystack/paystack.module';
 import { PricingModule } from './pricing/pricing.module';
-import { AiModule } from './npx/ai/ai.module';
-import { AiService } from './ai/ai.service';
+import { RefundCalculatorModule } from './refund-calculator/refund-calculator.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
-    // ConfigModule should be imported FIRST (and made global)
     ConfigModule.forRoot({
-      isGlobal: true, // Makes ConfigService injectable everywhere without importing ConfigModule again
-      envFilePath: '.env', // Explicitly load your .env file
-      ignoreEnvFile: process.env.NODE_ENV === 'production', // Optional: skip .env in prod if using real env vars
-      validationSchema: undefined, // Add Joi/Zod validation later if needed
+      isGlobal: true,
+      envFilePath: '.env',
+      ignoreEnvFile: process.env.NODE_ENV === 'production',
+      validationSchema: undefined,
     }),
 
-    PrismaModule, // should be listed before feature modules
+    PrismaModule,
+    MailModule,
     FeaturesModule,
     RefundCalculatorModule,
     AuthModule,
     ContactModule,
     PricingModule,
     AiModule,
+    FilingsModule,
+    PaymentModule,
+    PaystackModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AiService],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -1,6 +1,8 @@
 import {
   Controller,
   Post,
+  Patch,
+  Param,
   Get,
   Body,
   Query,
@@ -8,35 +10,38 @@ import {
   UploadedFiles,
   Request,
   UseGuards,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth } from '@nestjs/swagger/dist/decorators/api-bearer.decorator';
-import { Request as ExpressRequest } from 'express';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 import { ServiceType } from '@prisma/client';
-
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 import { FilingsService } from './filings.service';
 
 import { CreateFilingDto } from './dto/create-filing.dto';
+import { UpdateFilingDto } from './dto/update-filing.dto';
 
 @Controller('filings')
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 export class FilingsController {
   constructor(private readonly filingsService: FilingsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @UseInterceptors(FilesInterceptor('documents', 10))
-  async handleTaxAction(
-    @Request() req: ExpressRequest & { user?: { id?: string } },
+  async create(
+    @Request() req: { user?: { sub?: string } },
     @Body() createFilingDto: CreateFilingDto,
     @UploadedFiles() files: Express.Multer.File[],
     @Query('serviceType') serviceType: ServiceType,
   ) {
-    // Extract userId from JWT (mocked here for demo)
-    const userId = req.user?.id || 'user_123';
+    const userId = req.user?.sub;
+
+    if (!userId) {
+      throw new UnauthorizedException('User ID not found in token');
+    }
 
     return this.filingsService.createFiling(
       userId,
@@ -47,10 +52,23 @@ export class FilingsController {
   }
 
   @Get()
-  async getHistory(
-    @Request() req: ExpressRequest & { user?: { id?: string } },
-  ) {
-    const userId = req.user?.id || 'user_123';
+  async findAll(@Request() req: { user?: { sub?: string } }) {
+    const userId = req.user?.sub;
+
+    if (!userId) {
+      throw new UnauthorizedException('User ID not found in token');
+    }
+
     return this.filingsService.getUserFilings(userId);
+  }
+
+  @Patch(':id')
+  async updateFiling(
+    @Request() req: { user?: { sub?: string } },
+    @Param('id') filingId: string,
+    @Body() updateFilingDto: UpdateFilingDto,
+  ) {
+    const adminId = req.user?.sub;
+    return this.filingsService.updateFiling(adminId, filingId, updateFilingDto);
   }
 }
