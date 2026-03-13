@@ -52,7 +52,7 @@ const ContactUs = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/contact', {
+      const response = await fetch('http://localhost:3001/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
