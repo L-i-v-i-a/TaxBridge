@@ -37,7 +37,7 @@ export default function HomePage() {
   return (
     <>
     <div
-        className="bg-[#0D23AD] text-white relative overflow-hidden"
+        className="bg-[#0D23AD] text-white relative overflow-hidden pt-20"
         style={{
           backgroundImage: "url(/image.png)",
           backgroundSize: "cover",
