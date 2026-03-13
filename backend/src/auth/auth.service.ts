@@ -7,6 +7,8 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
+import { User } from '@prisma/client'; 
+
 import * as bcrypt from 'bcrypt';
 
 import * as nodemailer from 'nodemailer';
@@ -15,6 +17,14 @@ import { PrismaService } from '../prisma.service';
 import { PaystackService } from '../paystack/paystack.service';
 
 import { SignupDto } from './dto/signup.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto'; // <--- 2. Import the DTO
+
+// <--- 3. Define the JwtPayload interface
+interface JwtPayload {
+  sub: string;
+  email: string;
+  isAdmin: boolean;
+}
 
 @Injectable()
 export class AuthService {
