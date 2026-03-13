@@ -33,7 +33,7 @@ const ContactUs = () => {
               </div>
               <div className="text-xl">
                 <p>123, Atlanta United State.</p>
-                <p>123, Kwaripa, Abuja, Nigeria.</p>
+                <p>123, Gwarinpa, Abuja, Nigeria.</p>
               </div>
             </div>
 
