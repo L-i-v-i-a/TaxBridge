@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { PrismaModule } from '../prisma.module';
-import { JwtStrategy } from './jwt.strategy';
-import { GoogleStrategy } from './google.strategy';
 
+import { PrismaModule } from '../prisma.module';
+import { PaystackModule } from '../paystack/paystack.module'; 
+
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { GoogleStrategy } from './google.strategy';
+import { JwtStrategy } from './jwt.strategy';
 @Module({
   imports: [
     PrismaModule,
@@ -15,6 +17,7 @@ import { GoogleStrategy } from './google.strategy';
       secret: process.env.JWT_SECRET || 'dev-secret',
       signOptions: { expiresIn: '1h' },
     }),
+    PaystackModule, // <--- 2. Add PaystackModule to imports
   ],
   providers: [AuthService, JwtStrategy, GoogleStrategy],
   controllers: [AuthController],
