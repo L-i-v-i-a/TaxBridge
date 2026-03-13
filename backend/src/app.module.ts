@@ -11,8 +11,10 @@ import { ContactModule } from './contact/contact.module';
 import { FeaturesModule } from './features/features.module';
 import { FilingsModule } from './fillings/filings.module';
 import { MailModule } from './mail/mail.module';
+import { PaystackModule } from './paystack/paystack.module';
 import { PricingModule } from './pricing/pricing.module';
 import { RefundCalculatorModule } from './refund-calculator/refund-calculator.module';//
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -24,16 +26,16 @@ import { RefundCalculatorModule } from './refund-calculator/refund-calculator.mo
     }),
 
     PrismaModule,
-    MailModule,        // <--- ADD THIS (Global mail service)
-    
+    MailModule,
     FeaturesModule,
     RefundCalculatorModule,
     AuthModule,
     ContactModule,
     PricingModule,
     AiModule,
-    
-    FilingsModule, 
+    FilingsModule,
+    PaymentModule,
+    PaystackModule,
   ],
   controllers: [AppController],
   providers: [AppService],

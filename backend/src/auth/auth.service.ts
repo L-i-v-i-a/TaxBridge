@@ -1,10 +1,15 @@
 import { Injectable, BadRequestException, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+
 import * as bcrypt from 'bcrypt';
-import { PrismaService } from '../prisma.service'; // adjust path if needed
-import { SignupDto } from './dto/signup.dto';
+
 import * as nodemailer from 'nodemailer';
+
+import { PrismaService } from '../prisma.service';
+import { PaystackService } from '../paystack/paystack.service';
+
+import { SignupDto } from './dto/signup.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,15 +19,10 @@ export class AuthService {
     private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
+    private paystack: PaystackService
   ) {
-    // Initialize nodemailer transporter for Gmail
     const gmailUser = this.config.get<string>('GMAIL_USER');
     const gmailPass = this.config.get<string>('GMAIL_APP_PASSWORD');
-
-    console.log('process.env.GMAIL_USER:', process.env.GMAIL_USER);
-    console.log('process.env.GMAIL_APP_PASSWORD:', process.env.GMAIL_APP_PASSWORD ? 'set' : 'not set');
-    console.log('GMAIL_USER from config:', gmailUser ? 'set' : 'not set');
-    console.log('GMAIL_APP_PASSWORD from config:', gmailPass ? 'set' : 'not set');
 
     if (gmailUser && gmailPass) {
       this.transporter = nodemailer.createTransport({
@@ -32,36 +32,41 @@ export class AuthService {
           pass: gmailPass,
         },
       });
-      console.log('✅ Nodemailer initialized with Gmail');
-    } else {
-      console.warn('⚠️ GMAIL_USER or GMAIL_APP_PASSWORD not found in environment – email sending disabled');
     }
   }
 
   async signup(dto: SignupDto) {
-    const existing = await this.prisma.user.findFirst({
-      where: { OR: [{ email: dto.email }, { username: dto.username }] },
-    });
-    if (existing) throw new BadRequestException('Email or username already taken');
+    const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    if (existing) throw new BadRequestException('Email already exists');
 
     const hashed = await bcrypt.hash(dto.password, 10);
 
-    // build profile fields
+    // Create Paystack Customer
+    let paystackCustomerId = null;
+    try {
+      const customer = await this.paystack.createCustomer(
+        dto.email, 
+        dto.firstName || 'User', 
+        dto.lastName || ''
+      );
+      paystackCustomerId = customer.customer_code;
+    } catch (err) {
+      console.error('Paystack customer creation failed:', err);
+    }
+
     const profileData: any = {
-      username: dto.username,
-      phone: dto.phone,
       email: dto.email,
-      dateOfBirth: new Date(dto.dateOfBirth),
       password: hashed,
-      ssn: dto.ssn,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      username: dto.username || dto.email.split('@')[0] + Math.floor(Math.random() * 1000),
+      dateOfBirth: dto.dateOfBirth ? new Date(dto.dateOfBirth) : new Date('2000-01-01'),
+      paystackCustomerId: paystackCustomerId
     };
 
-    if (dto.firstName) profileData.firstName = dto.firstName;
-    if (dto.lastName) profileData.lastName = dto.lastName;
     if (dto.firstName && dto.lastName) {
       profileData.name = `${dto.firstName} ${dto.lastName}`;
     } else if (dto.name) {
-      // legacy support
       profileData.name = dto.name;
     }
 
@@ -69,46 +74,42 @@ export class AuthService {
       data: profileData,
     });
 
-    // do not issue token on signup – keep client flow simple
     return { message: 'Signup successful' };
   }
 
-  /**
-   * Attempt to log in using either email or username.
-   * Returns access/refresh tokens plus a message.
-   */
   async login(identifier: string, password: string) {
-    // allow login by email or username
     const user = await this.prisma.user.findFirst({
       where: { OR: [{ email: identifier }, { username: identifier }] },
     });
+    
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Send login notification email on every successful login
-    if (!this.transporter) {
-      console.warn('Login email skipped: Gmail not configured');
-    } else {
+    if (this.transporter) {
       try {
         const greetingName = user.firstName ?? user.name ?? 'there';
         console.log(`Sending login email to ${user.email}`);
-        const emailResponse = await this.transporter.sendMail({
+        await this.transporter.sendMail({
           from: `"Taxbridge" <${this.config.get<string>('GMAIL_USER')}>`,
           to: user.email,
           subject: 'Login to your Taxbridge account',
           html: `<p>Hi ${greetingName},</p><p>You have just logged in to your Taxbridge account. If this wasn't you, please reset your password immediately.</p>`,
         });
-        console.log('Login email sent successfully, Nodemailer response:', emailResponse);
       } catch (err) {
         console.error('Login email failed to send:', err);
       }
     }
 
-    // sign tokens with admin flag included
     const accessToken = this.jwt.sign({ sub: user.id, email: user.email, isAdmin: user.isAdmin }, { expiresIn: '15m' });
     const refreshToken = this.jwt.sign({ sub: user.id }, { expiresIn: '7d' });
-    return { message: 'Login successful', isAdmin: user.isAdmin, access_token: accessToken, refresh_token: refreshToken };
+    
+    return { 
+      message: 'Login successful', 
+      isAdmin: user.isAdmin, 
+      access_token: accessToken, 
+      refresh_token: refreshToken 
+    };
   }
 
   async validateGoogleUser(googleUser: { googleId: string; email: string; firstName?: string; lastName?: string }) {
@@ -117,8 +118,15 @@ export class AuthService {
     });
 
     if (!user) {
-      // Create new user
-      const username = googleUser.email.split('@')[0] + Math.random().toString(36).substring(7); // generate unique username
+      let paystackCustomerId = null;
+      try {
+        const customer = await this.paystack.createCustomer(googleUser.email, googleUser.firstName || 'User', googleUser.lastName || '');
+        paystackCustomerId = customer.customer_code;
+      } catch (err) {
+        console.error('Paystack customer creation failed for Google user:', err);
+      }
+
+      const username = googleUser.email.split('@')[0] + Math.random().toString(36).substring(7);
       user = await this.prisma.user.create({
         data: {
           googleId: googleUser.googleId,
@@ -127,13 +135,13 @@ export class AuthService {
           lastName: googleUser.lastName,
           name: `${googleUser.firstName} ${googleUser.lastName}`.trim(),
           username,
-          dateOfBirth: new Date('2000-01-01'), // default, can be updated later
-          password: '', // no password for Google users
-          isVerified: true, // Google accounts are verified
+          dateOfBirth: new Date('2000-01-01'),
+          password: '',
+          isVerified: true,
+          paystackCustomerId
         },
       });
     } else if (!user.googleId) {
-      // Link Google ID to existing user
       user = await this.prisma.user.update({
         where: { id: user.id },
         data: { googleId: googleUser.googleId },
@@ -254,7 +262,6 @@ export class AuthService {
       profilePicture = `/uploads/${file.filename}`;
     }
 
-    // if first/last provided, update legacy name field as well
     const updateData: any = { ...dto, profilePicture };
     if (dto.firstName) updateData.firstName = dto.firstName;
     if (dto.lastName) updateData.lastName = dto.lastName;
@@ -289,25 +296,14 @@ export class AuthService {
     return updated;
   }
 
-  /**
-   * Return an object with both access and refresh tokens.
-   * Access tokens are short lived; refresh tokens last longer.
-   */
   private signTokens(id: string, email: string, isAdmin: boolean) {
     const accessPayload = { sub: id, email, isAdmin };
     const refreshPayload = { sub: id };
-    const accessToken = this.jwt.sign(accessPayload, {
-      expiresIn: '15m',
-    });
-    const refreshToken = this.jwt.sign(refreshPayload, {
-      expiresIn: '7d',
-    });
+    const accessToken = this.jwt.sign(accessPayload, { expiresIn: '15m' });
+    const refreshToken = this.jwt.sign(refreshPayload, { expiresIn: '7d' });
     return { access_token: accessToken, refresh_token: refreshToken };
   }
 
-  /**
-   * Validate a refresh token and issue new tokens.
-   */
   async refreshTokens(token: string) {
     try {
       const decoded: any = this.jwt.verify(token);
