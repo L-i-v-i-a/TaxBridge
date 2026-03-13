@@ -31,7 +31,7 @@ const faqs = [
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#F7F9FF] text-[#0B0F1F]">
+    <main className="min-h-screen bg-[#F7F9FF] text-[#0B0F1F] pt-20">
       <Nav />
 
       <AboutHeroSection />

@@ -82,7 +82,7 @@ export default function Hero() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D23AD] flex flex-col items-center overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center overflow-hidden">
       
       <NotificationModal 
         isOpen={modalState.isOpen}
@@ -125,13 +125,21 @@ export default function Hero() {
         </motion.div>
 
         {/* Right Column: Calculator Card */}
-        <motion.div 
+        <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
           variants={fadeInLeft}
           className="flex justify-center lg:justify-end"
+          animate={{
+            y: [0, -10, 0],
+            transition: {
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }
+          }}
         >
           <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl text-black">
             <div className="flex items-center gap-4 mb-8">
