@@ -20,7 +20,7 @@ export class FilingsController {
     @Request() req,
     @Body() createFilingDto: CreateFilingDto,
     @UploadedFiles() files: Express.Multer.File[],
-    @Query('serviceType') serviceType: ServiceType
+    @Query('serviceType') serviceType: ServiceType,
   ) {
     const userId = req.user?.sub; 
 

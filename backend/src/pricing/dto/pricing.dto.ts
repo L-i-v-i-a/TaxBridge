@@ -7,7 +7,9 @@ export class CreatePricingDto {
   @IsString()
   title: string;
 
-  @ApiProperty({ example: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4'] })
+  @ApiProperty({
+    example: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4'],
+  })
   @IsArray()
   @IsString({ each: true })
   features: string[];

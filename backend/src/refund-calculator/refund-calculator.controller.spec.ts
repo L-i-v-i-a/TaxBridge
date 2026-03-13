@@ -9,7 +9,9 @@ describe('RefundCalculatorController', () => {
       controllers: [RefundCalculatorController],
     }).compile();
 
-    controller = module.get<RefundCalculatorController>(RefundCalculatorController);
+    controller = module.get<RefundCalculatorController>(
+      RefundCalculatorController,
+    );
   });
 
   it('should be defined', () => {

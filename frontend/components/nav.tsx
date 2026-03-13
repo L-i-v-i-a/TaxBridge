@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Nav() {
   return (
-    <header className="bg-[#0D23AD]">
+    <header className="bg-[#0D23AD] animate-fade-in">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link className="text-xl font-semibold text-white" href="/home">
           Taxbridge

@@ -1,6 +1,13 @@
-import { Injectable, BadRequestException, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+
+import { User } from '@prisma/client'; 
 
 import * as bcrypt from 'bcrypt';
 
@@ -10,10 +17,19 @@ import { PrismaService } from '../prisma.service';
 import { PaystackService } from '../paystack/paystack.service';
 
 import { SignupDto } from './dto/signup.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto'; // <--- 2. Import the DTO
+
+// <--- 3. Define the JwtPayload interface
+interface JwtPayload {
+  sub: string;
+  email: string;
+  isAdmin: boolean;
+}
 
 @Injectable()
 export class AuthService {
-  private transporter: nodemailer.Transporter;
+  private transporter: { sendMail: (options: Record<string, unknown>) => Promise<unknown> } | null =
+    null;
 
   constructor(
     private prisma: PrismaService,
@@ -25,7 +41,10 @@ export class AuthService {
     const gmailPass = this.config.get<string>('GMAIL_APP_PASSWORD');
 
     if (gmailUser && gmailPass) {
-      this.transporter = nodemailer.createTransport({
+      const createTransport = nodemailer.createTransport as unknown as (
+        options: Record<string, unknown>,
+      ) => { sendMail: (options: Record<string, unknown>) => Promise<unknown> };
+      this.transporter = createTransport({
         service: 'gmail',
         auth: {
           user: gmailUser,
@@ -112,9 +131,16 @@ export class AuthService {
     };
   }
 
-  async validateGoogleUser(googleUser: { googleId: string; email: string; firstName?: string; lastName?: string }) {
+  async validateGoogleUser(googleUser: {
+    googleId: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+  }) {
     let user = await this.prisma.user.findFirst({
-      where: { OR: [{ googleId: googleUser.googleId }, { email: googleUser.email }] },
+      where: {
+        OR: [{ googleId: googleUser.googleId }, { email: googleUser.email }],
+      },
     });
 
     if (!user) {
@@ -151,8 +177,11 @@ export class AuthService {
     return user;
   }
 
-  async generateTokensForUser(user: any) {
-    const accessToken = this.jwt.sign({ sub: user.id, email: user.email, isAdmin: user.isAdmin }, { expiresIn: '15m' });
+  generateTokensForUser(user: Pick<User, 'id' | 'email' | 'isAdmin'>) {
+    const accessToken = this.jwt.sign(
+      { sub: user.id, email: user.email, isAdmin: user.isAdmin },
+      { expiresIn: '15m' },
+    );
     const refreshToken = this.jwt.sign({ sub: user.id }, { expiresIn: '7d' });
     return { access_token: accessToken, refresh_token: refreshToken };
   }
@@ -171,7 +200,10 @@ export class AuthService {
 
     if (!this.transporter) {
       console.warn('Email sending skipped – Gmail not configured');
-      return { message: 'OTP would be sent (email service not configured in this environment)' };
+      return {
+        message:
+          'OTP would be sent (email service not configured in this environment)',
+      };
     }
 
     try {
@@ -208,7 +240,11 @@ export class AuthService {
     return { message: 'Password reset successful' };
   }
 
-  async changePassword(userId: string, oldPassword: string, newPassword: string) {
+  async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string,
+  ) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new UnauthorizedException('User not found');
 
@@ -254,7 +290,11 @@ export class AuthService {
     return user;
   }
 
-  async updateProfile(userId: string, dto: any, file?: Express.Multer.File) {
+  async updateProfile(
+    userId: string,
+    dto: UpdateProfileDto,
+    file?: Express.Multer.File,
+  ) {
     let profilePicture: string | undefined;
 
     if (file) {
@@ -306,11 +346,13 @@ export class AuthService {
 
   async refreshTokens(token: string) {
     try {
-      const decoded: any = this.jwt.verify(token);
-      const user = await this.prisma.user.findUnique({ where: { id: decoded.sub } });
+      const decoded = this.jwt.verify<JwtPayload>(token);
+      const user = await this.prisma.user.findUnique({
+        where: { id: decoded.sub },
+      });
       if (!user) throw new UnauthorizedException('User not found');
       return this.signTokens(user.id, user.email, user.isAdmin);
-    } catch (err) {
+    } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
   }
