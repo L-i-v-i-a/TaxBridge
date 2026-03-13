@@ -37,14 +37,15 @@ export default function HomePage() {
   return (
     <>
     <div
-        className="bg-[#0D23AD] text-white relative overflow-hidden pt-20"
-        style={{
-          backgroundImage: "url(/image.png)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundBlendMode: "overlay",
-        }}
-      >
+      className="relative overflow-hidden pt-20"
+      style={{
+        backgroundImage: "linear-gradient(rgba(13, 35, 173, 0.7), rgba(13, 35, 173, 0.7)), url('/hero.PNG')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        minHeight: "100vh"
+      }}
+    >
     <Nav/>
     <Hero/>
     <WhoWeAre/>

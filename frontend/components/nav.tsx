@@ -2,9 +2,13 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === '/home' || pathname === '/';
 
   // Close mobile menu when scrolling
   useEffect(() => {
@@ -12,19 +16,27 @@ export default function Nav() {
       if (isMenuOpen) {
         setIsMenuOpen(false);
       }
+
+      // Only apply scroll effect on home page
+      if (isHomePage) {
+        const scrollTop = window.scrollY;
+        setIsScrolled(scrollTop > 50);
+      }
     };
 
-    if (isMenuOpen) {
-      window.addEventListener('scroll', handleScroll, { passive: true });
-    }
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [isMenuOpen]);
+  }, [isMenuOpen, isHomePage]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0D23AD] shadow-lg">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isHomePage
+        ? (isScrolled ? 'bg-[#0D23AD] shadow-lg' : 'bg-transparent')
+        : 'bg-[#0D23AD] shadow-lg'
+    }`}>
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link className="text-xl font-semibold text-white" href="/home">
           Taxbridge
