@@ -13,7 +13,7 @@ export default function SignUpBioForm() {
           <input
             type="text"
             name="phone"
-            placeholder="+234 803 555 0199"
+            placeholder="+234 8 03 555 0199"
             className="mt-2 h-12 w-full rounded-[10px] border border-[#E5E5E5] px-4 text-sm text-[#1C1C1C] min-[1440px]:h-[54px]"
           />
         </div>
