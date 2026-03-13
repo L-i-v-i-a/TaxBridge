@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as nodemailer from 'nodemailer';
+import nodemailer, { Transporter } from 'nodemailer';
 import { PrismaService } from '../prisma.service';
 import { ContactDto } from './dto/contact.dto';
 import { SubscribeDto } from './dto/subscribe.dto';
@@ -8,7 +8,7 @@ import { SendNewsletterDto } from './dto/send-newsletter.dto';
 
 @Injectable()
 export class ContactService {
-  private transporter: nodemailer.Transporter;
+  private transporter: Transporter | null = null;
 
   constructor(
     private config: ConfigService,
@@ -75,7 +75,7 @@ export class ContactService {
     if (!this.transporter) throw new Error('Email service not configured');
 
     const subscribers = await this.prisma.subscriber.findMany();
-    const emails = subscribers.map(s => s.email);
+    const emails = subscribers.map((s) => s.email);
 
     if (emails.length === 0) {
       return { message: 'No subscribers to send to' };

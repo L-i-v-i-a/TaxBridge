@@ -31,7 +31,9 @@ async function bootstrap() {
   // 3. Swagger Setup
   const config = new DocumentBuilder()
     .setTitle('Taxbridge API')
-    .setDescription('API for Taxbridge tax filing platform - Smart AI + Human experts')
+    .setDescription(
+      'API for Taxbridge tax filing platform - Smart AI + Human experts',
+    )
     .setVersion('1.0')
     .addTag('filings', 'Tax filing management')
     .addTag('auth', 'Authentication endpoints')
@@ -80,4 +82,4 @@ async function bootstrap() {
     }
   }
 }
-bootstrap();
+void bootstrap();

@@ -13,7 +13,10 @@ export class UpdateProfileDto {
   @IsString()
   lastName?: string;
 
-  @ApiPropertyOptional({ example: '12-3456789', description: 'Employer Identification Number' })
+  @ApiPropertyOptional({
+    example: '12-3456789',
+    description: 'Employer Identification Number',
+  })
   @IsOptional()
   @IsString()
   ein?: string;

@@ -27,6 +27,8 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard'; // create this guard
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
+import { User } from '@prisma/client';
 
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -44,14 +46,20 @@ export class AuthController {
   @Post('signup')
   @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({ status: 201, description: 'User created successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid input or email/username taken' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input or email/username taken',
+  })
   async signup(@Body() dto: SignupDto) {
     return this.authService.signup(dto);
   }
 
   @Post('login')
   @ApiOperation({ summary: 'Login user and get JWT + refresh token' })
-  @ApiResponse({ status: 200, description: 'Login successful with tokens and admin status' })
+  @ApiResponse({
+    status: 200,
+    description: 'Login successful with tokens and admin status',
+  })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @ApiBody({
     description: 'Provide either email or username with password',
@@ -86,11 +94,21 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   @ApiOperation({ summary: 'Google OAuth callback' })
-  @ApiResponse({ status: 200, description: 'Login/signup successful with tokens' })
-  async googleAuthRedirect(@Req() req) {
+  @ApiResponse({
+    status: 200,
+    description: 'Login/signup successful with tokens',
+  })
+  async googleAuthRedirect(@Req() req: Request & { user?: User }) {
     const user = req.user;
-    const tokens = await this.authService.generateTokensForUser(user);
-    return { message: 'Google login successful', isAdmin: user.isAdmin, ...tokens };
+    if (!user) {
+      throw new BadRequestException('Google authentication failed');
+    }
+    const tokens = this.authService.generateTokensForUser(user);
+    return {
+      message: 'Google login successful',
+      isAdmin: user.isAdmin,
+      ...tokens,
+    };
   }
 
   @Post('refresh')
@@ -119,15 +137,28 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Change password (logged-in user)' })
-  async changePassword(@Req() req, @Body() dto: ChangePasswordDto) {
-    return this.authService.changePassword(req.user.sub, dto.oldPassword, dto.newPassword);
+  async changePassword(
+    @Req() req: Request & { user?: { sub?: string } },
+    @Body() dto: ChangePasswordDto,
+  ) {
+    if (!req.user?.sub) {
+      throw new BadRequestException('Invalid user context');
+    }
+    return this.authService.changePassword(
+      req.user.sub,
+      dto.oldPassword,
+      dto.newPassword,
+    );
   }
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current user profile' })
-  async getProfile(@Req() req) {
+  async getProfile(@Req() req: Request & { user?: { sub?: string } }) {
+    if (!req.user?.sub) {
+      throw new BadRequestException('Invalid user context');
+    }
     return this.authService.getProfile(req.user.sub);
   }
 
@@ -139,7 +170,8 @@ export class AuthController {
       storage: diskStorage({
         destination: './uploads',
         filename: (req, file, cb) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
           cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
         },
       }),
@@ -175,10 +207,13 @@ export class AuthController {
   })
   @ApiOperation({ summary: 'Update profile (including picture)' })
   async updateProfile(
-    @Req() req,
+    @Req() req: Request & { user?: { sub?: string } },
     @Body() dto: UpdateProfileDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
+    if (!req.user?.sub) {
+      throw new BadRequestException('Invalid user context');
+    }
     return this.authService.updateProfile(req.user.sub, dto, file);
   }
 
@@ -186,7 +221,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Logout (client-side token removal recommended)' })
-  async logout() {
+  logout() {
     // JWT is stateless → just instruct client to delete token
     return { message: 'Logout successful - delete JWT from client' };
   }

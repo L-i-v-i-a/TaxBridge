@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException, InternalServerErrorException, ForbiddenException } from '@nestjs/common';
 
-import { ServiceType, FilingStatus } from '@prisma/client';
+import { ServiceType, FilingStatus, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
 import { AiService } from '../ai/ai.service';
@@ -14,14 +14,14 @@ export class FilingsService {
   constructor(
     private prisma: PrismaService,
     private ai: AiService,
-    private mailer: MailService
+    private mailer: MailService,
   ) {}
 
   async createFiling(
     userId: string,
     dto: CreateFilingDto,
     files: Express.Multer.File[],
-    serviceType: ServiceType
+    serviceType: ServiceType,
   ) {
     
     if (!userId) {
@@ -50,11 +50,11 @@ export class FilingsService {
     // Map uploaded files
     if (files && files.length > 0) {
       filingData.documents = {
-        create: files.map(f => ({
+        create: files.map((f) => ({
           name: f.originalname,
           url: `uploads/${f.filename}`,
-          type: f.mimetype
-        }))
+          type: f.mimetype,
+        })),
       };
     }
 
@@ -156,7 +156,7 @@ export class FilingsService {
     return this.prisma.taxFiling.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
-      include: { documents: true }
+      include: { documents: true },
     });
   }
 }
