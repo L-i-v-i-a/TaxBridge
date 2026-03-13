@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  Res,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -18,17 +19,17 @@ import {
   ApiConsumes,
   ApiBody,
 } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { diskStorage } from 'multer';
 
 import { extname } from 'path';
 
+import type { Request, Response } from 'express';
+
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './jwt-auth.guard'; // create this guard
-import { FileInterceptor } from '@nestjs/platform-express';
-import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
-import { User } from '@prisma/client';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -77,7 +78,6 @@ export class AuthController {
   async login(@Body() dto: LoginDto) {
     const identifier = dto.email ?? dto.username;
     if (!identifier) {
-      // this should be caught by class-validator but add runtime safety
       throw new BadRequestException('Email or username must be provided');
     }
     return this.authService.login(identifier, dto.password);
@@ -95,20 +95,31 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   @ApiOperation({ summary: 'Google OAuth callback' })
   @ApiResponse({
-    status: 200,
-    description: 'Login/signup successful with tokens',
+    status: 302,
+    description: 'Redirects to frontend with tokens',
   })
-  async googleAuthRedirect(@Req() req: Request & { user?: User }) {
+  async googleAuthRedirect(
+    @Req() req: Request & { user?: any }, 
+    @Res() res: Response, // Now Response is correctly imported as a type
+  ) {
     const user = req.user;
     if (!user) {
       throw new BadRequestException('Google authentication failed');
     }
+
     const tokens = this.authService.generateTokensForUser(user);
-    return {
-      message: 'Google login successful',
-      isAdmin: user.isAdmin,
-      ...tokens,
-    };
+
+    // Make sure this matches your Frontend URL
+    const frontendUrl = 'http://localhost:3001';
+
+    const query = new URLSearchParams({
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token,
+      isAdmin: String(user.isAdmin),
+    }).toString();
+
+    // .redirect() works correctly
+    return res.redirect(`${frontendUrl}/auth/callback?${query}`);
   }
 
   @Post('refresh')
