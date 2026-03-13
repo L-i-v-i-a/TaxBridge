@@ -31,13 +31,13 @@ const faqItems = [
 
 export default function ContactPage() {
   return (
-    <>
+    <main className="pt-20">
     <Nav/>
     <ContactUs/>
     <FaqHighlightSection items={faqItems} />
   <NewsletterSection/>
     <ReadyToStartSection/>
     <SiteFooter/>
-    </>
+    </main>
   )
 }

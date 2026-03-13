@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
+import { motion, Variants } from 'framer-motion';
 
 interface FeatureItem {
   text: string;
@@ -12,13 +15,34 @@ const features: FeatureItem[] = [
   { text: "It was designed for people who want accuracy without complexity, flexibility without confusion, and support without delays." },
 ];
 
+const containerVariants: Variants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.14,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
+};
+
 const WhoWeAre: React.FC = () => {
   return (
-    <section className="py-16 px-6 md:px-12 bg-white">
+    <motion.section
+      className="py-16 px-6 md:px-12 bg-white"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={containerVariants}
+    >
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* Left Side: Image */}
-        <div className="relative h-[400px] w-full overflow-hidden rounded-3xl shadow-xl">
+        <motion.div variants={itemVariants} className="relative h-[400px] w-full overflow-hidden rounded-3xl shadow-xl">
           <Image
             src="/cpa.png" // Replace with your actual image path
             alt="TaxBridge team working"
@@ -26,10 +50,10 @@ const WhoWeAre: React.FC = () => {
             className="object-cover"
             priority
           />
-        </div>
+        </motion.div>
 
         {/* Right Side: Content */}
-        <div className="flex flex-col space-y-6">
+        <motion.div variants={itemVariants} className="flex flex-col space-y-6">
           <h2 className="text-4xl font-bold text-gray-900">Who We Are</h2>
           
           <p className="text-lg text-gray-700 leading-relaxed">
@@ -38,7 +62,7 @@ const WhoWeAre: React.FC = () => {
 
           <ul className="space-y-5">
             {features.map((feature, index) => (
-              <li key={index} className="flex items-start gap-4">
+              <motion.li key={index} variants={itemVariants} className="flex items-start gap-4">
                 {/* Custom Blue Checkmark Icon */}
                 <div className="flex-shrink-0 mt-1 w-6 h-6 rounded-full bg-blue-800 flex items-center justify-center">
                   <svg 
@@ -54,13 +78,13 @@ const WhoWeAre: React.FC = () => {
                 <p className="text-gray-600 leading-snug">
                   {feature.text}
                 </p>
-              </li>
+              </motion.li>
             ))}
           </ul>
-        </div>
+        </motion.div>
 
       </div>
-    </section>
+    </motion.section>
   );
 };
 

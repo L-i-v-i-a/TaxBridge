@@ -5,11 +5,11 @@ import SiteFooter from "../../../../components/SiteFooter";
 
 export default function PricingPage() {
   return (
-    <>
+    <main className="pt-20">
     <Nav/>
     <Pricing/>
      <NewsletterSection/>
      <SiteFooter/>
-    </>
+    </main>
   )
 }
