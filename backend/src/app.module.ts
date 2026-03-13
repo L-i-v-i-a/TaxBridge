@@ -11,10 +11,10 @@ import { ContactModule } from './contact/contact.module';
 import { FeaturesModule } from './features/features.module';
 import { FilingsModule } from './fillings/filings.module';
 import { MailModule } from './mail/mail.module';
+import { PaymentModule } from './payment/payment.module';
 import { PaystackModule } from './paystack/paystack.module';
 import { PricingModule } from './pricing/pricing.module';
-import { RefundCalculatorModule } from './refund-calculator/refund-calculator.module';//
-import { PaymentModule } from './payment/payment.module';
+import { RefundCalculatorModule } from './refund-calculator/refund-calculator.module';
 
 @Module({
   imports: [
