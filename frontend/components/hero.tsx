@@ -1,8 +1,21 @@
-'use client';
+"use client";
+
 import React, { useState } from 'react';
-import NotificationModal from '../components/NotificationModal'; // Adjust path based on your folder structure
+import { motion } from 'framer-motion';
+import NotificationModal from '../components/NotificationModal'; 
 
 export default function Hero() {
+  // Animation variants
+  const fadeInRight = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0 }
+  };
+
+  const fadeInLeft = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0 }
+  };
+
   // State for form inputs
   const [annualIncome, setAnnualIncome] = useState('');
   const [federalTaxWithheld, setFederalTaxWithheld] = useState('');
@@ -27,10 +40,8 @@ export default function Hero() {
   };
 
   const handleCalculate = async () => {
-    // Reset previous result
     setRefundAmount(null);
 
-    // 1. Validation
     if (!annualIncome || !federalTaxWithheld) {
       showModal("Please enter both income and tax withheld.", "error");
       return;
@@ -41,9 +52,7 @@ export default function Hero() {
     try {
       const response = await fetch('http://localhost:3000/refund-calculator/calculate', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           annualIncome: Number(annualIncome),
           federalTaxWithheld: Number(federalTaxWithheld),
@@ -52,31 +61,29 @@ export default function Hero() {
 
       if (response.ok) {
         const data = await response.json();
-        
-        // FIX: Use the correct key 'estimatedRefund' from backend
         const resultValue = data.estimatedRefund || 0;
-        
         setRefundAmount(resultValue);
         
-        // Show success modal
-        const formattedAmount = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(resultValue);
+        const formattedAmount = new Intl.NumberFormat('en-US', { 
+            style: 'currency', 
+            currency: 'USD' 
+        }).format(resultValue);
+        
         showModal(`Calculation complete! Estimated refund: ${formattedAmount}`, 'success');
       } else {
         const errData = await response.json();
         showModal(errData.message || "Calculation failed.", "error");
       }
     } catch (err) {
-      console.error('Network error:', err);
-      showModal("Could not connect to the server. Is the backend running?", "error");
+      showModal("Could not connect to the server.", "error");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0D23AD] flex flex-col items-center">
+    <div className="min-h-screen bg-[#0D23AD] flex flex-col items-center overflow-hidden">
       
-      {/* Render Modal */}
       <NotificationModal 
         isOpen={modalState.isOpen}
         message={modalState.message}
@@ -87,7 +94,14 @@ export default function Hero() {
       <main className="w-full max-w-7xl px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* Left Column: Text & CTA */}
-        <div className="flex flex-col space-y-8">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          variants={fadeInRight}
+          className="flex flex-col space-y-8"
+        >
           <div>
             <h1 className="text-[#5FF7E2] font-bold tracking-wider text-sm mb-4">
               TAX FILING THAT ACTUALLY FITS YOUR LIFE
@@ -101,7 +115,7 @@ export default function Hero() {
             </p>
           </div>
 
-          <div className="bg-white p-2 rounded-xl flex items-center shadow-2xl max-w-xl">
+          <div className="bg-white p-2 rounded-xl flex items-center shadow-2xl max-w-xl transition-all hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)]">
             <div className="flex items-center gap-3 px-4 flex-1">
               <span className="text-[#0D23AD] font-semibold">Try TaxBridge for Free</span>
             </div>
@@ -109,10 +123,17 @@ export default function Hero() {
               Get Started
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Right Column: Calculator Card */}
-        <div className="flex justify-center lg:justify-end">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+          variants={fadeInLeft}
+          className="flex justify-center lg:justify-end"
+        >
           <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl text-black">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center text-2xl">
@@ -176,7 +197,8 @@ export default function Hero() {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
+
       </main>
     </div>
   );
