@@ -137,7 +137,11 @@ export default function Hero() {
           <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl text-black">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center text-2xl">
-                👩‍💼
+                <img 
+                src="ellipse.png" 
+                alt="Sarah • CPA"
+                className='rounded-full'
+                />
               </div>
               <div>
                 <h3 className="font-bold text-lg">Sarah • CPA</h3>
