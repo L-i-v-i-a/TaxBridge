@@ -92,7 +92,6 @@ export default function Hero() {
       />
 
       <main className="w-full max-w-7xl px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        
         {/* Left Column: Text & CTA */}
         <motion.div 
           initial="hidden"
@@ -107,8 +106,8 @@ export default function Hero() {
               TAX FILING THAT ACTUALLY FITS YOUR LIFE
             </h1>
             <h2 className="text-4xl md:text-6xl text-white font-extrabold leading-[1.1]">
-              Real humans on demand <br /> 
-              <span className="text-white">+ AI accuracy.</span>
+              Real humans on demand <br />
+              <span className="text-white/80">+ AI accuracy.</span>
             </h2>
             <p className="text-xl text-blue-100 mt-6 max-w-lg">
               Fully compliant refund without the stress.
@@ -178,7 +177,7 @@ export default function Hero() {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="text-gray-600 text-sm">Federal Tax Withheld</label>
                 <div className="bg-gray-100 p-4 rounded-xl font-bold text-gray-700 mt-1">
