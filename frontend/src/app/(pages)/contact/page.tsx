@@ -31,7 +31,7 @@ const faqItems = [
 
 export default function ContactPage() {
   return (
-    <main className="pt-20">
+    <main>
     <Nav/>
     <ContactUs/>
     <FaqHighlightSection items={faqItems} />

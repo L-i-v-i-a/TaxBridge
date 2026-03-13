@@ -1,10 +1,20 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Mail, MapPin, Phone } from 'lucide-react';
-import NotificationModal from '../../components/NotificationModal'; // Adjust path as needed
+import { Mail, MapPin, Phone } from 'lucide-react';import { motion } from 'framer-motion';import NotificationModal from '../../components/NotificationModal'; // Adjust path as needed
 
 const ContactUs = () => {
+  // Animation variants
+  const fadeInLeft = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0 }
+  };
+
+  const fadeInRight = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0 }
+  };
+
   // State for form inputs
   const [formData, setFormData] = useState({
     name: '',
@@ -83,12 +93,19 @@ const ContactUs = () => {
 
   return (
     <>
-      <div className="bg-[#1e3a8a] min-h-screen p-8 lg:p-24 flex items-center justify-center">
+      <div className="bg-[#1e3a8a] min-h-screen pt-20 p-16 lg:p-32">
         {/* Container holding both sides */}
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
           {/* LEFT SIDE: Information Card */}
-          <div className="bg-[#0021A5] text-white p-10 lg:p-16 rounded-3xl shadow-xl h-full flex flex-col justify-center">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            variants={fadeInLeft}
+            className="bg-[#0021A5] text-white p-10 lg:p-16 rounded-3xl shadow-xl h-full flex flex-col justify-center"
+          >
             <h1 className="text-5xl font-bold mb-6">Contact Us</h1>
             <p className="text-blue-100 text-lg mb-10 leading-relaxed">
               Reach out to us at anytime, we are active 24/7 for any of your enquiry. 
@@ -114,16 +131,6 @@ const ContactUs = () => {
                 <p>123, Gwarinpa, Abuja, Nigeria.</p>
               </div>
             </div>
-              {/* Address */}
-              <div className="flex items-start gap-5">
-                <div className="bg-[#FF7A00] p-3 rounded-lg mt-1">
-                  <MapPin size={24} className="text-white" />
-                </div>
-                <div className="text-xl">
-                  <p>123, Atlanta United State.</p>
-                  <p>123, Gwarinpa, Abuja, Nigeria.</p>
-                </div>
-              </div>
 
               {/* Phone */}
               <div className="flex items-center gap-5">
@@ -133,10 +140,17 @@ const ContactUs = () => {
                 <span className="text-xl">+44 123 654 7890</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* RIGHT SIDE: Contact Form */}
-          <div className="bg-white p-10 lg:p-16 rounded-3xl shadow-xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+            variants={fadeInRight}
+            className="bg-white p-10 lg:p-16 rounded-3xl shadow-xl"
+          >
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <input 
@@ -190,7 +204,7 @@ const ContactUs = () => {
                 {loading ? 'Sending...' : 'Submit'}
               </button>
             </form>
-          </div>
+          </motion.div>
 
         </div>
       </div>

@@ -36,9 +36,17 @@ export default function Home() {
   }, [router]);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#0D23AD]">
+    <main
+      className="flex min-h-screen  items-center justify-center"
+      style={{
+        backgroundImage: "linear-gradient(rgba(13, 35, 173, 0.7), rgba(13, 35, 173, 0.7)), url('/hero.PNG')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <div className="text-center">
-        <h1 className={`text-4xl font-bold text-white transition-opacity duration-200 ${phase === 'fadeout' ? 'opacity-0' : 'opacity-100'}`}>
+        <h1 className={`text-6xl font-bold text-white transition-opacity duration-200 ${phase === 'fadeout' ? 'opacity-0' : 'opacity-100'}`}>
           {phase === 'full' ? (
             <>
               TAXBRIDGE
