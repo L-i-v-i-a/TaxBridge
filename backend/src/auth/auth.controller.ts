@@ -119,7 +119,7 @@ export class AuthController {
     }).toString();
 
     // .redirect() works correctly
-    return res.redirect(`${frontendUrl}/auth/callback?${query}`);
+    return res.redirect(`${frontendUrl}/callback?${query}`);
   }
 
   @Post('refresh')
