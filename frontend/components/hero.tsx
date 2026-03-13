@@ -119,7 +119,7 @@ export default function Hero() {
             <div className="flex items-center gap-3 px-4 flex-1">
               <span className="text-[#0D23AD] font-semibold">Try TaxBridge for Free</span>
             </div>
-            <button className="bg-[#0D23AD] text-white px-8 py-4 rounded-lg font-bold hover:bg-blue-800 transition-colors">
+            <button className="bg-[#0D23AD] text-white px-8 py-4 rounded-lg font-bold hover:bg-blue-800 transition-colors cursor-pointer">
               Get Started
             </button>
           </div>
@@ -195,7 +195,7 @@ export default function Hero() {
               <button 
                 onClick={handleCalculate}
                 disabled={loading}
-                className="w-full bg-[#0D23AD] text-white py-5 rounded-2xl font-bold text-lg mt-4 hover:bg-blue-800 shadow-lg transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full bg-[#0D23AD] text-white py-5 rounded-2xl font-bold text-lg mt-4 hover:bg-blue-800 shadow-lg transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
               >
                 {loading ? 'Calculating...' : 'Calculate'}
               </button>

@@ -76,7 +76,7 @@ export default function NewsletterSection() {
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 rounded-full bg-[#0D23AD] px-5 py-2 text-sm font-semibold text-white hover:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 rounded-full bg-[#0D23AD] px-5 py-2 text-sm font-semibold text-white hover:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {loading ? 'Subscribing...' : 'Subscribe'}
               {!loading && <span aria-hidden>→</span>}
