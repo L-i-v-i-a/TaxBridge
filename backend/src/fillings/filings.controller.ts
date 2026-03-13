@@ -1,20 +1,6 @@
-import {
-  Controller,
-  Post,
-  Patch,
-  Param,
-  Get,
-  Body,
-  Query,
-  UseInterceptors,
-  UploadedFiles,
-  Request,
-  UseGuards,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Controller, Post, Patch, Param, Get, Body, Query, UseInterceptors, UploadedFiles, Request, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth } from '@nestjs/swagger';
 
 import { ServiceType } from '@prisma/client';
 
@@ -32,27 +18,22 @@ export class FilingsController {
   @Post()
   @UseInterceptors(FilesInterceptor('documents', 10))
   async create(
-    @Request() req: { user?: { sub?: string } },
+    @Request() req,
     @Body() createFilingDto: CreateFilingDto,
     @UploadedFiles() files: Express.Multer.File[],
     @Query('serviceType') serviceType: ServiceType,
   ) {
-    const userId = req.user?.sub;
+    const userId = req.user?.sub; 
 
     if (!userId) {
-      throw new UnauthorizedException('User ID not found in token');
+       throw new UnauthorizedException('User ID not found in token');
     }
 
-    return this.filingsService.createFiling(
-      userId,
-      createFilingDto,
-      files,
-      serviceType,
-    );
+    return this.filingsService.createFiling(userId, createFilingDto, files, serviceType);
   }
 
   @Get()
-  async findAll(@Request() req: { user?: { sub?: string } }) {
+  async findAll(@Request() req) {
     const userId = req.user?.sub;
 
     if (!userId) {

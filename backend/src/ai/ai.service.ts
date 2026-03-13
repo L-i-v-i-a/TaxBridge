@@ -9,33 +9,6 @@ interface AiResult {
   error?: string;
 }
 
-type AiResponse = {
-  success: boolean;
-  amount?: number;
-  error?: string | null;
-};
-
-const isAiResponse = (value: unknown): value is AiResponse => {
-  if (!value || typeof value !== 'object') return false;
-  const record = value as Record<string, unknown>;
-  if (typeof record.success !== 'boolean') return false;
-  if (
-    record.amount !== undefined &&
-    typeof record.amount !== 'number' &&
-    record.amount !== null
-  ) {
-    return false;
-  }
-  if (
-    record.error !== undefined &&
-    typeof record.error !== 'string' &&
-    record.error !== null
-  ) {
-    return false;
-  }
-  return true;
-};
-
 // Configuration for Single Filers
 interface TaxConfig {
   standardDeduction: number;
@@ -129,11 +102,8 @@ export class AiService {
     }
   }
 
-  async calculateTax(
-    taxYear: number,
-    incomeDetails: { withholdingAmount?: string | number; grossIncome?: string | number } | null,
-    deductions: unknown,
-  ): Promise<AiResult> {
+  async calculateTax(taxYear: number, incomeDetails: any, deductions: any): Promise<AiResult> {
+    // If no OpenAI client, use Mock
     if (!this.openai) {
       return this.mockCalculation(taxYear, incomeDetails, deductions);
     }
@@ -156,28 +126,12 @@ export class AiService {
       });
 
       const content = response.choices[0].message.content;
-      if (!content) {
-        return { success: false, error: 'Empty AI response' };
-      }
+      if (!content) throw new Error("Empty AI response");
 
-      let parsed: unknown;
-      try {
-        parsed = JSON.parse(content);
-      } catch {
-        return { success: false, error: 'Invalid AI response format' };
-      }
+      return JSON.parse(content);
 
-      if (!isAiResponse(parsed)) {
-        return { success: false, error: 'Unexpected AI response schema' };
-      }
-
-      return {
-        success: parsed.success,
-        amount: typeof parsed.amount === 'number' ? parsed.amount : undefined,
-        error: typeof parsed.error === 'string' ? parsed.error : undefined,
-      };
     } catch (error) {
-      console.warn('OpenAI error, falling back to mock:', error);
+      console.warn(`⚠️ OpenAI Error (Falling back to Mock): ${error.message}`);
       return this.mockCalculation(taxYear, incomeDetails, deductions);
     }
   }

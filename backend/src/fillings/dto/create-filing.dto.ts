@@ -45,7 +45,7 @@ class IncomeDetailsDto {
 class DeductionDto {
   @IsString() hasDeductibleExpenses: string;
   @IsString() hasDependents: string;
-
+  
   @IsOptional()
   @IsNumber()
   @Transform(({ value }) => Number(value))

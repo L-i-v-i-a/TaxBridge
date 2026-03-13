@@ -7,21 +7,24 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
+import { User } from '@prisma/client'; 
+
 import * as bcrypt from 'bcrypt';
+
 import * as nodemailer from 'nodemailer';
-import { Prisma, User } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
 import { PaystackService } from '../paystack/paystack.service';
 
 import { SignupDto } from './dto/signup.dto';
-import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto'; // <--- 2. Import the DTO
 
-type JwtPayload = {
+// <--- 3. Define the JwtPayload interface
+interface JwtPayload {
   sub: string;
-  email?: string;
-  isAdmin?: boolean;
-};
+  email: string;
+  isAdmin: boolean;
+}
 
 @Injectable()
 export class AuthService {
@@ -44,27 +47,12 @@ export class AuthService {
           pass: gmailPass,
         },
       });
-      console.log('Nodemailer initialized with Gmail');
-    } else {
-      console.warn(
-        'GMAIL_USER or GMAIL_APP_PASSWORD not found in environment - email sending disabled',
-      );
     }
   }
 
   async signup(dto: SignupDto) {
-    const existing = await this.prisma.user.findFirst({
-      where: {
-        OR: [
-          { email: dto.email },
-          ...(dto.username ? [{ username: dto.username }] : []),
-        ],
-      },
-    });
-
-    if (existing) {
-      throw new BadRequestException('Email or username already taken');
-    }
+    const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    if (existing) throw new BadRequestException('Email already exists');
 
     const hashed = await bcrypt.hash(dto.password, 10);
 
@@ -81,11 +69,7 @@ export class AuthService {
       console.error('Paystack customer creation failed:', err);
     }
 
-    const username =
-      dto.username ||
-      `${dto.email.split('@')[0]}${Math.floor(Math.random() * 1000)}`;
-
-    const profileData: Prisma.UserCreateInput = {
+    const profileData: any = {
       email: dto.email,
       password: hashed,
       firstName: dto.firstName,
@@ -133,17 +117,14 @@ export class AuthService {
       }
     }
 
-    const accessToken = this.jwt.sign(
-      { sub: user.id, email: user.email, isAdmin: user.isAdmin },
-      { expiresIn: '15m' },
-    );
+    const accessToken = this.jwt.sign({ sub: user.id, email: user.email, isAdmin: user.isAdmin }, { expiresIn: '15m' });
     const refreshToken = this.jwt.sign({ sub: user.id }, { expiresIn: '7d' });
-
-    return {
-      message: 'Login successful',
-      isAdmin: user.isAdmin,
-      access_token: accessToken,
-      refresh_token: refreshToken,
+    
+    return { 
+      message: 'Login successful', 
+      isAdmin: user.isAdmin, 
+      access_token: accessToken, 
+      refresh_token: refreshToken 
     };
   }
 
@@ -160,7 +141,7 @@ export class AuthService {
     });
 
     if (!user) {
-      let paystackCustomerId: string | null = null;
+      let paystackCustomerId = null;
       try {
         const customer = await this.paystack.createCustomer(
           googleUser.email,
@@ -172,9 +153,7 @@ export class AuthService {
         console.error('Paystack customer creation failed for Google user:', err);
       }
 
-      const username =
-        googleUser.email.split('@')[0] + Math.random().toString(36).substring(7);
-
+      const username = googleUser.email.split('@')[0] + Math.random().toString(36).substring(7);
       user = await this.prisma.user.create({
         data: {
           googleId: googleUser.googleId,
@@ -320,7 +299,7 @@ export class AuthService {
       profilePicture = `/uploads/${file.filename}`;
     }
 
-    const updateData: Prisma.UserUpdateInput = { ...dto, profilePicture };
+    const updateData: any = { ...dto, profilePicture };
     if (dto.firstName) updateData.firstName = dto.firstName;
     if (dto.lastName) updateData.lastName = dto.lastName;
     if (dto.firstName && dto.lastName) {

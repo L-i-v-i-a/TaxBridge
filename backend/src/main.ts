@@ -49,8 +49,8 @@ async function bootstrap() {
   // 4. Start Server
   const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
   await app.listen(PORT);
-  console.log(`Application is running on: http://localhost:${PORT}`);
-  console.log(`Swagger Docs available at: http://localhost:${PORT}/api`);
+  console.log(`🚀 Application is running on: http://localhost:${PORT}`);
+  console.log(`📚 Swagger Docs available at: http://localhost:${PORT}/api`);
 
   // 5. Seed Admin User
   const prisma = app.get(PrismaService);

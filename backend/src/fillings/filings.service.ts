@@ -36,15 +36,12 @@ export class FilingsService {
     const count = await this.prisma.taxFiling.count();
     const filingId = `F${new Date().getFullYear()}-${String(count + 1).padStart(3, '0')}`;
 
-    // Ensure we have a tax year, default to current year if missing
-    const taxYear = dto.taxYear ?? new Date().getFullYear();
-
-    // 2. Prepare Base Data
-    const filingData: Prisma.TaxFilingUncheckedCreateInput = {
-      userId,
-      filingId,
-      serviceType,
-      taxYear,
+    // 2. Prepare Data Object
+    const filingData: any = {
+      userId: userId,
+      filingId: filingId,
+      serviceType: serviceType,
+      taxYear: taxYear,
       type: dto.type || 'Federal',
       personalInfo: dto.personalInfo,
       incomeDetails: dto.incomeDetails,
@@ -66,17 +63,29 @@ export class FilingsService {
 
     // A. CALCULATION ONLY
     if (serviceType === ServiceType.CALCULATION_ONLY) {
-      const aiResult = await this.ai.calculateTax(
-        taxYear,
-        dto.incomeDetails,
-        dto.deductions,
-      );
+      // FIX: Pass taxYear as the first argument
+      const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, dto.deductions);
 
       if (aiResult.success) {
-        filingData.status = FilingStatus.COMPLETED;
-        filingData.amount = aiResult.amount;
-        const filing = await this.prisma.taxFiling.create({ data: filingData });
-        return { message: 'Calculation successful', data: filing };
+        return this.prisma.taxFiling.create({
+          data: {
+            ...filingData,
+            status: FilingStatus.COMPLETED,
+            amount: aiResult.amount
+          }
+        });
+      } else {
+        const filing = await this.prisma.taxFiling.create({
+          data: { ...filingData, status: FilingStatus.UNDER_REVIEW }
+        });
+        
+        await this.mailer.sendAdminNotification(
+          filingId,
+          `AI Calculation Failed: ${aiResult.error}`,
+          dto.personalInfo?.email
+        );
+        
+        return filing;
       }
 
       // AI Failed -> Notify Admin
@@ -104,47 +113,38 @@ export class FilingsService {
       await this.mailer.sendAdminNotification(
         filingId,
         'New Expert Guided Request',
-        dto.personalInfo?.email,
+        dto.personalInfo?.email
       );
-
-      return {
-        message: 'Submission received. An expert has been assigned.',
-        data: filing,
-      };
+      
+      return filing;
     }
 
     // C. FULL FILING
     if (serviceType === ServiceType.FULL_FILING) {
-      const aiResult = await this.ai.calculateTax(
-        taxYear,
-        dto.incomeDetails,
-        dto.deductions,
-      );
+      // FIX: Pass taxYear as the first argument
+      const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, dto.deductions);
 
       if (aiResult.success) {
-        filingData.status = FilingStatus.COMPLETED;
-        filingData.amount = aiResult.amount;
-        const filing = await this.prisma.taxFiling.create({ data: filingData });
-        return {
-          message: 'Tax calculated and filed successfully.',
-          data: filing,
-        };
+        return this.prisma.taxFiling.create({
+          data: {
+            ...filingData,
+            status: FilingStatus.COMPLETED,
+            amount: aiResult.amount
+          }
+        });
+      } else {
+        const filing = await this.prisma.taxFiling.create({
+          data: { ...filingData, status: FilingStatus.NEEDS_INFO }
+        });
+        
+        await this.mailer.sendAdminNotification(
+          filingId,
+          'Manual Filing Intervention Required',
+          dto.personalInfo?.email
+        );
+        
+        return filing;
       }
-
-      const filing = await this.prisma.taxFiling.create({
-        data: { ...filingData, status: FilingStatus.NEEDS_INFO },
-      });
-
-      await this.mailer.sendAdminNotification(
-        filingId,
-        'Manual filing intervention required',
-        dto.personalInfo?.email,
-      );
-
-      return {
-        message: 'Submission received. Our team is reviewing to finalize.',
-        data: filing,
-      };
     }
 
     throw new InternalServerErrorException('Invalid Service Type provided');

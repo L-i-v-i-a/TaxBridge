@@ -104,6 +104,16 @@ const ContactUs = () => {
                 <span className="text-xl">example@taxbridge.com</span>
               </div>
 
+            {/* Address */}
+            <div className="flex items-start gap-5">
+              <div className="bg-[#FF7A00] p-3 rounded-lg mt-1">
+                <MapPin size={24} className="text-white" />
+              </div>
+              <div className="text-xl">
+                <p>123, Atlanta United State.</p>
+                <p>123, Gwarinpa, Abuja, Nigeria.</p>
+              </div>
+            </div>
               {/* Address */}
               <div className="flex items-start gap-5">
                 <div className="bg-[#FF7A00] p-3 rounded-lg mt-1">
@@ -111,7 +121,7 @@ const ContactUs = () => {
                 </div>
                 <div className="text-xl">
                   <p>123, Atlanta United State.</p>
-                  <p>123, Kwaripa, Abuja, Nigeria.</p>
+                  <p>123, Gwarinpa, Abuja, Nigeria.</p>
                 </div>
               </div>
 
