@@ -4,6 +4,9 @@ import { motion } from 'framer-motion';
 import Nav from './nav';
 import Image from 'next/image';
 import WhoWeAre from './features/whoWeAre';
+'use client';
+import React, { useState } from 'react';
+import NotificationModal from '../components/NotificationModal'; // Adjust path based on your folder structure
 
 export default function Hero() {
   // Animation variants for cleaner code
@@ -17,8 +20,88 @@ export default function Hero() {
     visible: { opacity: 1, x: 0 }
   };
 
+  // State for form inputs
+  const [annualIncome, setAnnualIncome] = useState('');
+  const [federalTaxWithheld, setFederalTaxWithheld] = useState('');
+  
+  // State for result and UI feedback
+  const [refundAmount, setRefundAmount] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  // State for Modal
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    message: '',
+    type: 'error' as 'success' | 'error'
+  });
+
+  const showModal = (message: string, type: 'success' | 'error') => {
+    setModalState({ isOpen: true, message, type });
+  };
+
+  const closeModal = () => {
+    setModalState({ ...modalState, isOpen: false });
+  };
+
+  const handleCalculate = async () => {
+    // Reset previous result
+    setRefundAmount(null);
+
+    // 1. Validation
+    if (!annualIncome || !federalTaxWithheld) {
+      showModal("Please enter both income and tax withheld.", "error");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:3000/refund-calculator/calculate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          annualIncome: Number(annualIncome),
+          federalTaxWithheld: Number(federalTaxWithheld),
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // FIX: Use the correct key 'estimatedRefund' from backend
+        const resultValue = data.estimatedRefund || 0;
+        
+        setRefundAmount(resultValue);
+        
+        // Show success modal
+        const formattedAmount = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(resultValue);
+        showModal(`Calculation complete! Estimated refund: ${formattedAmount}`, 'success');
+      } else {
+        const errData = await response.json();
+        showModal(errData.message || "Calculation failed.", "error");
+      }
+    } catch (err) {
+      console.error('Network error:', err);
+      showModal("Could not connect to the server. Is the backend running?", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0D23AD] flex flex-col items-center overflow-hidden">
+    <div className="min-h-screen bg-[#0D23AD] flex flex-col items-center">
+      
+      {/* Render Modal */}
+      <NotificationModal 
+        isOpen={modalState.isOpen}
+        message={modalState.message}
+        type={modalState.type}
+        onClose={closeModal}
+      />
+
       <main className="w-full max-w-7xl px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* Left Column: Text & CTA */}
@@ -39,7 +122,7 @@ export default function Hero() {
               <span className="text-white">+ AI accuracy.</span>
             </h2>
             <p className="text-xl text-blue-100 mt-6 max-w-lg">
-              Fully compliant refund without the stress. Simplify financial management and make tax filing effortless.
+              Fully compliant refund without the stress.
             </p>
           </div>
 
@@ -52,9 +135,11 @@ export default function Hero() {
                   </svg>
 
               </span>
+          <div className="bg-white p-2 rounded-xl flex items-center shadow-2xl max-w-xl">
+            <div className="flex items-center gap-3 px-4 flex-1">
               <span className="text-[#0D23AD] font-semibold">Try TaxBridge for Free</span>
             </div>
-            <button className="bg-[#0D23AD] text-white px-8 py-4 rounded-lg font-bold hover:bg-blue-800 transition-colors cursor-pointer">
+            <button className="bg-[#0D23AD] text-white px-8 py-4 rounded-lg font-bold hover:bg-blue-800 transition-colors">
               Get Started
             </button>
           </div>
@@ -71,13 +156,12 @@ export default function Hero() {
         >
           <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl text-black">
             <div className="flex items-center gap-4 mb-8">
-              <img
-                src="/ellipse.png"
-                alt="profile"
-                className="rounded-full w-14 h-14 object-cover border-2 border-blue-100"
-              />
+              <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center text-2xl">
+                👩‍💼
+              </div>
               <div>
                 <h3 className="font-bold text-lg">Sarah • CPA</h3>
+                <p className="text-gray-500 text-sm">Instant Refund Calculator</p>
                 <p className="text-gray-500 text-sm">Instant Refund Calculator</p>
               </div>
             </div>
@@ -92,17 +176,38 @@ export default function Hero() {
                 $2,485
               </motion.span>
               <span className="text-gray-500 text-sm">Estimated federal refund</span>
+              {refundAmount !== null ? (
+                <>
+                  <span className="text-green-600 text-4xl font-black block">
+                    ${refundAmount.toLocaleString()}
+                  </span>
+                  <span className="text-gray-500 text-sm">Estimated federal refund</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-gray-400 text-4xl font-black block">$0</span>
+                  <span className="text-gray-500 text-sm">Enter details to calculate</span>
+                </>
+              )}
             </div>
 
             <div className="space-y-4">
               <div>
                 <label className="text-sm text-gray-600">Annual Income</label>
+                <label className="text-gray-600 text-sm">Annual Income</label>
                 <div className="bg-gray-100 p-4 rounded-xl font-bold text-gray-700 mt-1">
                    <input 
                     type='text'
                     placeholder='5000'
                     className="w-full bg-transparent text-xl font-bold placeholder-gray-400 focus:outline-none"
                    />
+                  <input 
+                    type='number'
+                    placeholder='50000'
+                    value={annualIncome}
+                    onChange={(e) => setAnnualIncome(e.target.value)}
+                    className="bg-transparent w-full focus:outline-none text-xl"
+                  />
                 </div>
               </div>
               
@@ -114,16 +219,30 @@ export default function Hero() {
                     placeholder='5000'
                     className="w-full bg-transparent text-xl font-bold placeholder-gray-400 focus:outline-none"
                    />
+                <label className="text-gray-600 text-sm">Federal Tax Withheld</label>
+                <div className="bg-gray-100 p-4 rounded-xl font-bold text-gray-700 mt-1">
+                  <input 
+                    type='number'
+                    placeholder='7000'
+                    value={federalTaxWithheld}
+                    onChange={(e) => setFederalTaxWithheld(e.target.value)}
+                    className="bg-transparent w-full focus:outline-none text-xl"
+                  />
                 </div>
               </div>
 
-              <button className="w-full bg-[#0D23AD] text-white py-5 rounded-2xl font-bold text-lg mt-4 cursor-pointer hover:bg-blue-800 shadow-lg shadow-blue-200 transition-all active:scale-[0.98]">
-                Calculate
+              <button 
+                onClick={handleCalculate}
+                disabled={loading}
+                className="w-full bg-[#0D23AD] text-white py-5 rounded-2xl font-bold text-lg mt-4 hover:bg-blue-800 shadow-lg transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Calculating...' : 'Calculate'}
               </button>
             </div>
           </div>
         </motion.div>
 
+        </div>
       </main>
     </div>
   );

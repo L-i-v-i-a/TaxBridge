@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
+
 import { PrismaService } from '../prisma.service';
+import { PaystackService } from '../paystack/paystack.service';
+
 import { CreatePricingDto, UpdatePricingDto } from './dto/pricing.dto';
 
 @Injectable()
 export class PricingService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private paystack: PaystackService
+  ) {}
 
   async getMonthlyPlans() {
     return this.prisma.pricingPlan.findMany({
@@ -21,8 +27,19 @@ export class PricingService {
   }
 
   async createPlan(dto: CreatePricingDto) {
+    const interval = dto.type === 'monthly' ? 'monthly' : 'annually';
+    
+    const paystackPlan = await this.paystack.createPlan(
+      dto.title,
+      dto.price,
+      interval
+    );
+
     return this.prisma.pricingPlan.create({
-      data: dto,
+      data: {
+        ...dto,
+        paystackPlanCode: paystackPlan.plan_code
+      },
     });
   }
 
