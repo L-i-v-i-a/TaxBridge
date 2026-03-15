@@ -47,7 +47,7 @@ async function bootstrap() {
   });
 
   // 4. Start Server
-  const PORT = process.env.PORT || 3001;
+  const PORT = process.env.PORT || 3000;
   await app.listen(PORT);
   console.log(`🚀 Application is running on: http://localhost:${PORT}`);
   console.log(`📚 Swagger Docs available at: http://localhost:${PORT}/api`);
@@ -55,13 +55,12 @@ async function bootstrap() {
   // 5. Seed Admin User
   const prisma = app.get(PrismaService);
   const adminEmail = process.env.ADMIN_EMAIL;
-  
+
   if (adminEmail) {
     try {
       const existingAdmin = await prisma.user.findFirst({
         where: { email: adminEmail, isAdmin: true },
       });
-      
       if (!existingAdmin) {
         const hashed = await bcrypt.hash('admin123', 10);
         await prisma.user.create({
