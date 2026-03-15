@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma.module';
 import { AiModule } from './ai/ai.module';
 import { AuthModule } from './auth/auth.module';
 import { ContactModule } from './contact/contact.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 import { FeaturesModule } from './features/features.module';
 import { FilingsModule } from './fillings/filings.module';
 import { MailModule } from './mail/mail.module';
@@ -36,6 +37,7 @@ import { RefundCalculatorModule } from './refund-calculator/refund-calculator.mo
     FilingsModule,
     PaymentModule,
     PaystackModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

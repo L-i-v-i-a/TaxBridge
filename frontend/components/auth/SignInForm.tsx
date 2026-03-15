@@ -19,7 +19,7 @@ export default function SignInForm() {
 
     try {
       // Replace with your actual API URL if different
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
       
       const response = await fetch(`${apiUrl}/auth/login`, {
         method: "POST",

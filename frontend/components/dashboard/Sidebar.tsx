@@ -1,58 +1,102 @@
-import Link from "next/link";
-import { Home, FileText, MessageSquare, BarChart2, Settings, LogOut } from "lucide-react";
+'use client';
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { 
+  LayoutDashboard, 
+  FileText, 
+  History, 
+  CreditCard, 
+  Settings, 
+  LogOut, 
+  Menu, 
+  X 
+} from 'lucide-react';
 
 const navItems = [
-  { label: "Dashboard", icon: Home, href: "/dashboard" },
-  { label: "Management", icon: BarChart2, href: "/dashboard" },
-  { label: "Tax Filing", icon: FileText, href: "/dashboard" },
-  { label: "Communication", icon: MessageSquare, href: "/dashboard" },
-  { label: "Report", icon: BarChart2, href: "/dashboard" },
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Tax Filing', href: '/filings/new', icon: FileText },
+  { name: 'Filing History', href: '/filings/history', icon: History },
+  { name: 'Subscription', href: '/pricing', icon: CreditCard },
+  { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
-export default function Sidebar() {
+const Sidebar = () => {
+  const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <aside className="hidden md:flex h-screen w-72 flex-col border-r border-white/10 bg-white/70 backdrop-blur-sm">
-      <div className="px-6 py-8">
-        <h1 className="text-xl font-bold text-[#0D23AD]">Taxbridge</h1>
-      </div>
+    <>
+      {/* Mobile Toggle Button */}
+      <button 
+        onClick={() => setIsOpen(!isOpen)} 
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md"
+      >
+        {isOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
 
-      <nav className="flex-1 px-4">
-        <ul className="space-y-2">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-blue-50 hover:text-[#0D23AD]"
-                >
-                  <Icon className="h-5 w-5 text-slate-400 group-hover:text-[#0D23AD]" />
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+      {/* Overlay for mobile */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
 
-      <div className="px-4 pb-8">
-        <div className="border-t border-white/10 pt-4">
-          <Link
-            href="#"
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-blue-50 hover:text-[#0D23AD]"
-          >
-            <Settings className="h-5 w-5 text-slate-400 group-hover:text-[#0D23AD]" />
-            Settings
+      {/* Sidebar */}
+      <aside className={`
+        fixed top-0 left-0 z-40 h-screen w-64 bg-white border-r border-gray-200 
+        transform transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        lg:translate-x-0 lg:static lg:z-auto
+      `}>
+        <div className="h-full px-3 py-4 overflow-y-auto">
+          {/* Logo */}
+          <Link href="/" className="flex items-center pl-2.5 mb-8">
+            <span className="text-2xl font-bold text-[#0D23AD]">TaxBridge</span>
           </Link>
-          <Link
-            href="#"
-            className="mt-2 flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-red-50 hover:text-red-600"
-          >
-            <LogOut className="h-5 w-5 text-slate-400 group-hover:text-red-600" />
-            Logout
-          </Link>
+
+          {/* Navigation Links */}
+          <ul className="space-y-2">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    className={`
+                      flex items-center p-3 rounded-lg transition-colors group
+                      ${isActive 
+                        ? 'bg-[#0D23AD] text-white shadow-md' 
+                        : 'text-gray-700 hover:bg-gray-100'}
+                    `}
+                  >
+                    <item.icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-gray-900'}`} />
+                    <span className="ml-3 font-medium">{item.name}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Logout / Bottom Section */}
+          <div className="absolute bottom-0 left-0 right-0 p-4">
+            <button 
+              onClick={() => {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+              }}
+              className="flex items-center w-full p-3 text-gray-700 rounded-lg hover:bg-gray-100 group"
+            >
+              <LogOut className="w-5 h-5 text-gray-500 group-hover:text-gray-900" />
+              <span className="ml-3 font-medium">Logout</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
-}
+};
+
+export default Sidebar;

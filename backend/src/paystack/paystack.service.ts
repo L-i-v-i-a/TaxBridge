@@ -33,15 +33,16 @@ export class PaystackService {
     }
   }
 
-  async createPlan(name: string, amount: number, interval: string) {
+  // Accepts amount in NGN (converted by PricingService)
+  async createPlan(name: string, amountInNgn: number, interval: string) {
     try {
       const response = await axios.post(
         `${this.baseUrl}/plan`,
         { 
           name, 
-          amount: Math.round(amount * 100), 
+          amount: Math.round(amountInNgn * 100), // Convert to Kobo
           interval,
-          currency: "USD"
+          currency: "NGN" 
         },
         { headers: this.getHeaders() },
       );
@@ -52,12 +53,13 @@ export class PaystackService {
     }
   }
 
-  async initializeTransaction(email: string, amount: number, plan_code?: string) {
+  // Accepts amount in NGN (converted by PaymentService)
+  async initializeTransaction(email: string, amountInNgn: number, plan_code?: string) {
     try {
       const payload: any = {
         email,
-        amount: Math.round(amount * 100),
-        currency: "USD",
+        amount: Math.round(amountInNgn * 100), // Convert to Kobo
+        currency: "NGN",
         callback_url: "http://localhost:3000/payment/verify"
       };
       

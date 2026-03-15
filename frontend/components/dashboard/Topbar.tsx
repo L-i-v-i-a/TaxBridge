@@ -1,29 +1,108 @@
-import { Search, Bell, UserCircle } from "lucide-react";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { Bell, Search } from 'lucide-react';
 
-export default function Topbar() {
+// Interface for the Profile response
+interface UserProfile {
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  email?: string;
+  profilePicture?: string;
+}
+
+const TopBar = () => {
+  const [user, setUser] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem('access_token'); // Adjust key if needed
+      
+      if (!token) return;
+
+      try {
+        const response = await fetch('http://localhost:3000/auth/profile', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch profile:', error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  // Determine display name: FirstName LastName fallback to Username
+  const displayName = user?.firstName && user?.lastName 
+    ? `${user.firstName} ${user.lastName}` 
+    : user?.username || 'User';
+
+  // Generate initials for the Avatar fallback
+  const getInitials = () => {
+    if (user?.firstName && user?.lastName) {
+      return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+    }
+    if (user?.username) {
+      return user.username.substring(0, 2).toUpperCase();
+    }
+    return 'U';
+  };
+
   return (
-    <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <div>
-        <h2 className="text-2xl font-semibold text-[#0B0F1F]">Dashboard Overview</h2>
-        <p className="text-sm text-slate-500">Quick stats and recent activity at a glance.</p>
+    <header className="sticky top-0 z-30 bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6">
+      {/* Search Bar */}
+      <div className="hidden md:flex items-center bg-gray-50 rounded-lg px-3 py-2 w-64 border border-gray-200">
+        <Search className="w-5 h-5 text-gray-400 mr-2" />
+        <input 
+          type="text" 
+          placeholder="Search..." 
+          className="bg-transparent outline-none text-sm text-gray-700 w-full"
+        />
       </div>
 
-      <div className="flex flex-col gap-3 md:flex-row md:items-center">
-        <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
-          <Search className="h-4 w-4 text-slate-400" />
-          <input
-            placeholder="Search for something"
-            className="w-40 bg-transparent text-sm text-slate-600 focus:outline-none"
-          />
+      {/* Right Section */}
+      <div className="flex items-center space-x-4 ml-auto">
+        {/* Notification Bell */}
+        <button className="relative p-2 text-gray-500 hover:bg-gray-100 rounded-full">
+          <Bell className="w-5 h-5" />
+          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+
+        {/* Divider */}
+        <div className="h-8 w-px bg-gray-200"></div>
+
+        {/* User Profile */}
+        <div className="flex items-center space-x-3">
+          <div className="text-right hidden sm:block">
+            <p className="text-sm font-semibold text-gray-800">{displayName}</p>
+            <p className="text-xs text-gray-500">{user?.email || 'Loading...'}</p>
+          </div>
+          
+          {/* Avatar */}
+          {user?.profilePicture ? (
+            <img 
+              src={user.profilePicture} 
+              alt="Profile" 
+              className="w-9 h-9 rounded-full object-cover border-2 border-gray-200"
+            />
+          ) : (
+            <div className="w-9 h-9 rounded-full bg-[#0D23AD] flex items-center justify-center text-white font-bold text-sm">
+              {getInitials()}
+            </div>
+          )}
         </div>
-        <button className="flex items-center justify-center rounded-full border border-slate-200 bg-white p-2 shadow-sm hover:bg-slate-50">
-          <Bell className="h-5 w-5 text-slate-500" />
-        </button>
-        <button className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm hover:bg-slate-50">
-          <UserCircle className="h-5 w-5 text-slate-500" />
-          <span className="text-sm font-medium text-slate-700">Sarah</span>
-        </button>
       </div>
     </header>
   );
-}
+};
+
+export default TopBar;
