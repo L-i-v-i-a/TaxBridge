@@ -16,7 +16,7 @@ import {
 
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Tax Filing', href: '/filings/new', icon: FileText },
+  { name: 'Tax Filing', href: '/filings', icon: FileText },
   { name: 'Filing History', href: '/filings/history', icon: History },
   { name: 'Subscription', href: '/pricing', icon: CreditCard },
   { name: 'Settings', href: '/settings', icon: Settings },

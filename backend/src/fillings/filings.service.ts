@@ -9,6 +9,7 @@ import {
   InternalServerErrorException,
   ForbiddenException
 } from '@nestjs/common';
+
 import { ServiceType, FilingStatus, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
@@ -173,5 +174,28 @@ export class FilingsService {
       orderBy: { createdAt: 'desc' },
       include: { documents: true },
     });
+  }
+  async getUserFilingStats(userId: string) {
+    const filings = await this.prisma.taxFiling.findMany({
+      where: { userId },
+      select: { status: true }
+    });
+
+    const stats = {
+      total: filings.length,
+      pending: 0,
+      completed: 0,
+      underReview: 0,
+      rejected: 0,
+    };
+
+    filings.forEach(filing => {
+      if (filing.status === 'PENDING') stats.pending++;
+      else if (filing.status === 'COMPLETED') stats.completed++;
+      else if (filing.status === 'UNDER_REVIEW') stats.underReview++;
+      else if (filing.status === 'REJECTED') stats.rejected++;
+    });
+
+    return stats;
   }
 }

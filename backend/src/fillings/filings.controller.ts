@@ -143,4 +143,11 @@ export class FilingsController {
     const adminId = req.user?.sub;
     return this.filingsService.updateFiling(adminId, filingId, updateFilingDto);
   }
+  @Get('stats')
+  @ApiOperation({ summary: 'Get filing statistics for the logged-in user' })
+  async getStats(@Request() req) {
+    const userId = req.user?.sub;
+    if (!userId) throw new UnauthorizedException('User ID not found');
+    return this.filingsService.getUserFilingStats(userId);
+  }
 }
