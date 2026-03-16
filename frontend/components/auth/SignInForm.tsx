@@ -43,7 +43,7 @@ export default function SignInForm() {
 
       // 2. Navigate based on isAdmin flag
       if (data.isAdmin) {
-        router.push("/admin/dashboard");
+        router.push("/admin");
       } else {
         router.push("/dashboard");
       }

@@ -17,7 +17,7 @@ export default function AuthCallbackPage() {
       localStorage.setItem("refresh_token", refreshToken);
 
       if (isAdmin === "true") {
-        router.push("/admin/dashboard");
+        router.push("/admin");
       } else {
         router.push("/dashboard");
       }

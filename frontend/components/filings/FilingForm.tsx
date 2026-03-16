@@ -512,7 +512,7 @@ export default function FilingForm({ serviceType }: FilingFormProps) {
             <CheckCircle className="mx-auto h-20 w-20 text-green-500 mb-6" />
             <h2 className="text-2xl font-bold text-gray-900 mb-4">{getSuccessTitle()}</h2>
             <p className="text-gray-600 mb-8 leading-relaxed">{getSuccessMessage()}</p>
-            <button onClick={() => router.push('/tax-filing')} className="px-10 py-3 bg-[#0D23AD] text-white font-medium rounded-lg hover:bg-[#0a1b8a] transition">Return to Tax Filing</button>
+            <button onClick={() => router.push('/dashboard')} className="px-10 py-3 bg-[#0D23AD] text-white font-medium rounded-lg hover:bg-[#0a1b8a] transition">Return to Tax Filing</button>
           </div>
         </div>
       )}
