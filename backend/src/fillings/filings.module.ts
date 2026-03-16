@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+import { AuthModule } from 'src/auth/auth.module';
+
 import { PrismaModule } from '../prisma.module'; // Verify this path matches your project
 import { AiModule } from '../ai/ai.module';
 
@@ -9,7 +11,8 @@ import { FilingsService } from './filings.service';
 @Module({
   imports: [
     PrismaModule, 
-    AiModule
+    AiModule,
+    AuthModule
   ],
   controllers: [FilingsController],
   providers: [FilingsService],

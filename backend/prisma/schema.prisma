@@ -37,8 +37,9 @@ model User {
   updatedAt      DateTime @updatedAt
 
   // Relations
-  filings        TaxFiling[] // <--- ADDED: Opposite relation to TaxFiling
+  filings        TaxFiling[]
   subscriptions  Subscription[]
+  conversations  Conversation[] // <--- ADDED: Relation to Chat
 }
 
 model Subscriber {
@@ -126,4 +127,48 @@ model Document {
   type      String?
   filingId  String
   filing    TaxFiling @relation(fields: [filingId], references: [id], onDelete: Cascade)
+}
+
+enum ConversationType {
+  AI
+  AGENT
+}
+
+enum SenderType {
+  USER
+  ADMIN
+  AI
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  FILE
+  VOICE
+  STICKER
+}
+
+model Conversation {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  type      ConversationType @default(AGENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  messages  Message[]
+}
+
+model Message {
+  id             String   @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  senderId       String   // User ID or Admin ID or 'AI'
+  senderType     SenderType
+  content        String?  @db.Text // Text content or Sticker URL
+  type           MessageType @default(TEXT)
+  fileUrl        String?  // URL for files/images/voice notes
+  reactions      Json?    // Store reactions like [{ userId: "1", emoji: "👍" }]
+  createdAt      DateTime @default(now())
+
+  @@index([conversationId])
 }

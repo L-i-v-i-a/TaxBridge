@@ -1,21 +1,34 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+/**
+ * @file login.dto.ts
+ * @description Data Transfer Object for user authentication.
+ * Allows users to log in using either their email or username.
+ */
 
-import { IsEmail, IsString, IsOptional } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsString, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class LoginDto {
-  @ApiPropertyOptional({ example: 'olivia@example.com' })
+  @ApiPropertyOptional({
+    description: 'User email address. Required if username is not provided.',
+    example: 'olivia@example.com',
+  })
   @IsOptional()
-  @IsEmail()
+  @IsEmail({}, { message: 'Email format is invalid.' })
   email?: string;
 
-  @ApiPropertyOptional({ example: 'olivia_ade' })
+  @ApiPropertyOptional({
+    description: 'Username. Required if email is not provided.',
+    example: 'olivia_ade',
+  })
   @IsOptional()
   @IsString()
   username?: string;
 
-  // note: validation of "at least one of email or username" is performed in controller/service
-
-  @ApiProperty({ example: 'StrongPass123!' })
+  @ApiProperty({
+    description: 'User password.',
+    example: 'StrongPass123!',
+  })
   @IsString()
+  @IsNotEmpty({ message: 'Password is required.' })
   password: string;
 }

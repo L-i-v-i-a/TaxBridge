@@ -1,3 +1,8 @@
+/**
+ * @file filings.controller.ts
+ * @description Handles API routes for Tax Filing management.
+ */
+
 import {
   Controller,
   Post,
@@ -11,35 +16,72 @@ import {
   Request,
   UseGuards,
   UnauthorizedException,
+  ParseEnumPipe,
+  Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiConsumes,
+  ApiBody,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
 import { ServiceType } from '@prisma/client';
+
+import { AdminGuard } from '../auth/admin.guard';
 
 import { FilingsService } from './filings.service';
 
 import { CreateFilingDto } from './dto/create-filing.dto';
 import { UpdateFilingDto } from './dto/update-filing.dto';
 
+@ApiTags('Filings')
+@ApiBearerAuth()
 @Controller('filings')
 @UseGuards(AuthGuard('jwt'))
 export class FilingsController {
   constructor(private readonly filingsService: FilingsService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a new Tax Filing' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Filing data including personal info, income, and deductions.',
+    type: CreateFilingDto,
+  })
+  @ApiQuery({
+    name: 'serviceType',
+    enum: ServiceType,
+    description: 'Type of service requested',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Filing created successfully',
+    schema: {
+      example: {
+        id: 'uuid-1234',
+        filingId: 'F2024-001',
+        status: 'COMPLETED',
+        amount: 1500.00,
+        createdAt: '2023-10-01T12:00:00Z',
+      },
+    },
+  })
   @UseInterceptors(FilesInterceptor('documents', 10))
   async create(
     @Request() req,
     @Body() createFilingDto: CreateFilingDto,
     @UploadedFiles() files: Express.Multer.File[],
-    @Query('serviceType') serviceType: ServiceType,
+    @Query('serviceType', new ParseEnumPipe(ServiceType)) serviceType: ServiceType,
   ) {
     const userId = req.user?.sub;
-
-    if (!userId) {
-      throw new UnauthorizedException('User ID not found in token');
-    }
+    if (!userId) throw new UnauthorizedException('User ID not found in token');
 
     return this.filingsService.createFiling(
       userId,
@@ -50,17 +92,60 @@ export class FilingsController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all filings for the current user' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of user filings',
+    schema: {
+      type: 'array',
+      example: [
+        {
+          id: 'uuid-1234',
+          filingId: 'F2024-001',
+          status: 'COMPLETED',
+          amount: 1500.00,
+        },
+      ],
+    },
+  })
   async findAll(@Request() req) {
     const userId = req.user?.sub;
-
-    if (!userId) {
-      throw new UnauthorizedException('User ID not found in token');
-    }
-
+    if (!userId) throw new UnauthorizedException('User ID not found in token');
     return this.filingsService.getUserFilings(userId);
   }
 
+  @Get('stats')
+  @ApiOperation({ summary: 'Get filing statistics for the logged-in user' })
+  async getStats(@Request() req) {
+    const userId = req.user?.sub;
+    if (!userId) throw new UnauthorizedException('User ID not found');
+    return this.filingsService.getUserFilingStats(userId);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get a single filing by ID (Admin/User)' })
+  @ApiResponse({ status: 200, description: 'Filing details' })
+  @ApiResponse({ status: 404, description: 'Filing not found' })
+  async findOne(@Request() req, @Param('id') id: string) {
+    const userId = req.user?.sub;
+    return this.filingsService.getFilingById(id, userId);
+  }
+
   @Patch(':id')
+  @UseGuards(AdminGuard)
+  @ApiOperation({ summary: 'Update a filing status or amount (Admin Only)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Filing updated successfully',
+    schema: {
+      example: {
+        id: 'uuid-1234',
+        status: 'APPROVED',
+        amount: 1450.00,
+      },
+    },
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden (Admins only)' })
   async updateFiling(
     @Request() req,
     @Param('id') filingId: string,
@@ -68,5 +153,14 @@ export class FilingsController {
   ) {
     const adminId = req.user?.sub;
     return this.filingsService.updateFiling(adminId, filingId, updateFilingDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(AdminGuard)
+  @ApiOperation({ summary: 'Delete a filing (Admin Only)' })
+  @ApiResponse({ status: 200, description: 'Filing deleted successfully' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async remove(@Param('id') id: string) {
+    return this.filingsService.deleteFiling(id);
   }
 }

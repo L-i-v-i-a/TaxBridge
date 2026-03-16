@@ -11,7 +11,7 @@ export default function SignUpForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Updated state to use firstName and lastName
+  // State matches the API payload structure exactly
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -29,7 +29,7 @@ export default function SignUpForm() {
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
-    // Updated validation
+    // Updated validation for First Name and Last Name
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
       setError("Please fill in all required fields.");
       return;
@@ -48,14 +48,13 @@ export default function SignUpForm() {
     setError(null);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
       
       const response = await fetch(`${apiUrl}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        // Sending firstName and lastName as per backend logic
         body: JSON.stringify(formData),
       });
 
@@ -76,6 +75,7 @@ export default function SignUpForm() {
   };
 
   const handleGoogleLogin = () => {
+    // This initiates the OAuth flow -> Backend -> Google -> Backend -> Frontend Callback
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
     window.location.href = `${apiUrl}/auth/google`;
   };

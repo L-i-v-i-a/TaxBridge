@@ -1,166 +1,169 @@
-import { Injectable } from '@nestjs/common';
+/**
+ * @file ai.service.ts
+ * @description Core business logic for tax calculations and AI chat using Groq (OpenAI Compatible).
+ */
+
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-
 import OpenAI from 'openai';
+import { TAX_DATA } from './tax-data.constant';
 
-interface AiResult {
+// Interfaces
+export interface AiResult {
   success: boolean;
   amount?: number;
   error?: string;
 }
 
-// Configuration for Single Filers
-interface TaxConfig {
-  standardDeduction: number;
-  brackets: { rate: number; min: number; max: number }[];
+export interface IncomeDetailsDto {
+  grossIncome: number | string;
+  withholdingAmount?: number | string;
 }
 
-// Historical Tax Data (2019-2024) for Single Filers
-const TAX_DATA: Record<number, TaxConfig> = {
-  2024: {
-    standardDeduction: 14600,
-    brackets: [
-      { rate: 0.10, min: 0, max: 11600 },
-      { rate: 0.12, min: 11600, max: 47150 },
-      { rate: 0.22, min: 47150, max: 100525 },
-      { rate: 0.24, min: 100525, max: 191950 },
-      { rate: 0.32, min: 191950, max: 243725 },
-      { rate: 0.35, min: 243725, max: 609350 },
-      { rate: 0.37, min: 609350, max: Infinity },
-    ],
-  },
-  2023: {
-    standardDeduction: 13850,
-    brackets: [
-      { rate: 0.10, min: 0, max: 11000 },
-      { rate: 0.12, min: 11000, max: 44725 },
-      { rate: 0.22, min: 44725, max: 95375 },
-      { rate: 0.24, min: 95375, max: 182100 },
-      { rate: 0.32, min: 182100, max: 231250 },
-      { rate: 0.35, min: 231250, max: 578125 },
-      { rate: 0.37, min: 578125, max: Infinity },
-    ],
-  },
-  2022: {
-    standardDeduction: 12950,
-    brackets: [
-      { rate: 0.10, min: 0, max: 10275 },
-      { rate: 0.12, min: 10275, max: 41775 },
-      { rate: 0.22, min: 41775, max: 89075 },
-      { rate: 0.24, min: 89075, max: 170050 },
-      { rate: 0.32, min: 170050, max: 215950 },
-      { rate: 0.35, min: 215950, max: 539900 },
-      { rate: 0.37, min: 539900, max: Infinity },
-    ],
-  },
-  2021: {
-    standardDeduction: 12550,
-    brackets: [
-      { rate: 0.10, min: 0, max: 9950 },
-      { rate: 0.12, min: 9950, max: 40525 },
-      { rate: 0.22, min: 40525, max: 86375 },
-      { rate: 0.24, min: 86375, max: 164925 },
-      { rate: 0.32, min: 164925, max: 209425 },
-      { rate: 0.35, min: 209425, max: 523600 },
-      { rate: 0.37, min: 523600, max: Infinity },
-    ],
-  },
-  2020: {
-    standardDeduction: 12400,
-    brackets: [
-      { rate: 0.10, min: 0, max: 9875 },
-      { rate: 0.12, min: 9875, max: 40125 },
-      { rate: 0.22, min: 40125, max: 85525 },
-      { rate: 0.24, min: 85525, max: 163300 },
-      { rate: 0.32, min: 163300, max: 207350 },
-      { rate: 0.35, min: 207350, max: 518400 },
-      { rate: 0.37, min: 518400, max: Infinity },
-    ],
-  },
-  2019: {
-    standardDeduction: 12200,
-    brackets: [
-      { rate: 0.10, min: 0, max: 9700 },
-      { rate: 0.12, min: 9700, max: 39475 },
-      { rate: 0.22, min: 39475, max: 84200 },
-      { rate: 0.24, min: 84200, max: 160725 },
-      { rate: 0.32, min: 160725, max: 204100 },
-      { rate: 0.35, min: 204100, max: 510300 },
-      { rate: 0.37, min: 510300, max: Infinity },
-    ],
-  },
-};
+export interface DeductionsDto {
+  hasDeductibleExpenses?: 'Yes' | 'No';
+  donationAmount?: number | string;
+}
 
 @Injectable()
 export class AiService {
-  private openai: OpenAI | null = null;
+  // Renamed to 'client' since it's now Groq, but type remains OpenAI
+  private client: OpenAI | null = null;
+  private readonly logger = new Logger(AiService.name);
 
   constructor(private config: ConfigService) {
-    const apiKey = this.config.get<string>('OPENAI_API_KEY');
+    // 1. Read the GROQ API Key from environment
+    const apiKey = this.config.get<string>('GROQ_API_KEY');
+
     if (apiKey) {
-      this.openai = new OpenAI({ apiKey });
+      // 2. Configure OpenAI SDK to point to Groq's baseURL
+      this.client = new OpenAI({
+        apiKey,
+        baseURL: 'https://api.groq.com/openai/v1', // GROQ ENDPOINT
+      });
+      this.logger.log('Groq AI Client initialized successfully.');
+    } else {
+      this.logger.warn('GROQ_API_KEY not found. Using Mock Calculator only.');
     }
   }
 
-  async calculateTax(taxYear: number, incomeDetails: any, deductions: any): Promise<AiResult> {
-    // If no OpenAI client, use Mock
-    if (!this.openai) {
-      return this.mockCalculation(taxYear, incomeDetails, deductions);
+  /**
+   * TAX CALCULATION FEATURE
+   * Attempts AI calculation first, falls back to local logic on failure.
+   */
+  async calculateTax(
+    taxYear: number,
+    incomeDetails: IncomeDetailsDto,
+    deductions: DeductionsDto,
+  ): Promise<AiResult> {
+    if (!incomeDetails || !deductions) {
+      return { success: false, error: 'Missing input data.' };
+    }
+
+    // Attempt AI first
+    if (this.client) {
+      try {
+        return await this.aiCalculation(taxYear, incomeDetails, deductions);
+      } catch (error) {
+        this.logger.error(
+          `Groq AI Error: ${error.message}. Falling back to local logic.`,
+        );
+      }
+    }
+
+    // Fallback to deterministic local calculation
+    return this.localCalculation(taxYear, incomeDetails, deductions);
+  }
+
+  private async aiCalculation(
+    taxYear: number,
+    incomeDetails: IncomeDetailsDto,
+    deductions: DeductionsDto,
+  ): Promise<AiResult> {
+    const client = this.client;
+    if (!client) {
+      throw new Error('AI client is not initialized.');
+    }
+
+    const prompt = `
+      You are a US Tax Professional.
+      Calculate ${taxYear} US Federal Income Tax for:
+      Income: ${JSON.stringify(incomeDetails)}
+      Deductions: ${JSON.stringify(deductions)}
+      
+      Return JSON: { "success": boolean, "amount": number, "error": "string or null" }
+    `;
+
+    const response = await client.chat.completions.create({
+      model: 'llama-3.1-8b-instant',
+      messages: [{ role: 'user', content: prompt }],
+      response_format: { type: 'json_object' },
+    });
+
+    const content = response.choices[0].message.content;
+    if (!content) throw new Error('Empty AI response');
+    return JSON.parse(content);
+  }
+
+  /**
+   * CHAT FEATURE
+   * Handles generic conversation for the "Chat with AI" feature.
+   */
+  async chat(userMessage: string): Promise<string> {
+    if (!this.client) {
+      return "I'm sorry, the AI service is currently offline. Please try again later.";
     }
 
     try {
-      const prompt = `
-        You are a US Tax Professional.
-        Calculate ${taxYear} US Federal Income Tax for:
-        Income Details: ${JSON.stringify(incomeDetails)}
-        Deductions: ${JSON.stringify(deductions)}
-        
-        Return JSON: { "success": boolean, "amount": number, "error": "string or null" }
-        Amount should be the final tax due or refund amount (negative for refund).
-      `;
-
-      const response = await this.openai.chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: [{ role: 'user', content: prompt }],
-        response_format: { type: 'json_object' },
+      const response = await this.client.chat.completions.create({
+        model: 'llama-3.1-8b-instant',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful Tax Assistant for a tax filing platform. You answer questions about tax laws, filing procedures, and help users organize their financial data. Be concise and professional.',
+          },
+          { role: 'user', content: userMessage },
+        ],
       });
 
-      const content = response.choices[0].message.content;
-      if (!content) throw new Error("Empty AI response");
-
-      return JSON.parse(content);
-
+      return response.choices[0].message.content || "I couldn't generate a response.";
     } catch (error) {
-      console.warn(`⚠️ OpenAI Error (Falling back to Mock): ${error.message}`);
-      return this.mockCalculation(taxYear, incomeDetails, deductions);
+      this.logger.error('Chat AI Error:', error);
+      return "Sorry, I encountered an error processing your request. Please try again.";
     }
   }
 
-  // MOCK CALCULATOR: Real US Tax Logic for any year (2019-2024)
-  private async mockCalculation(
+  /**
+   * LOCAL CALCULATOR
+   * Uses imported TAX_DATA for accurate, offline calculations.
+   */
+  private async localCalculation(
     taxYear: number,
-    incomeDetails: { withholdingAmount?: string | number; grossIncome?: string | number } | null,
-    deductions: any,
+    incomeDetails: IncomeDetailsDto,
+    deductions: DeductionsDto,
   ): Promise<AiResult> {
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise((r) => setTimeout(r, 100)); // Minimal delay for UI feel
 
     try {
-      const grossIncome = parseFloat(String(incomeDetails?.grossIncome ?? '0'));
-      const taxPaid = parseFloat(String(incomeDetails?.withholdingAmount ?? '0'));
+      const grossIncome = parseFloat(String(incomeDetails.grossIncome || '0'));
+      const taxPaid = parseFloat(
+        String(incomeDetails.withholdingAmount || '0'),
+      );
 
       if (isNaN(grossIncome) || grossIncome <= 0) {
-        return { success: false, error: 'Valid gross income required' };
+        return { success: false, error: 'Valid Gross Income required' };
       }
 
+      // Retrieve config from imported constant
       const config = TAX_DATA[taxYear] || TAX_DATA[2024];
 
       let totalDeductions = config.standardDeduction;
 
-      if (deductions?.hasDeductibleExpenses === 'Yes') {
-        totalDeductions += 5000;
+      if (deductions.hasDeductibleExpenses === 'Yes') {
+        totalDeductions += 5000; // Simplified estimation
       }
-      if (deductions?.donationAmount) {
-        totalDeductions += Number(deductions.donationAmount);
+      if (deductions.donationAmount) {
+        totalDeductions += parseFloat(String(deductions.donationAmount));
       }
 
       const taxableIncome = Math.max(0, grossIncome - totalDeductions);
@@ -181,8 +184,8 @@ export class AiService {
         amount: Math.round(finalAmount * 100) / 100,
       };
     } catch (err) {
-      console.error(err);
-      return { success: false, error: 'Mock calculation failed' };
+      this.logger.error('Local calculation failed', err);
+      return { success: false, error: 'Internal calculation error' };
     }
   }
 }
