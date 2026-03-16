@@ -1,19 +1,16 @@
-/**
- * @file filings.service.ts
- * @description Service handling tax filing creation and management.
- */
-
+// src/filings/filings.service.ts
 import {
   Injectable,
   UnauthorizedException,
   InternalServerErrorException,
-  ForbiddenException
+  ForbiddenException,
+  NotFoundException
 } from '@nestjs/common';
 
 import { ServiceType, FilingStatus, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
-import { AiService, DeductionsDto } from '../ai/ai.service'; // <--- Import DeductionsDto interface
+import { AiService, DeductionsDto } from '../ai/ai.service';
 import { MailService } from '../mail/mail.service';
 
 import { CreateFilingDto } from './dto/create-filing.dto';
@@ -41,18 +38,16 @@ export class FilingsService {
     const count = await this.prisma.taxFiling.count();
     const filingId = `F${new Date().getFullYear()}-${String(count + 1).padStart(3, '0')}`;
     
-    // Ensure we have a tax year, default to current year if missing
     const taxYear = dto.taxYear || new Date().getFullYear();
 
     // 2. Prepare Data Object
-    // Using Prisma.TaxFilingCreateInput ensures type safety for the database insert
     const filingData: Prisma.TaxFilingCreateInput = {
       user: { connect: { id: userId } },
       filingId: filingId,
       serviceType: serviceType,
       taxYear: taxYear,
       type: dto.type || 'Federal',
-      personalInfo: dto.personalInfo as any, // Cast to any if JSON structure is flexible
+      personalInfo: dto.personalInfo as any,
       incomeDetails: dto.incomeDetails as any,
       deductions: dto.deductions as any,
     };
@@ -70,8 +65,6 @@ export class FilingsService {
 
     // --- LOGIC HANDLERS ---
 
-    // Helper: Map DTO to AiService DeductionsDto
-    // We explicitly cast 'hasDeductibleExpenses' to satisfy the strict 'Yes' | 'No' type
     const aiDeductions: DeductionsDto = {
       ...dto.deductions,
       hasDeductibleExpenses: dto.deductions.hasDeductibleExpenses as 'Yes' | 'No' | undefined,
@@ -151,14 +144,12 @@ export class FilingsService {
 
   // Admin Update Method
   async updateFiling(adminId: string, filingId: string, dto: UpdateFilingDto) {
-    // 1. Verify the user is an Admin
     const admin = await this.prisma.user.findUnique({ where: { id: adminId } });
     
     if (!admin || !admin.isAdmin) {
       throw new ForbiddenException('Only administrators can update filings');
     }
 
-    // 2. Update the filing
     return this.prisma.taxFiling.update({
       where: { id: filingId },
       data: {
@@ -175,6 +166,7 @@ export class FilingsService {
       include: { documents: true },
     });
   }
+
   async getUserFilingStats(userId: string) {
     const filings = await this.prisma.taxFiling.findMany({
       where: { userId },
@@ -197,5 +189,38 @@ export class FilingsService {
     });
 
     return stats;
+  }
+
+  async getFilingById(id: string, userId: string) {
+    const filing = await this.prisma.taxFiling.findUnique({
+      where: { id },
+      include: { documents: true, user: true }
+    });
+
+    if (!filing) {
+      throw new NotFoundException('Filing not found');
+    }
+
+    // If the user is not an admin, check ownership
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user.isAdmin && filing.userId !== userId) {
+      throw new ForbiddenException('You do not have permission to view this filing');
+    }
+
+    return filing;
+  }
+
+  async deleteFiling(id: string) {
+    // Check if filing exists
+    const filing = await this.prisma.taxFiling.findUnique({ where: { id } });
+    if (!filing) {
+      throw new NotFoundException('Filing not found');
+    }
+
+    // Delete associated documents first if needed, or use cascade in Prisma schema
+    // Assuming cascade is set up or we delete manually:
+    await this.prisma.document.deleteMany({ where: { filingId: id } });
+
+    return this.prisma.taxFiling.delete({ where: { id } });
   }
 }
