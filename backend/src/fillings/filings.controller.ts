@@ -17,6 +17,8 @@ import {
   UseGuards,
   UnauthorizedException,
   ParseEnumPipe,
+  Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import {
@@ -32,17 +34,17 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { ServiceType } from '@prisma/client';
 
-import { AdminGuard } from '../auth/admin.guard'; // Import the AdminGuard
-import { CreateFilingDto } from './dto/create-filing.dto';
+import { AdminGuard } from '../auth/admin.guard';
 
 import { FilingsService } from './filings.service';
 
+import { CreateFilingDto } from './dto/create-filing.dto';
 import { UpdateFilingDto } from './dto/update-filing.dto';
 
 @ApiTags('Filings')
-@ApiBearerAuth() // Applies JWT authentication to all routes in this controller
+@ApiBearerAuth()
 @Controller('filings')
-@UseGuards(AuthGuard('jwt')) // Default protection: User must be logged in
+@UseGuards(AuthGuard('jwt'))
 export class FilingsController {
   constructor(private readonly filingsService: FilingsService) {}
 
@@ -71,7 +73,7 @@ export class FilingsController {
       },
     },
   })
-  @UseInterceptors(FilesInterceptor('documents', 10)) // Max 10 files
+  @UseInterceptors(FilesInterceptor('documents', 10))
   async create(
     @Request() req,
     @Body() createFilingDto: CreateFilingDto,
@@ -79,17 +81,9 @@ export class FilingsController {
     @Query('serviceType', new ParseEnumPipe(ServiceType)) serviceType: ServiceType,
   ) {
     const userId = req.user?.sub;
+    if (!userId) throw new UnauthorizedException('User ID not found in token');
 
-    if (!userId) {
-      throw new UnauthorizedException('User ID not found in token');
-    }
-
-    return this.filingsService.createFiling(
-      userId,
-      createFilingDto,
-      files,
-      serviceType,
-    );
+    return this.filingsService.createFiling(userId, createFilingDto, files, serviceType);
   }
 
   @Get()
@@ -111,16 +105,29 @@ export class FilingsController {
   })
   async findAll(@Request() req) {
     const userId = req.user?.sub;
-
-    if (!userId) {
-      throw new UnauthorizedException('User ID not found in token');
-    }
-
+    if (!userId) throw new UnauthorizedException('User ID not found in token');
     return this.filingsService.getUserFilings(userId);
   }
 
+  @Get('stats')
+  @ApiOperation({ summary: 'Get filing statistics for the logged-in user' })
+  async getStats(@Request() req) {
+    const userId = req.user?.sub;
+    if (!userId) throw new UnauthorizedException('User ID not found');
+    return this.filingsService.getUserFilingStats(userId);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get a single filing by ID (Admin/User)' })
+  @ApiResponse({ status: 200, description: 'Filing details' })
+  @ApiResponse({ status: 404, description: 'Filing not found' })
+  async findOne(@Request() req, @Param('id') id: string) {
+    const userId = req.user?.sub;
+    return this.filingsService.getFilingById(id, userId);
+  }
+
   @Patch(':id')
-  @UseGuards(AdminGuard) // SECURITY: Only Admins can access this route
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: 'Update a filing status or amount (Admin Only)' })
   @ApiResponse({
     status: 200,
@@ -139,15 +146,16 @@ export class FilingsController {
     @Param('id') filingId: string,
     @Body() updateFilingDto: UpdateFilingDto,
   ) {
-    // We can pass the adminId for logging purposes, though AdminGuard ensures validity
     const adminId = req.user?.sub;
     return this.filingsService.updateFiling(adminId, filingId, updateFilingDto);
   }
-  @Get('stats')
-  @ApiOperation({ summary: 'Get filing statistics for the logged-in user' })
-  async getStats(@Request() req) {
-    const userId = req.user?.sub;
-    if (!userId) throw new UnauthorizedException('User ID not found');
-    return this.filingsService.getUserFilingStats(userId);
+
+  @Delete(':id')
+  @UseGuards(AdminGuard)
+  @ApiOperation({ summary: 'Delete a filing (Admin Only)' })
+  @ApiResponse({ status: 200, description: 'Filing deleted successfully' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async remove(@Param('id') id: string) {
+    return this.filingsService.deleteFiling(id);
   }
 }

@@ -10,13 +10,14 @@ import {
   MessageSquare, 
   BarChart2, 
   Settings, 
-  LogOut 
+  LogOut, 
+  CreditCard
 } from 'lucide-react';
 
 const navItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Management', href: '/admin/users', icon: Users },
-  { name: 'Tax Filing', href: '/admin/filings', icon: FileText },
+  { name: 'Subscription', href: '/admin/subscription', icon: CreditCard },
   { name: 'Communication', href: '/admin/communication', icon: MessageSquare },
   { name: 'Report', href: '/admin/reports', icon: BarChart2 },
   { name: 'Setting', href: '/admin/settings', icon: Settings },
