@@ -95,14 +95,29 @@ export class FilingsService {
         
         return filing;
       }
+
+      // AI Failed -> Notify Admin
+      filingData.status = FilingStatus.UNDER_REVIEW;
+      const filing = await this.prisma.taxFiling.create({ data: filingData });
+
+      await this.mailer.sendAdminNotification(
+        filingId,
+        `AI Calculation Failed: ${aiResult.error}`,
+        dto.personalInfo?.email,
+      );
+
+      return {
+        message: 'Complex data detected. Expert assigned for manual review.',
+        data: filing,
+      };
     }
 
     // B. EXPERT GUIDED
     if (serviceType === ServiceType.EXPERT_GUIDED) {
       const filing = await this.prisma.taxFiling.create({
-        data: { ...filingData, status: FilingStatus.UNDER_REVIEW }
+        data: { ...filingData, status: FilingStatus.UNDER_REVIEW },
       });
-      
+
       await this.mailer.sendAdminNotification(
         filingId,
         'New Expert Guided Request',
@@ -145,7 +160,7 @@ export class FilingsService {
   // Admin Update Method
   async updateFiling(adminId: string, filingId: string, dto: UpdateFilingDto) {
     const admin = await this.prisma.user.findUnique({ where: { id: adminId } });
-    
+
     if (!admin || !admin.isAdmin) {
       throw new ForbiddenException('Only administrators can update filings');
     }

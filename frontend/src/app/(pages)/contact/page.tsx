@@ -4,6 +4,7 @@ import NewsletterSection from "../../../../components/NewsletterSection"
 import ReadyToStartSection from "../../../../components/ReadyToStartSection"
 import SiteFooter from "../../../../components/SiteFooter"
 import ContactUs from "../../../../components/contactus/contactus"
+import MarketingPageShell from "../../../../components/marketing/MarketingPageShell";
 
 
 const faqItems = [
@@ -31,13 +32,15 @@ const faqItems = [
 
 export default function ContactPage() {
   return (
-    <main>
-    <Nav/>
-    <ContactUs/>
-    <FaqHighlightSection items={faqItems} />
-  <NewsletterSection/>
-    <ReadyToStartSection/>
-    <SiteFooter/>
-    </main>
+    <MarketingPageShell>
+      <main className="pt-20">
+        <Nav/>
+        <ContactUs/>
+        <FaqHighlightSection items={faqItems} />
+        <NewsletterSection/>
+        <ReadyToStartSection/>
+        <SiteFooter/>
+      </main>
+    </MarketingPageShell>
   )
 }

@@ -1,60 +1,91 @@
-import Image from "next/image";
+﻿import Image from "next/image";
+
+const highlights = [
+  {
+    title: "Our Mission",
+    description:
+      "To empower individuals and businesses to take control of their taxes using intelligent technology and trusted human guidance.",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="7" stroke="#0D23AD" strokeWidth="2" />
+        <circle cx="12" cy="12" r="2" fill="#0D23AD" />
+        <path
+          d="M20 4L15.5 8.5"
+          stroke="#0D23AD"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: "Our Vision",
+    description:
+      "To become the most trusted digital tax partner connecting people, businesses, and authorities through innovation and transparency.",
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M2 12C4.4 7.5 8 5 12 5C16 5 19.6 7.5 22 12C19.6 16.5 16 19 12 19C8 19 4.4 16.5 2 12Z"
+          stroke="#0D23AD"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle
+          cx="12"
+          cy="12"
+          r="3"
+          stroke="#0D23AD"
+          strokeWidth="2"
+          fill="none"
+        />
+      </svg>
+    ),
+  },
+];
 
 export default function MissionVisionSection() {
   return (
-    <section className="mx-auto w-full max-w-[1600px] px-6 py-16 min-[1600px]:px-0 min-[1600px]:py-[96px]">
-      <div className="grid items-start gap-10 lg:grid-cols-[1fr_1.1fr] min-[1600px]:grid-cols-[551px_616px] min-[1600px]:gap-[104px] min-[1600px]:pl-[269px] min-[1600px]:pr-[260px]">
-        <div className="animate-fade-up" style={{ animationDelay: "60ms" }}>
-          <h2 className="text-2xl font-semibold text-[#0D23AD] sm:text-3xl min-[1600px]:text-[40px] min-[1600px]:leading-[60px]">
+    <section className="mx-auto w-full max-w-5xl bg-white px-6 py-16 lg:px-12">
+      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        {/* Text Section */}
+        <div className="mx-auto max-w-xl lg:mx-0">
+          <h2 className="text-3xl font-bold text-[#0D23AD] sm:text-4xl">
             We Make Complex Tax Processes Easy For Everyone.
           </h2>
-          <p className="mt-3 text-sm text-slate-500 min-[1600px]:mt-[8px] min-[1600px]:text-[20px] min-[1600px]:leading-[28.5px]">
+
+          <p className="mt-3 text-lg font-bold text-slate-800">
             We Safeguard Every Byte Of Your Financial Data.
           </p>
-          <div className="mt-6 space-y-6 min-[1600px]:mt-[36px] min-[1600px]:space-y-[28px]">
-            <div className="flex items-start gap-3">
-              <span className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#E9F1FF]">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 4L14 8H10L12 4Z" fill="#0D23AD" />
-                  <circle cx="12" cy="14" r="4" fill="#0D23AD" />
-                </svg>
-              </span>
-              <div>
-                <p className="text-sm font-semibold text-[#0B0F1F] min-[1600px]:text-[21px] min-[1600px]:leading-[30px]">
-                  Our Mission
-                </p>
-                <p className="mt-2 text-xs text-slate-500 min-[1600px]:text-[18px] min-[1600px]:leading-[25.5px]">
-                  To empower individuals and businesses to take control of their taxes using intelligent
-                  technology and trusted human guidance.
-                </p>
+
+          <div className="mt-6 space-y-6">
+            {highlights.map((item) => (
+              <div key={item.title} className="flex items-start gap-3">
+                <span className="-mt-[4px] flex h-8 w-8 items-center justify-center rounded-full bg-[#E9F1FF]">
+                  {item.icon}
+                </span>
+
+                <div>
+                  <p className="text-lg font-bold text-[#0D23AD]">
+                    {item.title}
+                  </p>
+                  <p className="mt-2 text-sm font-bold text-slate-700">
+                    {item.description}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#E9F1FF]">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 12H19M12 5V19" stroke="#0D23AD" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </span>
-              <div>
-                <p className="text-sm font-semibold text-[#0B0F1F] min-[1600px]:text-[21px] min-[1600px]:leading-[30px]">
-                  Our Vision
-                </p>
-                <p className="mt-2 text-xs text-slate-500 min-[1600px]:text-[18px] min-[1600px]:leading-[25.5px]">
-                  To become the most trusted digital tax partner connecting people, businesses, and
-                  authorities through innovation and transparency.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        <div className="animate-fade-in" style={{ animationDelay: "140ms" }}>
+        {/* Image Section */}
+        <div className="flex justify-center">
           <Image
             src="/about-team.png"
             alt="TaxBridge team meeting"
-            width={616}
-            height={585}
-            className="h-auto w-full rounded-3xl object-cover shadow-md transition-transform duration-500 hover:scale-[1.02] min-[1600px]:h-[585px] min-[1600px]:w-[616px]"
+            width={420}
+            height={380}
+            className="h-auto w-full max-w-[420px] rounded-3xl object-cover shadow-md transition-transform duration-500 hover:scale-[1.02]"
           />
         </div>
       </div>
