@@ -29,12 +29,17 @@ export class FilingsService {
     serviceType: ServiceType,
   ) {
     if (!userId) {
-      throw new UnauthorizedException('User ID is missing. Authentication failed.');
+      throw new UnauthorizedException(
+        'User ID is missing. Authentication failed.',
+      );
     }
 
     // 1. Generate ID and Extract Year
     const count = await this.prisma.taxFiling.count();
     const filingId = `F${new Date().getFullYear()}-${String(count + 1).padStart(3, '0')}`;
+
+    // Ensure we have a tax year, default to current year if missing
+    const taxYear = dto.taxYear || new Date().getFullYear();
 
     // 2. Prepare Data Object
     const filingData: any = {
@@ -64,44 +69,33 @@ export class FilingsService {
     // A. CALCULATION ONLY
     if (serviceType === ServiceType.CALCULATION_ONLY) {
       // FIX: Pass taxYear as the first argument
-      const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, dto.deductions);
+      const aiResult = await this.ai.calculateTax(
+        taxYear,
+        dto.incomeDetails,
+        dto.deductions,
+      );
 
       if (aiResult.success) {
         return this.prisma.taxFiling.create({
           data: {
             ...filingData,
             status: FilingStatus.COMPLETED,
-            amount: aiResult.amount
-          }
+            amount: aiResult.amount,
+          },
         });
       } else {
         const filing = await this.prisma.taxFiling.create({
-          data: { ...filingData, status: FilingStatus.UNDER_REVIEW }
+          data: { ...filingData, status: FilingStatus.UNDER_REVIEW },
         });
-        
+
         await this.mailer.sendAdminNotification(
           filingId,
           `AI Calculation Failed: ${aiResult.error}`,
-          dto.personalInfo?.email
+          dto.personalInfo?.email,
         );
-        
+
         return filing;
       }
-
-      // AI Failed -> Notify Admin
-      filingData.status = FilingStatus.UNDER_REVIEW;
-      const filing = await this.prisma.taxFiling.create({ data: filingData });
-
-      await this.mailer.sendAdminNotification(
-        filingId,
-        `AI Calculation Failed: ${aiResult.error}`,
-        dto.personalInfo?.email,
-      );
-
-      return {
-        message: 'Complex data detected. Expert assigned for manual review.',
-        data: filing,
-      };
     }
 
     // B. EXPERT GUIDED
@@ -113,36 +107,40 @@ export class FilingsService {
       await this.mailer.sendAdminNotification(
         filingId,
         'New Expert Guided Request',
-        dto.personalInfo?.email
+        dto.personalInfo?.email,
       );
-      
+
       return filing;
     }
 
     // C. FULL FILING
     if (serviceType === ServiceType.FULL_FILING) {
       // FIX: Pass taxYear as the first argument
-      const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, dto.deductions);
+      const aiResult = await this.ai.calculateTax(
+        taxYear,
+        dto.incomeDetails,
+        dto.deductions,
+      );
 
       if (aiResult.success) {
         return this.prisma.taxFiling.create({
           data: {
             ...filingData,
             status: FilingStatus.COMPLETED,
-            amount: aiResult.amount
-          }
+            amount: aiResult.amount,
+          },
         });
       } else {
         const filing = await this.prisma.taxFiling.create({
-          data: { ...filingData, status: FilingStatus.NEEDS_INFO }
+          data: { ...filingData, status: FilingStatus.NEEDS_INFO },
         });
-        
+
         await this.mailer.sendAdminNotification(
           filingId,
           'Manual Filing Intervention Required',
-          dto.personalInfo?.email
+          dto.personalInfo?.email,
         );
-        
+
         return filing;
       }
     }
@@ -150,7 +148,7 @@ export class FilingsService {
     throw new InternalServerErrorException('Invalid Service Type provided');
   }
 
-  // Admin Update Method
+  // NEW: Admin Update Method
   async updateFiling(adminId: string, filingId: string, dto: UpdateFilingDto) {
     // 1. Verify the user is an Admin
     const admin = await this.prisma.user.findUnique({ where: { id: adminId } });
@@ -168,7 +166,6 @@ export class FilingsService {
       },
     });
   }
-
   async getUserFilings(userId: string) {
     return this.prisma.taxFiling.findMany({
       where: { userId },

@@ -1,4 +1,17 @@
-import { Controller, Post, Patch, Param, Get, Body, Query, UseInterceptors, UploadedFiles, Request, UseGuards, UnauthorizedException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Patch,
+  Param,
+  Get,
+  Body,
+  Query,
+  UseInterceptors,
+  UploadedFiles,
+  Request,
+  UseGuards,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -11,7 +24,6 @@ import { UpdateFilingDto } from './dto/update-filing.dto';
 
 @Controller('filings')
 @UseGuards(AuthGuard('jwt'))
-@ApiBearerAuth()
 export class FilingsController {
   constructor(private readonly filingsService: FilingsService) {}
 
@@ -23,13 +35,18 @@ export class FilingsController {
     @UploadedFiles() files: Express.Multer.File[],
     @Query('serviceType') serviceType: ServiceType,
   ) {
-    const userId = req.user?.sub; 
+    const userId = req.user?.sub;
 
     if (!userId) {
-       throw new UnauthorizedException('User ID not found in token');
+      throw new UnauthorizedException('User ID not found in token');
     }
 
-    return this.filingsService.createFiling(userId, createFilingDto, files, serviceType);
+    return this.filingsService.createFiling(
+      userId,
+      createFilingDto,
+      files,
+      serviceType,
+    );
   }
 
   @Get()
@@ -45,7 +62,7 @@ export class FilingsController {
 
   @Patch(':id')
   async updateFiling(
-    @Request() req: { user?: { sub?: string } },
+    @Request() req,
     @Param('id') filingId: string,
     @Body() updateFilingDto: UpdateFilingDto,
   ) {

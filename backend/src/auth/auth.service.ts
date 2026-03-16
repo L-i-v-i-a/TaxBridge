@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
-import { User } from '@prisma/client'; 
+import { User } from '@prisma/client';
 
 import * as bcrypt from 'bcrypt';
 
@@ -28,7 +28,9 @@ interface JwtPayload {
 
 @Injectable()
 export class AuthService {
-  private transporter: nodemailer.Transporter | null = null;
+  private transporter: {
+    sendMail: (options: Record<string, unknown>) => Promise<unknown>;
+  } | null = null;
 
   constructor(
     private prisma: PrismaService,
@@ -40,7 +42,10 @@ export class AuthService {
     const gmailPass = this.config.get<string>('GMAIL_APP_PASSWORD');
 
     if (gmailUser && gmailPass) {
-      this.transporter = nodemailer.createTransport({
+      const createTransport = nodemailer.createTransport as unknown as (
+        options: Record<string, unknown>,
+      ) => { sendMail: (options: Record<string, unknown>) => Promise<unknown> };
+      this.transporter = createTransport({
         service: 'gmail',
         auth: {
           user: gmailUser,
@@ -51,13 +56,15 @@ export class AuthService {
   }
 
   async signup(dto: SignupDto) {
-    const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    const existing = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
     if (existing) throw new BadRequestException('Email already exists');
 
     const hashed = await bcrypt.hash(dto.password, 10);
 
     // Create Paystack Customer
-    let paystackCustomerId: string | null = null;
+    let paystackCustomerId = null;
     try {
       const customer = await this.paystack.createCustomer(
         dto.email,
@@ -74,11 +81,13 @@ export class AuthService {
       password: hashed,
       firstName: dto.firstName,
       lastName: dto.lastName,
-      username,
-      phone: dto.phone,
-      ssn: dto.ssn,
-      dateOfBirth: new Date(dto.dateOfBirth),
-      paystackCustomerId: paystackCustomerId ?? undefined,
+      username:
+        dto.username ||
+        dto.email.split('@')[0] + Math.floor(Math.random() * 1000),
+      dateOfBirth: dto.dateOfBirth
+        ? new Date(dto.dateOfBirth)
+        : new Date('2000-01-01'),
+      paystackCustomerId: paystackCustomerId,
     };
 
     if (dto.firstName && dto.lastName) {
@@ -106,6 +115,7 @@ export class AuthService {
     if (this.transporter) {
       try {
         const greetingName = user.firstName ?? user.name ?? 'there';
+        console.log(`Sending login email to ${user.email}`);
         await this.transporter.sendMail({
           from: `"Taxbridge" <${this.config.get<string>('GMAIL_USER')}>`,
           to: user.email,
@@ -117,14 +127,17 @@ export class AuthService {
       }
     }
 
-    const accessToken = this.jwt.sign({ sub: user.id, email: user.email, isAdmin: user.isAdmin }, { expiresIn: '15m' });
+    const accessToken = this.jwt.sign(
+      { sub: user.id, email: user.email, isAdmin: user.isAdmin },
+      { expiresIn: '15m' },
+    );
     const refreshToken = this.jwt.sign({ sub: user.id }, { expiresIn: '7d' });
-    
-    return { 
-      message: 'Login successful', 
-      isAdmin: user.isAdmin, 
-      access_token: accessToken, 
-      refresh_token: refreshToken 
+
+    return {
+      message: 'Login successful',
+      isAdmin: user.isAdmin,
+      access_token: accessToken,
+      refresh_token: refreshToken,
     };
   }
 
@@ -150,10 +163,15 @@ export class AuthService {
         );
         paystackCustomerId = customer.customer_code;
       } catch (err) {
-        console.error('Paystack customer creation failed for Google user:', err);
+        console.error(
+          'Paystack customer creation failed for Google user:',
+          err,
+        );
       }
 
-      const username = googleUser.email.split('@')[0] + Math.random().toString(36).substring(7);
+      const username =
+        googleUser.email.split('@')[0] +
+        Math.random().toString(36).substring(7);
       user = await this.prisma.user.create({
         data: {
           googleId: googleUser.googleId,
@@ -165,7 +183,7 @@ export class AuthService {
           dateOfBirth: new Date('2000-01-01'),
           password: '',
           isVerified: true,
-          paystackCustomerId: paystackCustomerId ?? undefined,
+          paystackCustomerId,
         },
       });
     } else if (!user.googleId) {
@@ -200,7 +218,7 @@ export class AuthService {
     });
 
     if (!this.transporter) {
-      console.warn('Email sending skipped - Gmail not configured');
+      console.warn('Email sending skipped – Gmail not configured');
       return {
         message:
           'OTP would be sent (email service not configured in this environment)',
@@ -241,7 +259,11 @@ export class AuthService {
     return { message: 'Password reset successful' };
   }
 
-  async changePassword(userId: string, oldPassword: string, newPassword: string) {
+  async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string,
+  ) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new UnauthorizedException('User not found');
 
