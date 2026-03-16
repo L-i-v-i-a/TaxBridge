@@ -18,7 +18,6 @@ import {
   UnauthorizedException,
   ParseEnumPipe,
   Delete,
-  NotFoundException,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import {
@@ -45,7 +44,6 @@ import { UpdateFilingDto } from './dto/update-filing.dto';
 @ApiBearerAuth()
 @Controller('filings')
 @UseGuards(AuthGuard('jwt'))
-@ApiBearerAuth()
 export class FilingsController {
   constructor(private readonly filingsService: FilingsService) {}
 
@@ -89,21 +87,6 @@ export class FilingsController {
 
   @Get()
   @ApiOperation({ summary: 'Get all filings for the current user' })
-  @ApiResponse({
-    status: 200,
-    description: 'List of user filings',
-    schema: {
-      type: 'array',
-      example: [
-        {
-          id: 'uuid-1234',
-          filingId: 'F2024-001',
-          status: 'COMPLETED',
-          amount: 1500.00,
-        },
-      ],
-    },
-  })
   async findAll(@Request() req) {
     const userId = req.user?.sub;
     if (!userId) throw new UnauthorizedException('User ID not found in token');
@@ -120,42 +103,29 @@ export class FilingsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a single filing by ID (Admin/User)' })
-  @ApiResponse({ status: 200, description: 'Filing details' })
-  @ApiResponse({ status: 404, description: 'Filing not found' })
   async findOne(@Request() req, @Param('id') id: string) {
     const userId = req.user?.sub;
+    if (!userId) throw new UnauthorizedException('User ID not found');
     return this.filingsService.getFilingById(id, userId);
   }
 
   @Patch(':id')
   @UseGuards(AdminGuard)
   @ApiOperation({ summary: 'Update a filing status or amount (Admin Only)' })
-  @ApiResponse({
-    status: 200,
-    description: 'Filing updated successfully',
-    schema: {
-      example: {
-        id: 'uuid-1234',
-        status: 'APPROVED',
-        amount: 1450.00,
-      },
-    },
-  })
-  @ApiResponse({ status: 403, description: 'Forbidden (Admins only)' })
   async updateFiling(
-    @Request() req: { user?: { sub?: string } },
+    @Request() req,
     @Param('id') filingId: string,
     @Body() updateFilingDto: UpdateFilingDto,
   ) {
     const adminId = req.user?.sub;
+    if (!adminId) throw new UnauthorizedException('Admin ID not found');
+    
     return this.filingsService.updateFiling(adminId, filingId, updateFilingDto);
   }
 
   @Delete(':id')
   @UseGuards(AdminGuard)
   @ApiOperation({ summary: 'Delete a filing (Admin Only)' })
-  @ApiResponse({ status: 200, description: 'Filing deleted successfully' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
   async remove(@Param('id') id: string) {
     return this.filingsService.deleteFiling(id);
   }

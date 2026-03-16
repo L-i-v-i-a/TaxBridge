@@ -7,11 +7,12 @@ import {
   NotFoundException
 } from '@nestjs/common';
 
-import { ServiceType, FilingStatus, Prisma } from '@prisma/client';
+import { ServiceType, FilingStatus, Prisma, NotificationType, NotificationPriority } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
 import { AiService, DeductionsDto } from '../ai/ai.service';
 import { MailService } from '../mail/mail.service';
+import { NotificationsService } from '../notifications/notifications.service'; 
 
 import { CreateFilingDto } from './dto/create-filing.dto';
 import { UpdateFilingDto } from './dto/update-filing.dto';
@@ -22,6 +23,7 @@ export class FilingsService {
     private prisma: PrismaService,
     private ai: AiService,
     private mailer: MailService,
+    private notifications: NotificationsService, // Inject Notifications
   ) {}
 
   async createFiling(
@@ -75,13 +77,25 @@ export class FilingsService {
       const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, aiDeductions);
 
       if (aiResult.success) {
-        return this.prisma.taxFiling.create({
+        const filing = await this.prisma.taxFiling.create({
           data: {
             ...filingData,
             status: FilingStatus.COMPLETED,
             amount: aiResult.amount
           }
         });
+
+        // Notify User
+        await this.notifications.createNotification(
+          userId,
+          NotificationType.FILING,
+          'Calculation Complete',
+          `Your tax calculation for ${taxYear} is ready. Estimated refund/owe: ${aiResult.amount}`,
+          NotificationPriority.LOW,
+          `/filings/${filing.id}`
+        );
+
+        return filing;
       } else {
         const filing = await this.prisma.taxFiling.create({
           data: { ...filingData, status: FilingStatus.UNDER_REVIEW }
@@ -92,36 +106,41 @@ export class FilingsService {
           `AI Calculation Failed: ${aiResult.error}`,
           dto.personalInfo?.email
         );
+
+        // Notify User
+        await this.notifications.createNotification(
+          userId,
+          NotificationType.FILING,
+          'Manual Review Required',
+          `Your filing requires manual review by our experts.`,
+          NotificationPriority.HIGH,
+          `/filings/${filing.id}`
+        );
         
         return filing;
       }
-
-      // AI Failed -> Notify Admin
-      filingData.status = FilingStatus.UNDER_REVIEW;
-      const filing = await this.prisma.taxFiling.create({ data: filingData });
-
-      await this.mailer.sendAdminNotification(
-        filingId,
-        `AI Calculation Failed: ${aiResult.error}`,
-        dto.personalInfo?.email,
-      );
-
-      return {
-        message: 'Complex data detected. Expert assigned for manual review.',
-        data: filing,
-      };
     }
 
     // B. EXPERT GUIDED
     if (serviceType === ServiceType.EXPERT_GUIDED) {
       const filing = await this.prisma.taxFiling.create({
-        data: { ...filingData, status: FilingStatus.UNDER_REVIEW },
+        data: { ...filingData, status: FilingStatus.UNDER_REVIEW }
       });
-
+      
       await this.mailer.sendAdminNotification(
         filingId,
         'New Expert Guided Request',
         dto.personalInfo?.email
+      );
+
+      // Notify User
+      await this.notifications.createNotification(
+        userId,
+        NotificationType.FILING,
+        'Expert Request Submitted',
+        `Your request has been submitted. An expert will contact you shortly.`,
+        NotificationPriority.LOW,
+        `/filings/${filing.id}`
       );
       
       return filing;
@@ -132,13 +151,25 @@ export class FilingsService {
       const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, aiDeductions);
 
       if (aiResult.success) {
-        return this.prisma.taxFiling.create({
+        const filing = await this.prisma.taxFiling.create({
           data: {
             ...filingData,
             status: FilingStatus.COMPLETED,
             amount: aiResult.amount
           }
         });
+
+        // Notify User
+        await this.notifications.createNotification(
+          userId,
+          NotificationType.FILING,
+          'Filing Submitted',
+          `Your full tax filing has been successfully submitted.`,
+          NotificationPriority.LOW,
+          `/filings/${filing.id}`
+        );
+
+        return filing;
       } else {
         const filing = await this.prisma.taxFiling.create({
           data: { ...filingData, status: FilingStatus.NEEDS_INFO }
@@ -148,6 +179,16 @@ export class FilingsService {
           filingId,
           'Manual Filing Intervention Required',
           dto.personalInfo?.email
+        );
+
+        // Notify User
+        await this.notifications.createNotification(
+          userId,
+          NotificationType.FILING,
+          'More Information Needed',
+          `We need some additional details to process your filing.`,
+          NotificationPriority.HIGH,
+          `/filings/${filing.id}`
         );
         
         return filing;
@@ -165,13 +206,48 @@ export class FilingsService {
       throw new ForbiddenException('Only administrators can update filings');
     }
 
-    return this.prisma.taxFiling.update({
+    // 1. Update the filing
+    const filing = await this.prisma.taxFiling.update({
       where: { id: filingId },
       data: {
         status: dto.status,
         amount: dto.amount,
       },
     });
+
+    // 2. Create Notification for the User
+    if (dto.status) {
+      let title = 'Filing Update';
+      let message = `Your filing status changed to ${dto.status}.`;
+      
+      // FIX: Explicitly define type as NotificationPriority enum
+      let priority: NotificationPriority = NotificationPriority.LOW; 
+
+      if (dto.status === FilingStatus.COMPLETED) {
+        title = 'Filing Approved!';
+        message = `Your tax filing has been approved. Amount: ${dto.amount || filing.amount}`;
+        priority = NotificationPriority.HIGH;
+      } else if (dto.status === FilingStatus.REJECTED) {
+        title = 'Filing Rejected';
+        message = `Your filing was rejected. Please review the details.`;
+        priority = NotificationPriority.HIGH;
+      } else if (dto.status === FilingStatus.NEEDS_INFO) {
+        title = 'Action Required';
+        message = `Additional information is required for your filing.`;
+        priority = NotificationPriority.HIGH;
+      }
+
+      await this.notifications.createNotification(
+        filing.userId,
+        NotificationType.FILING,
+        title,
+        message,
+        priority,
+        `/filings/${filing.id}`
+      );
+    }
+
+    return filing;
   }
 
   async getUserFilings(userId: string) {
@@ -216,10 +292,8 @@ export class FilingsService {
       throw new NotFoundException('Filing not found');
     }
 
-    // If the user is not an admin, check ownership
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
-    // FIX: Explicitly check if user is null before accessing properties
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
@@ -232,14 +306,11 @@ export class FilingsService {
   }
 
   async deleteFiling(id: string) {
-    // Check if filing exists
     const filing = await this.prisma.taxFiling.findUnique({ where: { id } });
     if (!filing) {
       throw new NotFoundException('Filing not found');
     }
 
-    // Delete associated documents first if needed, or use cascade in Prisma schema
-    // Assuming cascade is set up or we delete manually:
     await this.prisma.document.deleteMany({ where: { filingId: id } });
 
     return this.prisma.taxFiling.delete({ where: { id } });

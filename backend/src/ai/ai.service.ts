@@ -5,7 +5,9 @@
 
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+
 import OpenAI from 'openai';
+
 import { TAX_DATA } from './tax-data.constant';
 
 // Interfaces
@@ -25,21 +27,24 @@ export interface DeductionsDto {
   donationAmount?: number | string;
 }
 
+// Interface for Chat History
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 @Injectable()
 export class AiService {
-  // Renamed to 'client' since it's now Groq, but type remains OpenAI
   private client: OpenAI | null = null;
   private readonly logger = new Logger(AiService.name);
 
   constructor(private config: ConfigService) {
-    // 1. Read the GROQ API Key from environment
     const apiKey = this.config.get<string>('GROQ_API_KEY');
 
     if (apiKey) {
-      // 2. Configure OpenAI SDK to point to Groq's baseURL
       this.client = new OpenAI({
         apiKey,
-        baseURL: 'https://api.groq.com/openai/v1', // GROQ ENDPOINT
+        baseURL: 'https://api.groq.com/openai/v1',
       });
       this.logger.log('Groq AI Client initialized successfully.');
     } else {
@@ -49,7 +54,6 @@ export class AiService {
 
   /**
    * TAX CALCULATION FEATURE
-   * Attempts AI calculation first, falls back to local logic on failure.
    */
   async calculateTax(
     taxYear: number,
@@ -60,7 +64,6 @@ export class AiService {
       return { success: false, error: 'Missing input data.' };
     }
 
-    // Attempt AI first
     if (this.client) {
       try {
         return await this.aiCalculation(taxYear, incomeDetails, deductions);
@@ -71,7 +74,6 @@ export class AiService {
       }
     }
 
-    // Fallback to deterministic local calculation
     return this.localCalculation(taxYear, incomeDetails, deductions);
   }
 
@@ -106,24 +108,30 @@ export class AiService {
   }
 
   /**
-   * CHAT FEATURE
-   * Handles generic conversation for the "Chat with AI" feature.
+   * CHAT FEATURE (UPDATED)
+   * Now accepts history to maintain context (ChatGPT-like memory).
    */
-  async chat(userMessage: string): Promise<string> {
+  async chat(userMessage: string, history: ChatMessage[] = []): Promise<string> {
     if (!this.client) {
       return "I'm sorry, the AI service is currently offline. Please try again later.";
     }
 
     try {
+      // Construct messages array: System Prompt + History + Current User Message
+      const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
+        {
+          role: 'system',
+          content: 'You are a helpful Tax Assistant for a tax filing platform. You answer questions about tax laws, filing procedures, and help users organize their financial data. Be concise and professional. Remember context from previous messages.',
+        },
+        // Spread previous history
+        ...history,
+        // Add current user message
+        { role: 'user', content: userMessage }
+      ];
+
       const response = await this.client.chat.completions.create({
         model: 'llama-3.1-8b-instant',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a helpful Tax Assistant for a tax filing platform. You answer questions about tax laws, filing procedures, and help users organize their financial data. Be concise and professional.',
-          },
-          { role: 'user', content: userMessage },
-        ],
+        messages: messages,
       });
 
       return response.choices[0].message.content || "I couldn't generate a response.";
@@ -135,14 +143,13 @@ export class AiService {
 
   /**
    * LOCAL CALCULATOR
-   * Uses imported TAX_DATA for accurate, offline calculations.
    */
   private async localCalculation(
     taxYear: number,
     incomeDetails: IncomeDetailsDto,
     deductions: DeductionsDto,
   ): Promise<AiResult> {
-    await new Promise((r) => setTimeout(r, 100)); // Minimal delay for UI feel
+    await new Promise((r) => setTimeout(r, 100));
 
     try {
       const grossIncome = parseFloat(String(incomeDetails.grossIncome || '0'));
@@ -154,13 +161,12 @@ export class AiService {
         return { success: false, error: 'Valid Gross Income required' };
       }
 
-      // Retrieve config from imported constant
       const config = TAX_DATA[taxYear] || TAX_DATA[2024];
 
       let totalDeductions = config.standardDeduction;
 
       if (deductions.hasDeductibleExpenses === 'Yes') {
-        totalDeductions += 5000; // Simplified estimation
+        totalDeductions += 5000;
       }
       if (deductions.donationAmount) {
         totalDeductions += parseFloat(String(deductions.donationAmount));

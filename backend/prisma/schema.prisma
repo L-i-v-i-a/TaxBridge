@@ -40,6 +40,7 @@ model User {
   filings        TaxFiling[]
   subscriptions  Subscription[]
   conversations  Conversation[] // <--- ADDED: Relation to Chat
+  notifications Notification[]
 }
 
 model Subscriber {
@@ -171,4 +172,32 @@ model Message {
   createdAt      DateTime @default(now())
 
   @@index([conversationId])
+}
+
+enum NotificationType {
+  FILING
+  CHAT
+  SYSTEM
+  SUBSCRIPTION
+}
+
+enum NotificationPriority {
+  HIGH
+  LOW
+}
+
+model Notification {
+  id        String @id @default(uuid())
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type      NotificationType
+  priority  NotificationPriority @default(LOW)
+  
+  title     String
+  message   String
+  link      String? // URL to the relevant resource (e.g., /filings/123)
+  
+  isRead    Boolean @default(false)
+  createdAt DateTime @default(now())
 }
