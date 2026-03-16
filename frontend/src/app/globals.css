@@ -43,6 +43,13 @@ h6 {
   background-blend-mode: overlay;
 }
 
+.contactus-background {
+  background-image: url(/document.jpg);
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+}
+
 @keyframes fadeUp {
   0% {
     opacity: 0;

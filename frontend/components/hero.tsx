@@ -117,7 +117,7 @@ export default function Hero() {
           <div className="bg-white p-2 rounded-xl flex items-center shadow-2xl max-w-xl transition-all hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)]">
             <div className="flex items-center gap-3 px-4 flex-1">
               <svg width="47" height="47" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clipRule="evenodd" d="M37.0439 41.9181H11.6981C9.88828 41.9181 8.1526
+              <path fillRule="evenodd" clipRule="evenodd" d="M37.0439 41.9181H11.6981C9.88828 41.9181 8.1526
                41.1992 6.87287 39.9194C5.59315 38.6397 4.87421 36.904 4.87421 35.0942V9.63727C4.87421 7.55696
                 6.93307 6.23703 8.74432 6.86482C9.00428 6.95451 9.25578 7.08579 9.49884 7.25866L9.84004
                  7.50237C10.6699 8.09123 11.6627 8.40673 12.6803 8.40498C13.6979 8.40324 14.6896 8.08432
