@@ -30,7 +30,7 @@ export default function PricingBottomSection({ faqs }: { faqs: Faq[] }) {
     <div
       ref={bottomRef}
       className={
-        "mt-20 bg-[#0D23AD] py-20 transition-all duration-700 ease-out " +
+        "mt--20  bg-[#0D23AD] py-20 transition-all duration-700 ease-out " +
         (inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8")
       }
     >

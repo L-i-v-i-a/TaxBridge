@@ -1,9 +1,42 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+      const response = await fetch(`${apiUrl}/auth/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to send OTP.");
+      }
+
+      // Redirect to reset password page with email in query params
+      router.push(`/reset-password?email=${encodeURIComponent(email)}`);
+      
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-[#E9EDFF] px-6 py-10">
@@ -13,26 +46,28 @@ export default function ForgotPasswordPage() {
           Enter the email linked to your account and we will send a one-time passcode (OTP).
         </p>
 
-        <form
-          className="mt-8 space-y-6"
-          onSubmit={(event) => {
-            event.preventDefault();
-            router.push("/forgot-password/reset");
-          }}
-        >
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
             <label className="text-sm text-[#5B5B5B]">Email</label>
             <input
               type="email"
+              name="email"
               placeholder="friday.okafor@gmail.com"
-              className="mt-2 h-12 w-full rounded-[10px] border border-[#E5E5E5] px-4 text-sm text-[#1C1C1C]"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="mt-2 h-12 w-full rounded-[10px] border border-[#E5E5E5] px-4 text-sm text-[#1C1C1C] focus:outline-none focus:border-[#0D23AD]"
             />
           </div>
+
+          {error && <p className="text-sm text-red-500">{error}</p>}
+
           <button
             type="submit"
-            className="h-12 w-full rounded-[10px] bg-[#0D23AD] text-sm font-semibold text-white cursor-pointer"
+            disabled={loading}
+            className="h-12 w-full rounded-[10px] bg-[#0D23AD] text-sm font-semibold text-white cursor-pointer disabled:opacity-50"
           >
-            Send OTP
+            {loading ? "Sending..." : "Send OTP"}
           </button>
         </form>
       </div>
