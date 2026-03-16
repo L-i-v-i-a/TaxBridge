@@ -14,7 +14,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
-import { ConversationType } from '@prisma/client';
+import { ConversationType, SenderType } from '@prisma/client'; 
 
 import { AdminGuard } from '../auth/admin.guard';
 
@@ -46,6 +46,28 @@ export class ChatController {
     return this.chatService.getConversation(id);
   }
 
+  // NEW: HTTP Endpoint to send messages
+  @Post('messages')
+  async sendMessage(
+    @Request() req,
+    @Body() body: { conversationId: string; content: string; type: 'TEXT' | 'IMAGE' | 'FILE' }
+  ) {
+    const { conversationId, content, type } = body;
+    const userId = req.user.sub;
+    const isAdmin = req.user.isAdmin;
+
+    const senderType: SenderType = isAdmin ? 'ADMIN' : 'USER';
+
+    // This triggers the event that updates the sockets
+    return this.chatService.createMessage(
+      conversationId,
+      userId,
+      senderType,
+      content,
+      type || 'TEXT',
+    );
+  }
+
   @Post('messages/:id/react')
   async addReaction(
     @Request() req,
@@ -59,8 +81,6 @@ export class ChatController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FilesInterceptor('files', 5))
   async uploadFile(@UploadedFiles() files: Express.Multer.File[]) {
-    // In a real app, upload to AWS S3 or similar
-    // Here we return the local path for demo
     const urls = files.map(f => ({ url: `uploads/${f.filename}`, name: f.originalname }));
     return { success: true, files: urls };
   }

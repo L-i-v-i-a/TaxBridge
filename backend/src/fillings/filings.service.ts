@@ -203,6 +203,12 @@ export class FilingsService {
 
     // If the user is not an admin, check ownership
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    // FIX: Explicitly check if user is null before accessing properties
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
     if (!user.isAdmin && filing.userId !== userId) {
       throw new ForbiddenException('You do not have permission to view this filing');
     }

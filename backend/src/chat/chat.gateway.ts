@@ -39,9 +39,19 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleConnection(client: Socket) {
     try {
-      const token = client.handshake.auth.token?.split(' ')[1];
-      if (!token) throw new Error('No token');
+      // 1. Retrieve token from auth or headers
+      let token = client.handshake.auth.token || client.handshake.headers.authorization;
 
+      if (!token) {
+        throw new Error('No token provided');
+      }
+
+      // 2. Remove 'Bearer ' prefix if it exists
+      if (token.startsWith('Bearer ')) {
+        token = token.split(' ')[1];
+      }
+
+      // 3. Verify Token
       const payload = await this.jwtService.verifyAsync(token);
       client.data.user = payload; // { sub: userId, email, isAdmin }
 
@@ -56,7 +66,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.logger.log(`User ${payload.sub} connected`);
       }
     } catch (e) {
-      this.logger.error('Connection failed', e.message);
+      this.logger.error(`Connection failed: ${e.message}`);
       client.disconnect();
     }
   }
@@ -68,7 +78,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('joinConversation')
   async handleJoinRoom(@ConnectedSocket() client: Socket, @MessageBody() conversationId: string) {
     client.join(`conv-${conversationId}`);
-    this.logger.log(`Client joined room conv-${conversationId}`);
+    this.logger.log(`Client ${client.id} joined room conv-${conversationId}`);
   }
 
   @SubscribeMessage('sendMessage')
@@ -98,7 +108,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // 2. Logic for AI vs Agent
     const conversation = await this.chatService.getConversation(conversationId);
 
-    // FIX: Safety check for conversation existence
+    // Safety check for conversation existence
     if (!conversation) {
       this.logger.error(`Conversation ${conversationId} not found`);
       return;
@@ -125,7 +135,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         // Admin replied -> Email the User
         this.server.to(`user-${conversation.userId}`).emit('notification', message);
         
-        // FIX: Handle nullable name property
+        // Handle nullable name property
         const userName = conversation.user.name || 'User';
         
         await this.mailService.sendNewMessageNotification(

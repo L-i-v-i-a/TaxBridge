@@ -1,6 +1,6 @@
 // src/chat/chat.service.ts
 import { Injectable, NotFoundException, Logger, InternalServerErrorException } from '@nestjs/common';
-
+import { EventEmitter2 } from '@nestjs/event-emitter'; // Import EventEmitter
 import { MessageType, SenderType, ConversationType } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
@@ -13,6 +13,7 @@ export class ChatService {
   constructor(
     private prisma: PrismaService,
     private mailer: MailService,
+    private eventEmitter: EventEmitter2, // Inject EventEmitter
   ) {}
 
   async createConversation(userId: string, type: ConversationType) {
@@ -26,7 +27,6 @@ export class ChatService {
       return conversation;
     } catch (error) {
       this.logger.error(`Failed to create conversation: ${error.message}`, error.stack);
-      // This will return a clear error message to the frontend
       throw new InternalServerErrorException('Database error: Could not create conversation. Did you run migrations?');
     }
   }
@@ -50,7 +50,7 @@ export class ChatService {
       });
     } catch (error) {
       this.logger.error(`Failed to get conversations: ${error.message}`);
-      return []; // Return empty on error
+      return [];
     }
   }
 
@@ -89,6 +89,10 @@ export class ChatService {
         where: { id: conversationId },
         data: { updatedAt: new Date() },
       });
+
+      // Emit event so Gateway can broadcast to sockets
+      // We pass the full message and the senderId for logic checks
+      this.eventEmitter.emit('message.created', { message, senderId });
 
       return message;
     } catch (error) {
