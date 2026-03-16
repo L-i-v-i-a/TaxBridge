@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { PrismaService } from '../prisma.service';
+import { AdminGuard } from '../auth/admin.guard';
 import { AuthModule } from '../auth/auth.module';
 import { PaystackModule } from '../paystack/paystack.module';
 
@@ -8,8 +9,8 @@ import { PaymentController } from './payment.controller';
 import { PaymentService } from './payment.service';
 
 @Module({
-  imports: [PaystackModule, AuthModule],
-  providers: [PaymentService, PrismaService],
+  imports: [AuthModule, PaystackModule],
+  providers: [PaymentService, PrismaService, AdminGuard],
   controllers: [PaymentController],
 })
 export class PaymentModule {}

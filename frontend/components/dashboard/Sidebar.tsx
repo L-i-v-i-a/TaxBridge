@@ -19,7 +19,7 @@ const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Tax Filing', href: '/filings', icon: FileText },
   { name: 'Communication', href: '/communication', icon: MessageCircle },
-  { name: 'Subscription', href: '/pricing', icon: CreditCard },
+  { name: 'Subscription', href: '/subscription', icon: CreditCard },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
