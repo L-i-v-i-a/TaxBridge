@@ -93,7 +93,7 @@ const ContactUs = () => {
 
   return (
     <>
-      <div className="bg-[#1e3a8a] min-h-screen pt-20 p-16 lg:p-32">
+      <div className="bg-blue-900 bg-[url('/document.jpg')] bg-center bg-repeat bg-blend-overlay min-h-screen pt-20 p-16 lg:p-30 ">
         {/* Container holding both sides */}
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           

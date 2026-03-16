@@ -1,4 +1,3 @@
-import FaqHighlightSection from "../../../../components/FaqHighlightSection";
 import Nav from "../../../../components/nav"
 import NewsletterSection from "../../../../components/NewsletterSection"
 import ReadyToStartSection from "../../../../components/ReadyToStartSection"
@@ -33,10 +32,10 @@ const faqItems = [
 export default function ContactPage() {
   return (
     <MarketingPageShell>
-      <main className="pt-20">
+      <main>
         <Nav/>
         <ContactUs/>
-        <FaqHighlightSection items={faqItems} />
+        
         <NewsletterSection/>
         <ReadyToStartSection/>
         <SiteFooter/>
