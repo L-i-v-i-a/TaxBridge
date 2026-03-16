@@ -1,16 +1,14 @@
 /**
  * @file ai.service.ts
- * @description Core business logic for tax calculations.
+ * @description Core business logic for tax calculations and AI chat using Groq (OpenAI Compatible).
  */
 
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-
 import OpenAI from 'openai';
-
 import { TAX_DATA } from './tax-data.constant';
 
-// Interfaces moved to top for clarity
+// Interfaces
 export interface AiResult {
   success: boolean;
   amount?: number;
@@ -29,18 +27,30 @@ export interface DeductionsDto {
 
 @Injectable()
 export class AiService {
-  private openai: OpenAI | null = null;
+  // Renamed to 'client' since it's now Groq, but type remains OpenAI
+  private client: OpenAI | null = null;
   private readonly logger = new Logger(AiService.name);
 
   constructor(private config: ConfigService) {
-    const apiKey = this.config.get<string>('OPENAI_API_KEY');
+    // 1. Read the GROQ API Key from environment
+    const apiKey = this.config.get<string>('GROQ_API_KEY');
+
     if (apiKey) {
-      this.openai = new OpenAI({ apiKey });
+      // 2. Configure OpenAI SDK to point to Groq's baseURL
+      this.client = new OpenAI({
+        apiKey,
+        baseURL: 'https://api.groq.com/openai/v1', // GROQ ENDPOINT
+      });
+      this.logger.log('Groq AI Client initialized successfully.');
     } else {
-      this.logger.warn('OPENAI_API_KEY not found. Using Mock Calculator only.');
+      this.logger.warn('GROQ_API_KEY not found. Using Mock Calculator only.');
     }
   }
 
+  /**
+   * TAX CALCULATION FEATURE
+   * Attempts AI calculation first, falls back to local logic on failure.
+   */
   async calculateTax(
     taxYear: number,
     incomeDetails: IncomeDetailsDto,
@@ -51,12 +61,12 @@ export class AiService {
     }
 
     // Attempt AI first
-    if (this.openai) {
+    if (this.client) {
       try {
         return await this.aiCalculation(taxYear, incomeDetails, deductions);
       } catch (error) {
         this.logger.error(
-          `OpenAI Error: ${error.message}. Falling back to local logic.`,
+          `Groq AI Error: ${error.message}. Falling back to local logic.`,
         );
       }
     }
@@ -70,9 +80,8 @@ export class AiService {
     incomeDetails: IncomeDetailsDto,
     deductions: DeductionsDto,
   ): Promise<AiResult> {
-    // FIX: Assign to local variable to narrow type from 'OpenAI | null' to 'OpenAI'
-    const openaiClient = this.openai;
-    if (!openaiClient) {
+    const client = this.client;
+    if (!client) {
       throw new Error('AI client is not initialized.');
     }
 
@@ -85,8 +94,8 @@ export class AiService {
       Return JSON: { "success": boolean, "amount": number, "error": "string or null" }
     `;
 
-    const response = await openaiClient.chat.completions.create({
-      model: 'gpt-4o-mini',
+    const response = await client.chat.completions.create({
+      model: 'llama-3.1-8b-instant',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
     });
@@ -94,6 +103,34 @@ export class AiService {
     const content = response.choices[0].message.content;
     if (!content) throw new Error('Empty AI response');
     return JSON.parse(content);
+  }
+
+  /**
+   * CHAT FEATURE
+   * Handles generic conversation for the "Chat with AI" feature.
+   */
+  async chat(userMessage: string): Promise<string> {
+    if (!this.client) {
+      return "I'm sorry, the AI service is currently offline. Please try again later.";
+    }
+
+    try {
+      const response = await this.client.chat.completions.create({
+        model: 'llama-3.1-8b-instant',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful Tax Assistant for a tax filing platform. You answer questions about tax laws, filing procedures, and help users organize their financial data. Be concise and professional.',
+          },
+          { role: 'user', content: userMessage },
+        ],
+      });
+
+      return response.choices[0].message.content || "I couldn't generate a response.";
+    } catch (error) {
+      this.logger.error('Chat AI Error:', error);
+      return "Sorry, I encountered an error processing your request. Please try again.";
+    }
   }
 
   /**

@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma.module';
 
 import { AiModule } from './ai/ai.module';
 import { AuthModule } from './auth/auth.module';
+import { ChatModule } from './chat/chat.module';
 import { ContactModule } from './contact/contact.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FeaturesModule } from './features/features.module';
@@ -38,6 +39,7 @@ import { RefundCalculatorModule } from './refund-calculator/refund-calculator.mo
     PaymentModule,
     PaystackModule,
     DashboardModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
