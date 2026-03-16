@@ -18,14 +18,19 @@ import { Type, Transform, plainToInstance } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 // Helper to parse JSON strings in form-data
-const ToClass = (cls: any) => Transform(({ value }) => {
-  if (!value) return value;
-  let obj = value;
-  if (typeof value === 'string') {
-    try { obj = JSON.parse(value); } catch (e) { return value; }
-  }
-  return plainToInstance(cls, obj);
-});
+const ToClass = (cls: any) =>
+  Transform(({ value }) => {
+    if (!value) return value;
+    let obj = value;
+    if (typeof value === 'string') {
+      try {
+        obj = JSON.parse(value);
+      } catch (e) {
+        return value;
+      }
+    }
+    return plainToInstance(cls, obj);
+  });
 
 class PersonalInfoDto {
   @ApiProperty({ example: 'Olivia Adebayo' })

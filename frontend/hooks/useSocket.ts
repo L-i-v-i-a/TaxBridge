@@ -1,5 +1,4 @@
-// hooks/useSocket.ts
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 import { io, Socket } from 'socket.io-client';
 
@@ -8,28 +7,35 @@ export const useSocket = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const token = localStorage.getItem('access_token');
     if (!token) return;
 
-    const socketIo = io('http://localhost:3000/chat', {
-      auth: { token: `Bearer ${token}` },
-      transports: ['websocket'],
+    const newSocket = io('http://localhost:3000/chat', {
+      auth: {
+        token: `Bearer ${token}`, 
+      },
+      transports: ['websocket'], 
     });
 
-    socketIo.on('connect', () => {
+    newSocket.on('connect', () => {
+      console.log('Socket Connected:', newSocket.id);
       setIsConnected(true);
-      console.log('Socket connected');
     });
 
-    socketIo.on('disconnect', () => {
+    newSocket.on('disconnect', () => {
       setIsConnected(false);
-      console.log('Socket disconnected');
     });
 
-    setSocket(socketIo);
+    newSocket.on('connect_error', (err) => {
+      console.error('Socket Connection Error:', err.message);
+    });
+
+    setSocket(newSocket);
 
     return () => {
-      socketIo.disconnect();
+      newSocket.disconnect();
     };
   }, []);
 

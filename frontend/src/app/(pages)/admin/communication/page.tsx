@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Headphones, Loader2, User, Circle } from 'lucide-react';
+import { Headphones, Loader2, User, Circle, AlertCircle } from 'lucide-react';
 // Adjust imports based on your actual project structure
 import Topbar from '../../../../../components/admin/AdminTopbar';
 import Sidebar from '../../../../../components/admin/AdminSidebar';
@@ -24,10 +24,30 @@ export default function AdminSupportPage() {
   const router = useRouter();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [debugMode, setDebugMode] = useState(false);
   const { socket, isConnected } = useSocket();
 
   // Fetch list of support conversations
   useEffect(() => {
+    // --- DEBUGGING: Check if Token has Admin privileges ---
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('DEBUG: Token Payload', payload);
+        if (!payload.isAdmin) {
+          console.warn('WARNING: User is not an Admin according to the token!');
+          setDebugMode(true); // Show warning in UI
+        } else {
+          console.log('SUCCESS: Admin token detected.');
+          setDebugMode(false);
+        }
+      } catch (e) {
+        console.error('Error parsing token', e);
+      }
+    }
+    // ------------------------------------------------------
+
     fetchConversations();
   }, []);
 
@@ -35,7 +55,6 @@ export default function AdminSupportPage() {
   useEffect(() => {
     if (socket) {
       socket.on('notification', (data: any) => {
-        // When a new message comes in, refresh the list to update order/preview
         console.log('New activity in support channel');
         fetchConversations();
       });
@@ -52,7 +71,10 @@ export default function AdminSupportPage() {
       });
       if (res.ok) {
         const data = await res.json();
+        console.log('Fetched Conversations:', data); // See what backend returns
         setConversations(data);
+      } else {
+        console.error('Failed to fetch conversations', res.status);
       }
     } catch (err) {
       console.error('Failed to fetch conversations', err);
@@ -74,6 +96,20 @@ export default function AdminSupportPage() {
               <h1 className="text-2xl font-bold text-gray-900 mb-1">Support Center</h1>
               <p className="text-gray-500">Manage user support requests and live chats.</p>
             </div>
+
+            {/* Debug Warning */}
+            {debugMode && (
+              <div className="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r flex items-start">
+                <AlertCircle className="text-yellow-600 mr-3 mt-0.5 shrink-0" size={20} />
+                <div>
+                  <h3 className="text-yellow-800 font-medium">Admin Privileges Not Detected</h3>
+                  <p className="text-yellow-700 text-sm">
+                    Your login token does not have <code>isAdmin: true</code>. Please verify your backend Auth logic.
+                    The list below may appear empty because the API thinks you are a regular user.
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Conversation List Card */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -100,7 +136,7 @@ export default function AdminSupportPage() {
                   {conversations.map((conv) => (
                     <div
                       key={conv.id}
-                      onClick={() => router.push(`/admin/support/${conv.id}`)}
+                      onClick={() => router.push(`/admin/communication/${conv.id}`)}
                       className="p-4 hover:bg-gray-50 cursor-pointer flex items-center justify-between transition-colors"
                     >
                       <div className="flex items-center space-x-4">

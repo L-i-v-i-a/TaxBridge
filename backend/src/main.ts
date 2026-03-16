@@ -14,7 +14,7 @@ async function bootstrap() {
 
   // 1. ENABLE CORS (Critical for Frontend/Postman connection issues)
   app.enableCors({
-    origin: '*', // Allows all origins for development
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
@@ -37,7 +37,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('filings', 'Tax filing management')
     .addTag('auth', 'Authentication endpoints')
-    .addBearerAuth() // <--- ENABLED: Allows you to paste JWT in Swagger UI
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -48,6 +48,7 @@ async function bootstrap() {
 
   // 4. Start Server
   const PORT = process.env.PORT || 3001;
+  const PORT = process.env.PORT ? Number(process.env.PORT) : 3001;
   await app.listen(PORT);
   console.log(`🚀 Application is running on: http://localhost:${PORT}`);
   console.log(`📚 Swagger Docs available at: http://localhost:${PORT}/api`);
@@ -74,7 +75,7 @@ async function bootstrap() {
             isAdmin: true,
           },
         });
-        console.log('✅ Default admin user created');
+        console.log('Default admin user created');
       }
     } catch (error) {
       console.error('Error seeding admin:', error);

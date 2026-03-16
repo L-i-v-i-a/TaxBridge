@@ -2,6 +2,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter'; 
 
 import { PrismaModule } from '../prisma.module';
 import { AiModule } from '../ai/ai.module';
@@ -16,7 +17,7 @@ import { ChatService } from './chat.service';
     PrismaModule,
     AiModule,
     MailModule,
-    // Add JwtModule so ChatGateway can verify tokens
+    EventEmitterModule.forRoot(), // <--- Add this
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

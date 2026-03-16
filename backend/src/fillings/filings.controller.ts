@@ -45,6 +45,7 @@ import { UpdateFilingDto } from './dto/update-filing.dto';
 @ApiBearerAuth()
 @Controller('filings')
 @UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 export class FilingsController {
   constructor(private readonly filingsService: FilingsService) {}
 
@@ -142,7 +143,7 @@ export class FilingsController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden (Admins only)' })
   async updateFiling(
-    @Request() req,
+    @Request() req: { user?: { sub?: string } },
     @Param('id') filingId: string,
     @Body() updateFilingDto: UpdateFilingDto,
   ) {

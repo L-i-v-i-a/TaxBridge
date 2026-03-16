@@ -19,7 +19,7 @@ export default function Hero() {
   // State for form inputs
   const [annualIncome, setAnnualIncome] = useState('');
   const [federalTaxWithheld, setFederalTaxWithheld] = useState('');
-  
+
   // State for result and UI feedback
   const [refundAmount, setRefundAmount] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ export default function Hero() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/refund-calculator/calculate', {
+      const response = await fetch('http://localhost:3001/refund-calculator/calculate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -205,7 +205,7 @@ export default function Hero() {
               <div>
                 <label className="text-gray-600 text-sm">Annual Income</label>
                 <div className="bg-gray-100 p-4 rounded-xl font-bold text-gray-700 mt-1">
-                  <input 
+                  <input
                     type='number'
                     placeholder='50000'
                     value={annualIncome}
@@ -218,7 +218,7 @@ export default function Hero() {
               <div>
                 <label className="text-gray-600 text-sm">Federal Tax Withheld</label>
                 <div className="bg-gray-100 p-4 rounded-xl font-bold text-gray-700 mt-1">
-                  <input 
+                  <input
                     type='number'
                     placeholder='7000'
                     value={federalTaxWithheld}
@@ -228,7 +228,7 @@ export default function Hero() {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={handleCalculate}
                 disabled={loading}
                 className="w-full bg-[#0D23AD] text-white py-5 rounded-2xl font-bold text-lg mt-4 hover:bg-blue-800 shadow-lg transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"

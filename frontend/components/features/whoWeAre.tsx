@@ -42,7 +42,7 @@ const WhoWeAre: React.FC = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* Left Side: Image */}
-        <motion.div variants={itemVariants} className="relative h-[400px] w-full overflow-hidden rounded-3xl shadow-xl">
+        <motion.div variants={itemVariants} className="relative h-[260px] w-full overflow-hidden rounded-3xl shadow-xl sm:h-[320px] lg:h-[400px]">
           <Image
             src="/cpa.png" // Replace with your actual image path
             alt="TaxBridge team working"

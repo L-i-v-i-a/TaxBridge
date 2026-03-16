@@ -7,6 +7,7 @@ import WhoWeAre from "../../../../components/features/whoWeAre"
 import TaskFilling from "../../../../components/features/TaskFilling"
 import Homefeatures from "../../../../components/homefeatures"
 import PricingBottomSection from "../../../../components/PricingBottomSection"
+import MarketingPageShell from "../../../../components/marketing/MarketingPageShell"
 
 
 
@@ -35,29 +36,28 @@ const faqs = [
 
 export default function HomePage() {
   return (
-    <>
-    <div
-      className="relative overflow-hidden pt-20"
-      style={{
-        backgroundImage: "linear-gradient(rgba(13, 35, 173, 0.7), rgba(13, 35, 173, 0.7)), url('/hero.PNG')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        minHeight: "100vh"
-      }}
-    >
-    <Nav/>
-    <Hero/>
-    <WhoWeAre/>
-    <TaskFilling/>
-    <Homefeatures/>
-    <PricingBottomSection faqs={faqs} />
-    <NewsletterSection/>
-    <ReadyToStartSection/>
-    
-    <SiteFooter/>
-   
-    </div>
-    </>
+    <MarketingPageShell>
+      <div
+        className="relative overflow-hidden pt-20"
+        style={{
+          backgroundImage: "linear-gradient(rgba(13, 35, 173, 0.7), rgba(13, 35, 173, 0.7)), url('/hero.PNG')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          minHeight: "100vh"
+        }}
+      >
+        <Nav/>
+        <Hero/>
+        <WhoWeAre/>
+        <TaskFilling/>
+        <Homefeatures/>
+        <PricingBottomSection faqs={faqs} />
+        <NewsletterSection/>
+        <ReadyToStartSection/>
+        
+        <SiteFooter/>
+      </div>
+    </MarketingPageShell>
   )
 }

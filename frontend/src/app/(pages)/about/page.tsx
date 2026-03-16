@@ -1,45 +1,48 @@
 import Nav from "../../../../components/nav";
 import AboutHeroSection from "../../../../components/about/AboutHeroSection";
 import MissionVisionSection from "../../../../components/about/MissionVisionSection";
-import FaqHighlightSection from "../../../../components/FaqHighlightSection";
 import NewsletterSection from "../../../../components/NewsletterSection";
 import ReadyToStartSection from "../../../../components/ReadyToStartSection";
 import SiteFooter from "../../../../components/SiteFooter";
+import PricingBottomSection from "../../../../components/PricingBottomSection";
+import MarketingPageShell from "../../../../components/marketing/MarketingPageShell";
 
-const faqItems = [
+const faqs = [
   {
-    question: "How to setup my Taxbridge Account?",
+    question: "How to setup my TaxBridge Account?",
     answer:
-      "The process comes easy with direct expression steps, whereby you start by signing up, after sign up, you confirm your email and login.",
+      "Create your account and verify your email. Then follow the onboarding steps to connect your tax documents, so we can prepare your return accurately.",
   },
   {
-    question: "How Can I file my tax?",
+    question: "How can I file my taxes?",
     answer:
-      "Upload or sync your tax documents, review your summary, then submit with guided support.",
+      "Our guided workflow walks you through each section with smart suggestions; once complete, submit directly through the platform.",
   },
   {
-    question: "How do I use the AI-tools?",
+    question: "How do I use the AI tools?",
     answer:
-      "The AI assistant highlights missing fields, suggests deductions, and explains each recommendation.",
+      "Use the AI assistant to classify expenses, summarize documents, and generate draft responses to tax questions.",
   },
   {
     question: "How can I use the Chatbot?",
     answer:
-      "Open the in-dashboard chat to reach a tax expert or the AI assistant at any time.",
+      "Ask the Chatbot for real-time help, status updates, and recommendations throughout your filing journey.",
   },
 ];
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#F7F9FF] text-[#0B0F1F] pt-20">
-      <Nav />
+    <MarketingPageShell>
+      <main className="min-h-screen bg-[#F7F9FF] text-[#0B0F1F] pt-20">
+        <Nav />
 
-      <AboutHeroSection />
-      <MissionVisionSection />
-      <FaqHighlightSection items={faqItems} />
-      <NewsletterSection />
-      <ReadyToStartSection />
-      <SiteFooter />
-    </main>
+        <AboutHeroSection />
+        <MissionVisionSection />
+        <PricingBottomSection faqs={faqs} />
+        <NewsletterSection />
+        <ReadyToStartSection />
+        <SiteFooter />
+      </main>
+    </MarketingPageShell>
   );
 }
