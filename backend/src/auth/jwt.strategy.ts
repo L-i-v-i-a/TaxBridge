@@ -17,11 +17,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: secret, // now definitely string
+      secretOrKey: secret, 
     });
   }
 
-  validate(payload: { sub: string; email?: string }) {
-    return { sub: payload.sub, email: payload.email };
+  // FIX: Explicitly pass isAdmin to the request user object
+  validate(payload: { sub: string; email?: string; isAdmin?: boolean }) {
+    return { 
+      sub: payload.sub, 
+      email: payload.email,
+      isAdmin: payload.isAdmin || false 
+    };
   }
 }

@@ -8,8 +8,9 @@ import {
   ConnectedSocket,
   MessageBody,
 } from '@nestjs/websockets';
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { OnEvent } from '@nestjs/event-emitter'; 
 
 import { SenderType } from '@prisma/client';
 
@@ -21,7 +22,7 @@ import { MailService } from '../mail/mail.service';
 import { ChatService } from './chat.service';
 
 @WebSocketGateway({
-  cors: { origin: '*' }, // Adjust for your frontend URL
+  cors: { origin: '*' },
   namespace: '/chat',
 })
 @Injectable()
@@ -81,75 +82,74 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.logger.log(`Client ${client.id} joined room conv-${conversationId}`);
   }
 
-  @SubscribeMessage('sendMessage')
-  async handleMessage(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() data: { conversationId: string; content: string; type: 'TEXT' | 'IMAGE' | 'FILE' | 'VOICE' | 'STICKER' }
-  ) {
-    const user = client.data.user;
-    if (!user) return;
+  // Listener for messages created via HTTP or Socket
+  @OnEvent('message.created')
+  async handleMessageCreatedEvent(payload: { message: any; senderId: string }) {
+    const { message, senderId } = payload;
+    const conversationId = message.conversationId;
 
-    const { conversationId, content, type } = data;
-
-    // 1. Save User Message
-    const senderType: SenderType = user.isAdmin ? 'ADMIN' : 'USER';
-
-    const message = await this.chatService.createMessage(
-      conversationId,
-      user.sub,
-      senderType,
-      content,
-      type || 'TEXT',
-    );
-
-    // Emit to the conversation room immediately
+    // 1. Broadcast message to the conversation room
     this.server.to(`conv-${conversationId}`).emit('newMessage', message);
 
-    // 2. Logic for AI vs Agent
+    // 2. Handle Side Effects (AI, Email, Notifications)
     const conversation = await this.chatService.getConversation(conversationId);
+    if (!conversation) return;
 
-    // Safety check for conversation existence
-    if (!conversation) {
-      this.logger.error(`Conversation ${conversationId} not found`);
-      return;
-    }
+    const isAiConversation = conversation.type === 'AI';
+    const isSenderAdmin = message.senderType === 'ADMIN';
 
-    if (conversation.type === 'AI' && !user.isAdmin) {
+    if (isAiConversation && !isSenderAdmin) {
       // --- AI LOGIC ---
-      const aiResponseContent = await this.aiService.chat(content);
-
-      const aiMessage = await this.chatService.createMessage(
+      const aiResponseContent = await this.aiService.chat(message.content);
+      
+      // This creates a new message, which will trigger this event again recursively
+      await this.chatService.createMessage(
         conversationId,
         'AI_SYSTEM',
         'AI',
         aiResponseContent,
         'TEXT',
       );
-
-      this.server.to(`conv-${conversationId}`).emit('newMessage', aiMessage);
-
     } else if (conversation.type === 'AGENT') {
       // --- AGENT LOGIC ---
-
-      if (user.isAdmin) {
-        // Admin replied -> Email the User
+      if (isSenderAdmin) {
+        // Admin replied -> Notify specific User
         this.server.to(`user-${conversation.userId}`).emit('notification', message);
         
-        // Handle nullable name property
+        // Send Email
         const userName = conversation.user.name || 'User';
-        
         await this.mailService.sendNewMessageNotification(
           conversation.user.email,
           userName,
           'Agent',
-          content,
+          message.content,
           conversationId
         );
       } else {
-        // User replied -> Notify Admins
+        // User replied -> Notify all Admins
         this.server.to('admin-support').emit('notification', message);
-        // Note: You might want to fetch all admin emails here or send to a generic admin inbox
       }
     }
+  }
+
+  // Keep socket listener for direct socket messages
+  @SubscribeMessage('sendMessage')
+  async handleSocketMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { conversationId: string; content: string; type: 'TEXT' | 'IMAGE' | 'FILE' }
+  ) {
+    const user = client.data.user;
+    if (!user) return;
+
+    const senderType: SenderType = user.isAdmin ? 'ADMIN' : 'USER';
+    
+    // Delegate to service (which emits the event we listen to above)
+    await this.chatService.createMessage(
+      data.conversationId,
+      user.sub,
+      senderType,
+      data.content,
+      data.type || 'TEXT',
+    );
   }
 }

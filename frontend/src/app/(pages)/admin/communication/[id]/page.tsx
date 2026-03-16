@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Send, User, Loader2, Phone, Mail } from 'lucide-react';
+import { ArrowLeft, Send, User, Loader2 } from 'lucide-react';
 import Topbar from '../../../../../../components/admin/AdminTopbar';
 import Sidebar from '../../../../../../components/admin/AdminSidebar';
 import { useSocket } from '../../../../../../hooks/useSocket';
@@ -33,10 +33,11 @@ export default function AdminChatRoomPage() {
   const [conversation, setConversation] = useState<ConversationDetails | null>(null);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Fetch initial history
+  // 1. Fetch initial history
   useEffect(() => {
     const fetchMessages = async () => {
       const token = localStorage.getItem('access_token');
@@ -51,7 +52,6 @@ export default function AdminChatRoomPage() {
           setMessages(data.messages || []);
           setConversation(data);
         } else {
-          // If error or not found, go back to list
           router.push('/admin/support');
         }
       } catch (err) {
@@ -64,38 +64,57 @@ export default function AdminChatRoomPage() {
     fetchMessages();
   }, [id, router]);
 
-  // Socket listeners
+  // 2. Socket listeners (Receive Messages)
   useEffect(() => {
-    if (socket && id) {
-      // Join the specific conversation room
-      socket.emit('joinConversation', id);
+    if (!socket || !id) return;
 
-      // Listen for new messages
-      socket.on('newMessage', (message: Message) => {
-        setMessages((prev) => [...prev, message]);
-      });
-
-      return () => {
-        socket.off('newMessage');
-      };
+    if (isConnected) {
+        socket.emit('joinConversation', id);
     }
-  }, [socket, id]);
 
-  // Auto scroll to bottom
+    socket.on('newMessage', (message: Message) => {
+      setMessages((prev) => [...prev, message]);
+    });
+
+    return () => {
+      socket.off('newMessage');
+    };
+  }, [socket, id, isConnected]);
+
+  // Auto scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = () => {
-    if (!input.trim() || !socket) return;
+  // 3. Send Message via HTTP API
+  const handleSend = async () => {
+    if (!input.trim() || sending) return;
 
-    socket.emit('sendMessage', {
-      conversationId: id,
-      content: input,
-      type: 'TEXT',
-    });
-
+    const token = localStorage.getItem('access_token');
+    const content = input;
     setInput('');
+    setSending(true);
+
+    try {
+      await fetch('http://localhost:3000/chat/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          conversationId: id,
+          content: content,
+          type: 'TEXT',
+        }),
+      });
+    } catch (err) {
+      console.error(err);
+      alert('Failed to send');
+      setInput(content);
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -139,7 +158,6 @@ export default function AdminChatRoomPage() {
               </div>
             ) : (
               messages.map((msg) => {
-                // Logic: If sender is ADMIN, it's ME (Right). Else USER (Left).
                 const isMe = msg.senderType === 'ADMIN';
                 return (
                   <div
@@ -188,10 +206,10 @@ export default function AdminChatRoomPage() {
 
             <button
               onClick={handleSend}
-              disabled={!input.trim()}
+              disabled={!input.trim() || sending}
               className="p-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition shadow-md disabled:opacity-50"
             >
-              <Send size={20} />
+              {sending ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
             </button>
           </div>
         </div>
