@@ -5,6 +5,7 @@ import NewsletterSection from "../../../../components/NewsletterSection";
 import ReadyToStartSection from "../../../../components/ReadyToStartSection";
 import SiteFooter from "../../../../components/SiteFooter";
 import PricingBottomSection from "../../../../components/PricingBottomSection";
+import MarketingPageShell from "../../../../components/marketing/MarketingPageShell";
 
 const faqs = [
   {
@@ -31,15 +32,17 @@ const faqs = [
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#F7F9FF] text-[#0B0F1F] pt-20">
-      <Nav />
+    <MarketingPageShell>
+      <main className="min-h-screen bg-[#F7F9FF] text-[#0B0F1F] pt-20">
+        <Nav />
 
-      <AboutHeroSection />
-      <MissionVisionSection />
-      <PricingBottomSection faqs={faqs} />
-      <NewsletterSection />
-      <ReadyToStartSection />
-      <SiteFooter />
-    </main>
+        <AboutHeroSection />
+        <MissionVisionSection />
+        <PricingBottomSection faqs={faqs} />
+        <NewsletterSection />
+        <ReadyToStartSection />
+        <SiteFooter />
+      </main>
+    </MarketingPageShell>
   );
 }

@@ -50,7 +50,7 @@ export default function Hero() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/refund-calculator/calculate', {
+      const response = await fetch('http://localhost:3001/refund-calculator/calculate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
