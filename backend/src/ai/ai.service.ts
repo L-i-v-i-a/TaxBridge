@@ -61,8 +61,8 @@ export class AiService {
 
     try {
       const response = await this.client.chat.completions.create({
-        // UPDATED: Using the stable Vision model
-        model: 'llama-3.2-11b-vision', 
+        // FIX: Using the stable llava-v1.5-7b-4096-preview model
+        model: 'llava-v1.5-7b-4096-preview', 
         messages: [
           {
             role: 'user',
@@ -96,13 +96,20 @@ export class AiService {
             ],
           },
         ],
-        response_format: { type: 'json_object' },
+        // Note: llava does not support response_format json_object, 
+        // so we rely on the prompt instructions for JSON output.
       });
 
       const content = response.choices[0].message.content;
       if (!content) throw new Error('Empty AI response');
       
-      return JSON.parse(content) as ExtractedDocumentData;
+      // Clean potential markdown formatting if present
+      let jsonStr = content.trim();
+      if (jsonStr.startsWith("```json")) {
+        jsonStr = jsonStr.slice(7, -3).trim();
+      }
+
+      return JSON.parse(jsonStr) as ExtractedDocumentData;
     } catch (error) {
       this.logger.error('Document Extraction Error:', error);
       throw error;
