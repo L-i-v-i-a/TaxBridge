@@ -59,6 +59,7 @@ export default function NotificationsPage() {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },
       });
+      
       // Remove from list if filter is UNREAD
       if (statusFilter === 'UNREAD') {
         setNotifications(prev => prev.filter(n => n.id !== id));

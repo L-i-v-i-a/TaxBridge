@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { AuthModule } from 'src/auth/auth.module';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 import { PrismaModule } from '../prisma.module'; // Verify this path matches your project
 import { AiModule } from '../ai/ai.module';
@@ -12,9 +13,11 @@ import { FilingsService } from './filings.service';
   imports: [
     PrismaModule, 
     AiModule,
-    AuthModule
+    AuthModule,
+    NotificationsModule,
   ],
   controllers: [FilingsController],
   providers: [FilingsService],
+  exports: [FilingsService],
 })
 export class FilingsModule {}

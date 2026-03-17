@@ -37,6 +37,7 @@ model User {
   updatedAt      DateTime @updatedAt
 
   // Relations
+
   filings        TaxFiling[]
   subscriptions  Subscription[]
   conversations  Conversation[] // <--- ADDED: Relation to Chat
@@ -128,6 +129,7 @@ model Document {
   type      String?
   filingId  String
   filing    TaxFiling @relation(fields: [filingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 
 enum ConversationType {
