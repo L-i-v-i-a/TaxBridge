@@ -29,14 +29,23 @@ export default function AdminSidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Close sidebar on route change on mobile
+  // Close sidebar on route change (e.g., browser back button)
+  // Wrapped in setTimeout to prevent synchronous setState warning
   useEffect(() => {
-    setIsOpen(false);
+    const timer = setTimeout(() => {
+      setIsOpen(false);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     router.push('/login');
+  };
+
+  const handleNavClick = (href: string) => {
+    setIsOpen(false); // Close immediately on click
+    router.push(href);
   };
 
   const isActive = (href: string) => {
@@ -98,7 +107,7 @@ export default function AdminSidebar() {
           {navItems.map((item) => (
             <button
               key={item.name}
-              onClick={() => router.push(item.href)}
+              onClick={() => handleNavClick(item.href)}
               className={`
                 w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-150
                 ${isActive(item.href) 
