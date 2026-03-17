@@ -29,7 +29,7 @@ export default function Home() {
     // Set a timer to navigate after 3 seconds
     const timer = setTimeout(() => {
       router.push('/home');
-    }, 3000);
+    }, 2000);
 
     // Cleanup the timer if the component unmounts early
     return () => clearTimeout(timer);
@@ -46,7 +46,7 @@ export default function Home() {
       }}
     >
       <div className="text-center">
-        <h1 className={`text-6xl font-bold text-white transition-opacity duration-200 ${phase === 'fadeout' ? 'opacity-0' : 'opacity-100'}`}>
+        <h1 className={`text-4xl font-bold text-white transition-opacity duration-200 ${phase === 'fadeout' ? 'opacity-0' : 'opacity-100'}`}>
           {phase === 'full' ? (
             <>
               TAXBRIDGE
