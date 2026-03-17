@@ -176,7 +176,7 @@ export default function Hero() {
               <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center text-2xl overflow-hidden">
                 {/* 2. Replaced img with Image component */}
                 <Image
-                  src="/ellipse.png" 
+                  src="/Ellipse.png" 
                   alt="Sarah • CPA"
                   width={56}
                   height={56}
