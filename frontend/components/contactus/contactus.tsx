@@ -1,9 +1,17 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Mail, MapPin, Phone } from 'lucide-react';import { motion } from 'framer-motion';import NotificationModal from '../../components/NotificationModal'; // Adjust path as needed
+import React, { useRef, useState } from 'react';
+import { Mail, MapPin, Phone } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import NotificationModal from '../../components/NotificationModal'; // Adjust path as needed
 
 const ContactUs = () => {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [40, -40]);
   // Animation variants
   const fadeInLeft = {
     hidden: { opacity: 0, x: -50 },
@@ -13,6 +21,11 @@ const ContactUs = () => {
   const fadeInRight = {
     hidden: { opacity: 0, x: 50 },
     visible: { opacity: 1, x: 0 }
+  };
+
+  const hoverable = {
+    whileHover: { scale: 1.02, y: -2 },
+    whileTap: { scale: 0.98 }
   };
 
   // State for form inputs
@@ -93,7 +106,11 @@ const ContactUs = () => {
 
   return (
     <>
-      <div className="bg-blue-900 bg-[url('/document.jpg')] bg-center bg-repeat bg-blend-overlay min-h-screen pt-20 p-16 lg:p-30 ">
+      <motion.div
+        ref={sectionRef}
+        className="bg-blue-900 bg-[url('/document.jpg')] bg-center bg-repeat bg-blend-overlay min-h-screen pt-20 p-16 lg:p-30 "
+        style={{ y: parallaxY }}
+      >
         {/* Container holding both sides */}
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
@@ -114,31 +131,43 @@ const ContactUs = () => {
 
             <div className="space-y-8">
               {/* Email */}
-              <div className="flex items-center gap-5">
+              <motion.div
+                className="flex items-center gap-5"
+                {...hoverable}
+                transition={{ duration: 0.2 }}
+              >
                 <div className="bg-[#FF7A00] p-3 rounded-lg">
                   <Mail size={24} className="text-white" />
                 </div>
                 <span className="text-xl">example@taxbridge.com</span>
-              </div>
+              </motion.div>
 
-            {/* Address */}
-            <div className="flex items-start gap-5">
-              <div className="bg-[#FF7A00] p-3 rounded-lg mt-1">
-                <MapPin size={24} className="text-white" />
-              </div>
-              <div className="text-xl">
-                <p>123, Atlanta United State.</p>
-                <p>123, Gwarinpa, Abuja, Nigeria.</p>
-              </div>
-            </div>
+              {/* Address */}
+              <motion.div
+                className="flex items-start gap-5"
+                {...hoverable}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="bg-[#FF7A00] p-3 rounded-lg mt-1">
+                  <MapPin size={24} className="text-white" />
+                </div>
+                <div className="text-xl">
+                  <p>123, Atlanta United State.</p>
+                  <p>123, Gwarinpa, Abuja, Nigeria.</p>
+                </div>
+              </motion.div>
 
               {/* Phone */}
-              <div className="flex items-center gap-5">
+              <motion.div
+                className="flex items-center gap-5"
+                {...hoverable}
+                transition={{ duration: 0.2 }}
+              >
                 <div className="bg-[#FF7A00] p-3 rounded-lg">
                   <Phone size={24} className="text-white" />
                 </div>
                 <span className="text-xl">+44 123 654 7890</span>
-              </div>
+              </motion.div>
             </div>
           </motion.div>
 
@@ -196,13 +225,16 @@ const ContactUs = () => {
                 ></textarea>
               </div>
               
-              <button 
-                type="submit" 
+              <motion.button
+                type="submit"
                 disabled={loading}
                 className="w-full bg-[#03045E] text-white font-bold py-5 rounded-xl hover:bg-black transition-all text-lg uppercase tracking-wide disabled:opacity-70 disabled:cursor-not-allowed"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.15 }}
               >
                 {loading ? 'Sending...' : 'Submit'}
-              </button>
+              </motion.button>
             </form>
           </motion.div>
 
