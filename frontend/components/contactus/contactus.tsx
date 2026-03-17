@@ -28,42 +28,9 @@ const ContactUs = () => {
   const cardScale3 = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1.015, 1]);
   const cardRotate3 = useTransform(scrollYProgress, [0, 1], [-1, 1]);
 
-  // Animation variants
-  const fadeInLeft = {
-    hidden: { opacity: 0, x: -50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { staggerChildren: 0.12, delayChildren: 0.12 }
-    }
-  };
-
-  const fadeInRight = {
-    hidden: { opacity: 0, x: 50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { staggerChildren: 0.12, delayChildren: 0.12 }
-    }
-  };
-
-  const itemFadeUp = {
-    hidden: { opacity: 0, y: 16 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } }
-  };
-
   const hoverable = {
     whileHover: { scale: 1.02, y: -2 },
     whileTap: { scale: 0.98 }
-  };
-
-  const cardFloat = {
-    hidden: { opacity: 0, y: 24 },
-    visible: (custom: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: 'easeOut', delay: 0.1 * custom }
-    })
   };
 
   // State for form inputs
@@ -154,15 +121,26 @@ const ContactUs = () => {
           
           {/* LEFT SIDE: Information Card */}
           <motion.div
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            variants={fadeInLeft}
             className="bg-[#0021A5] text-white p-10 lg:p-16 rounded-3xl shadow-xl h-full flex flex-col justify-center"
           >
-            <motion.h1 variants={itemFadeUp} className="text-5xl font-bold mb-6">Contact Us</motion.h1>
-            <motion.p variants={itemFadeUp} className="text-blue-100 text-lg mb-10 leading-relaxed">
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.45, ease: 'easeOut' }}
+              className="text-5xl font-bold mb-6"
+            >Contact Us</motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.45, ease: 'easeOut' }}
+              className="text-blue-100 text-lg mb-10 leading-relaxed"
+            >
               Reach out to us at anytime, we are active 24/7 for any of your enquiry. 
               We give a quick feedback for every enquiry.
             </motion.p>
@@ -172,8 +150,10 @@ const ContactUs = () => {
               <motion.div
                 className="flex items-center gap-5"
                 {...hoverable}
-                variants={itemFadeUp}
-                transition={{ duration: 0.2 }}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
                 style={{ scale: cardScale1, rotate: cardRotate1 }}
               >
                 <div className="bg-[#FF7A00] p-3 rounded-lg">
@@ -186,8 +166,10 @@ const ContactUs = () => {
               <motion.div
                 className="flex items-start gap-5"
                 {...hoverable}
-                variants={itemFadeUp}
-                transition={{ duration: 0.2 }}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
               >
                 <div className="bg-[#FF7A00] p-3 rounded-lg mt-1">
                   <MapPin size={24} className="text-white" />
@@ -202,11 +184,10 @@ const ContactUs = () => {
               <motion.div
                 className="flex items-center gap-5"
                 {...hoverable}
-                variants={cardFloat}
-                initial="hidden"
-                animate="visible"
-                custom={2}
-                transition={{ duration: 0.2 }}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
               >
                 <div className="bg-[#FF7A00] p-3 rounded-lg">
                   <Phone size={24} className="text-white" />
@@ -218,15 +199,26 @@ const ContactUs = () => {
 
           {/* RIGHT SIDE: Contact Form */}
           <motion.div
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-            variants={fadeInRight}
             className="bg-white p-10 lg:p-16 rounded-3xl shadow-xl"
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
+            <motion.form
+              onSubmit={handleSubmit}
+              className="space-y-6"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+              >
                 <input 
                   type="text" 
                   name="name"
@@ -236,8 +228,13 @@ const ContactUs = () => {
                   className="w-full p-5 bg-[#F4F7FF] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
                   required
                 />
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+              >
                 <input 
                   type="email" 
                   name="email"
@@ -247,8 +244,13 @@ const ContactUs = () => {
                   className="w-full p-5 bg-[#F4F7FF] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
                   required
                 />
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+              >
                 <input 
                   type="text" 
                   name="phone"
@@ -257,8 +259,13 @@ const ContactUs = () => {
                   onChange={handleChange}
                   className="w-full p-5 bg-[#F4F7FF] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
                 />
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+              >
                 <textarea 
                   placeholder="Message"
                   name="message"
@@ -268,7 +275,7 @@ const ContactUs = () => {
                   className="w-full p-5 bg-[#F4F7FF] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
                   required
                 ></textarea>
-              </div>
+              </motion.div>
               
               <motion.button
                 type="submit"
@@ -280,7 +287,7 @@ const ContactUs = () => {
               >
                 {loading ? 'Sending...' : 'Submit'}
               </motion.button>
-            </form>
+            </motion.form>
           </motion.div>
 
         </div>
