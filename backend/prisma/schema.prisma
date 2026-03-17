@@ -126,9 +126,16 @@ model Document {
   id        String @id @default(uuid())
   name      String
   url       String
-  type      String?
-  filingId  String
-  filing    TaxFiling @relation(fields: [filingId], references: [id], onDelete: Cascade)
+  type      String? // MIME type
+  // Fields for AI extraction
+  documentType String? // e.g., "W2", "Receipt"
+  contentSummary String? @db.Text
+  extractedData Json? // Stored JSON from AI
+  
+  filingId  String? // Made optional
+  filing    TaxFiling? @relation(fields: [filingId], references: [id], onDelete: Cascade)
+  userId    String // Add direct relation to User
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 }
 

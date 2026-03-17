@@ -19,16 +19,52 @@ async function apiFetch(endpoint: string, options: RequestInit = {}) {
     throw new Error(error.message || 'Network response was not ok');
   }
   
-  // Handle 204 No Content
   if (response.status === 204) return null;
   
   return response.json();
 }
 
 export const getProfile = () => apiFetch('/auth/profile');
-export const updateProfile = (data: any) => apiFetch('/auth/profile', { method: 'PATCH', body: JSON.stringify(data) });
-export const changePassword = (data: any) => apiFetch('/auth/change-password', { method: 'POST', body: JSON.stringify(data) });
 
+// Updated to handle File uploads
+export const updateProfile = async (data: any, file?: File | null) => {
+  const token = localStorage.getItem('access_token');
+  
+  // If a file is provided, use FormData
+  if (file) {
+    const formData = new FormData();
+    
+    // Append all text fields
+    Object.keys(data).forEach(key => {
+      if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
+        formData.append(key, data[key]);
+      }
+    });
+    
+    // Append the file with the specific field name expected by backend
+    formData.append('profilePicture', file);
+
+    const response = await fetch(`${BASE_URL}/auth/profile`, {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${token}` }, // Let browser set Content-Type
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to update profile');
+    }
+    return response.json();
+  }
+
+  // Otherwise, use JSON
+  return apiFetch('/auth/profile', { 
+    method: 'PATCH', 
+    body: JSON.stringify(data) 
+  });
+};
+
+export const changePassword = (data: any) => apiFetch('/auth/change-password', { method: 'POST', body: JSON.stringify(data) });
 export const getStats = () => apiFetch('/settings/stats');
 export const getFilings = () => apiFetch('/filings');
 export const getDocuments = () => apiFetch('/settings/documents');
