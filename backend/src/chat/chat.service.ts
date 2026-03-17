@@ -1,6 +1,7 @@
 // src/chat/chat.service.ts
-import { Injectable, NotFoundException, Logger, InternalServerErrorException } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter'; // Import EventEmitter
+import { Injectable, NotFoundException, Logger, InternalServerErrorException, ForbiddenException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+
 import { MessageType, SenderType, ConversationType } from '@prisma/client';
 
 import { PrismaService } from '../prisma.service';
@@ -13,10 +14,41 @@ export class ChatService {
   constructor(
     private prisma: PrismaService,
     private mailer: MailService,
-    private eventEmitter: EventEmitter2, // Inject EventEmitter
+    private eventEmitter: EventEmitter2,
   ) {}
 
+  /**
+   * Helper method to validate if a user has access to chat features.
+   * Access is granted if: User isAdmin = true OR User has an ACTIVE subscription.
+   */
+  private async validateUserAccess(userId: string): Promise<void> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { 
+        isAdmin: true, 
+        subscriptions: { 
+          where: { status: 'active' },
+          select: { id: true } 
+        } 
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const isAdmin = user.isAdmin;
+    const hasActiveSubscription = user.subscriptions.length > 0;
+
+    if (!isAdmin && !hasActiveSubscription) {
+      throw new ForbiddenException('Access denied. You must be an admin or have an active subscription plan to use this feature.');
+    }
+  }
+
   async createConversation(userId: string, type: ConversationType) {
+    // 1. Check Access
+    await this.validateUserAccess(userId);
+
     this.logger.log(`Attempting to create conversation for user: ${userId}, type: ${type}`);
     
     try {
@@ -27,11 +59,16 @@ export class ChatService {
       return conversation;
     } catch (error) {
       this.logger.error(`Failed to create conversation: ${error.message}`, error.stack);
-      throw new InternalServerErrorException('Database error: Could not create conversation. Did you run migrations?');
+      throw new InternalServerErrorException('Database error: Could not create conversation.');
     }
   }
 
   async getConversations(userId: string, isAdmin: boolean) {
+    // If not admin, check access
+    if (!isAdmin) {
+      await this.validateUserAccess(userId);
+    }
+
     try {
       if (isAdmin) {
         return this.prisma.conversation.findMany({
@@ -72,6 +109,11 @@ export class ChatService {
     type: MessageType,
     fileUrl?: string,
   ) {
+    // 1. Validate Access (unless it's an Admin/AI replying)
+    if (senderType === 'USER') {
+      await this.validateUserAccess(senderId);
+    }
+
     try {
       const message = await this.prisma.message.create({
         data: {
@@ -84,14 +126,11 @@ export class ChatService {
         },
       });
 
-      // Update conversation timestamp
       await this.prisma.conversation.update({
         where: { id: conversationId },
         data: { updatedAt: new Date() },
       });
 
-      // Emit event so Gateway can broadcast to sockets
-      // We pass the full message and the senderId for logic checks
       this.eventEmitter.emit('message.created', { message, senderId });
 
       return message;
