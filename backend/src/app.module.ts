@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
 import { ContactModule } from './contact/contact.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { DocumentsModule } from './documents/documents.module';
 import { FeaturesModule } from './features/features.module';
 import { FilingsModule } from './fillings/filings.module';
 import { MailModule } from './mail/mail.module';
@@ -46,6 +47,7 @@ import { SettingsModule } from './settings/settings.module';
     AdminModule,
     NotificationsModule,
     SettingsModule,
+    DocumentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -37,10 +37,9 @@ model User {
   updatedAt          DateTime  @updatedAt
 
   // Relations
-
   filings       TaxFiling[]
   subscriptions Subscription[]
-  conversations Conversation[] // <--- ADDED: Relation to Chat
+  conversations Conversation[]
   notifications Notification[]
   documents     Document[]
 }
@@ -124,20 +123,23 @@ model TaxFiling {
 }
 
 model Document {
-  id             String  @id @default(uuid())
+  id             String   @id @default(uuid())
   name           String
   url            String
-  type           String? // MIME type
-  // Fields for AI extraction
-  documentType   String? // e.g., "W2", "Receipt"
-  contentSummary String? @db.Text
-  extractedData  Json? // Stored JSON from AI
+  type           String?
+  size           Int?
+  documentType   String?
+  summary        String?  @db.Text
+  extractedData  Json?
 
-  filingId  String? // Made optional
-  filing    TaxFiling? @relation(fields: [filingId], references: [id], onDelete: Cascade)
-  userId    String // Add direct relation to User
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime   @default(now())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  filingId       String?
+  filing         TaxFiling? @relation(fields: [filingId], references: [id], onDelete: Cascade)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 enum ConversationType {
