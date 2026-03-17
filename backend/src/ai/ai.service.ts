@@ -74,13 +74,21 @@ export class AiService {
     if (!this.googleClient) throw new Error('Google Client not initialized');
 
     try {
-      // Remove data URI prefix if present (e.g. "data:image/jpeg;base64,")
-      const base64Data = imageBase64.split(',')[1] || imageBase64;
-      
-      // Determine mimeType
-      const mimeType = imageBase64.split(';')[0]?.split(':')[1] || 'image/jpeg';
+      // 1. Clean Base64 Data (remove data URI prefix)
+      const matches = imageBase64.match(/^data:(.+?);base64,(.*)$/);
+      const mimeType = matches ? matches[1] : 'image/jpeg';
+      const base64Data = matches ? matches[2] : imageBase64;
 
-      const model = this.googleClient.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      // 2. Try Latest Model first, fallback to Stable
+      let model;
+      try {
+        // Try the specific latest version
+        model = this.googleClient.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+      } catch (e) {
+        // Fallback to stable vision model
+        this.logger.warn('Gemini 1.5 not found, falling back to gemini-1.0-pro-vision');
+        model = this.googleClient.getGenerativeModel({ model: 'gemini-1.0-pro-vision' });
+      }
 
       const prompt = `You are a professional Tax Document Analyzer. Analyze this image.
       1. Identify the document type (e.g., W-2, 1099, State Tax Return, Donation Receipt).
@@ -118,6 +126,8 @@ export class AiService {
       let jsonStr = text.trim();
       if (jsonStr.startsWith("```json")) {
         jsonStr = jsonStr.slice(7, -3).trim();
+      } else if (jsonStr.startsWith("```")) {
+         jsonStr = jsonStr.slice(3, -3).trim();
       }
 
       return JSON.parse(jsonStr) as ExtractedDocumentData;
