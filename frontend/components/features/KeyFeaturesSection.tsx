@@ -86,10 +86,7 @@ export default function KeyFeaturesSection() {
       viewport={{ once: true, amount: 0.3 }}
       variants={containerVariants}
     >
-      <motion.div
-        className="text-center"
-        variants={itemVariants}
-      >
+      <motion.div className="text-center" variants={itemVariants}>
         <motion.h1
           className="text-4xl font-bold text-[#0B0F1F] min-[1600px]:text-[40px] min-[1600px]:leading-[60px]"
           variants={itemVariants}
@@ -100,7 +97,8 @@ export default function KeyFeaturesSection() {
           className="mt-2 text-sm text-slate-800 min-[1600px]:text-[24px] min-[1600px]:leading-[36px]"
           variants={itemVariants}
         >
-          Get to know some of our Features at Taxbridge which provide the best service for our Users.
+          Get to know some of our Features at Taxbridge which provide the best
+          service for our Users.
         </motion.p>
       </motion.div>
 
@@ -115,7 +113,7 @@ export default function KeyFeaturesSection() {
                 whileHover="hover"
                 transition={{ delay: index * 0.05 }}
               >
-                <div className="rounded-3xl border border-slate-100 bg-white p-7 text-center shadow-sm">
+                <div className="rounded-3xl border border-slate-100 bg-white p-7 text-center shadow-sm h-[320px] flex flex-col">
                   <motion.div
                     className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#E9F1FF]"
                     whileHover={{ rotate: 360 }}

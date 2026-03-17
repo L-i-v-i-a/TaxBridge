@@ -82,7 +82,12 @@ export class FilingsController {
     const userId = req.user?.sub;
     if (!userId) throw new UnauthorizedException('User ID not found in token');
 
-    return this.filingsService.createFiling(userId, createFilingDto, files, serviceType);
+    return this.filingsService.createFiling(
+      userId,
+      createFilingDto,
+      files,
+      serviceType,
+    );
   }
 
   @Get()
