@@ -35,8 +35,7 @@ export default function ContactPage() {
       <main>
         <Nav/>
         <ContactUs/>
-        
-        <NewsletterSection/>
+      <NewsletterSection/>
         <ReadyToStartSection/>
         <SiteFooter/>
       </main>

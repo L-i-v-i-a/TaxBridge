@@ -1,18 +1,36 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Mail, MapPin, Phone } from 'lucide-react';import { motion } from 'framer-motion';import NotificationModal from '../../components/NotificationModal'; // Adjust path as needed
+import React, { useEffect, useRef, useState } from 'react';
+import { Mail, MapPin, Phone } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import NotificationModal from '../../components/NotificationModal'; // Adjust path as needed
 
 const ContactUs = () => {
-  // Animation variants
-  const fadeInLeft = {
-    hidden: { opacity: 0, x: -50 },
-    visible: { opacity: 1, x: 0 }
-  };
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  const fadeInRight = {
-    hidden: { opacity: 0, x: 50 },
-    visible: { opacity: 1, x: 0 }
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: mounted ? sectionRef : undefined,
+    offset: ['start end', 'end start'],
+  });
+
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [40, -40]);
+
+  // Scroll-based card animation
+  const cardScale1 = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1.03, 1]);
+  const cardRotate1 = useTransform(scrollYProgress, [0, 1], [-2, 2]);
+  const cardScale2 = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1.02, 1]);
+  const cardRotate2 = useTransform(scrollYProgress, [0, 1], [2, -2]);
+  const cardScale3 = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1.015, 1]);
+  const cardRotate3 = useTransform(scrollYProgress, [0, 1], [-1, 1]);
+
+  const hoverable = {
+    whileHover: { scale: 1.02, y: -2 },
+    whileTap: { scale: 0.98 }
   };
 
   // State for form inputs
@@ -93,66 +111,114 @@ const ContactUs = () => {
 
   return (
     <>
-      <div className="bg-blue-900 bg-[url('/document.jpg')] bg-center bg-repeat bg-blend-overlay min-h-screen pt-20 p-16 lg:p-30 ">
+      <motion.div
+        ref={sectionRef}
+        className="bg-blue-900 bg-[url('/document.jpg')] bg-center bg-repeat bg-blend-overlay min-h-screen pt-20 p-16 lg:p-30 "
+        style={{ y: parallaxY }}
+      >
         {/* Container holding both sides */}
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
           {/* LEFT SIDE: Information Card */}
           <motion.div
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            variants={fadeInLeft}
             className="bg-[#0021A5] text-white p-10 lg:p-16 rounded-3xl shadow-xl h-full flex flex-col justify-center"
           >
-            <h1 className="text-5xl font-bold mb-6">Contact Us</h1>
-            <p className="text-blue-100 text-lg mb-10 leading-relaxed">
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.45, ease: 'easeOut' }}
+              className="text-5xl font-bold mb-6"
+            >Contact Us</motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.45, ease: 'easeOut' }}
+              className="text-blue-100 text-lg mb-10 leading-relaxed"
+            >
               Reach out to us at anytime, we are active 24/7 for any of your enquiry. 
               We give a quick feedback for every enquiry.
-            </p>
+            </motion.p>
 
             <div className="space-y-8">
               {/* Email */}
-              <div className="flex items-center gap-5">
+              <motion.div
+                className="flex items-center gap-5"
+                {...hoverable}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+                style={{ scale: cardScale1, rotate: cardRotate1 }}
+              >
                 <div className="bg-[#FF7A00] p-3 rounded-lg">
                   <Mail size={24} className="text-white" />
                 </div>
                 <span className="text-xl">example@taxbridge.com</span>
-              </div>
+              </motion.div>
 
-            {/* Address */}
-            <div className="flex items-start gap-5">
-              <div className="bg-[#FF7A00] p-3 rounded-lg mt-1">
-                <MapPin size={24} className="text-white" />
-              </div>
-              <div className="text-xl">
-                <p>123, Atlanta United State.</p>
-                <p>123, Gwarinpa, Abuja, Nigeria.</p>
-              </div>
-            </div>
+              {/* Address */}
+              <motion.div
+                className="flex items-start gap-5"
+                {...hoverable}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+              >
+                <div className="bg-[#FF7A00] p-3 rounded-lg mt-1">
+                  <MapPin size={24} className="text-white" />
+                </div>
+                <div className="text-xl">
+                  <p>123, Atlanta United State.</p>
+                  <p>123, Gwarinpa, Abuja, Nigeria.</p>
+                </div>
+              </motion.div>
 
               {/* Phone */}
-              <div className="flex items-center gap-5">
+              <motion.div
+                className="flex items-center gap-5"
+                {...hoverable}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+              >
                 <div className="bg-[#FF7A00] p-3 rounded-lg">
                   <Phone size={24} className="text-white" />
                 </div>
                 <span className="text-xl">+44 123 654 7890</span>
-              </div>
+              </motion.div>
             </div>
           </motion.div>
 
           {/* RIGHT SIDE: Contact Form */}
           <motion.div
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-            variants={fadeInRight}
             className="bg-white p-10 lg:p-16 rounded-3xl shadow-xl"
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
+            <motion.form
+              onSubmit={handleSubmit}
+              className="space-y-6"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+              >
                 <input 
                   type="text" 
                   name="name"
@@ -162,8 +228,13 @@ const ContactUs = () => {
                   className="w-full p-5 bg-[#F4F7FF] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
                   required
                 />
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+              >
                 <input 
                   type="email" 
                   name="email"
@@ -173,8 +244,13 @@ const ContactUs = () => {
                   className="w-full p-5 bg-[#F4F7FF] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
                   required
                 />
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+              >
                 <input 
                   type="text" 
                   name="phone"
@@ -183,8 +259,13 @@ const ContactUs = () => {
                   onChange={handleChange}
                   className="w-full p-5 bg-[#F4F7FF] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
                 />
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+              >
                 <textarea 
                   placeholder="Message"
                   name="message"
@@ -194,20 +275,23 @@ const ContactUs = () => {
                   className="w-full p-5 bg-[#F4F7FF] border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-700"
                   required
                 ></textarea>
-              </div>
+              </motion.div>
               
-              <button 
-                type="submit" 
+              <motion.button
+                type="submit"
                 disabled={loading}
                 className="w-full bg-[#03045E] text-white font-bold py-5 rounded-xl hover:bg-black transition-all text-lg uppercase tracking-wide disabled:opacity-70 disabled:cursor-not-allowed"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.15 }}
               >
                 {loading ? 'Sending...' : 'Submit'}
-              </button>
-            </form>
+              </motion.button>
+            </motion.form>
           </motion.div>
 
         </div>
-      </div>
+      </motion.div>
 
       {/* Notification Modal */}
       <NotificationModal 
