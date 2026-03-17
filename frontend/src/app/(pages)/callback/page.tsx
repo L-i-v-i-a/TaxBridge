@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function AuthCallbackPage() {
+// 1. The main content component that uses useSearchParams
+function CallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -30,5 +31,18 @@ export default function AuthCallbackPage() {
     <div className="flex h-screen items-center justify-center">
       <p>Logging you in...</p>
     </div>
+  );
+}
+
+// 2. The default export wraps the content in Suspense
+export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    }>
+      <CallbackContent />
+    </Suspense>
   );
 }
