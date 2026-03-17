@@ -39,30 +39,45 @@ export interface ExtractedDocumentData {
 
 @Injectable()
 export class AiService {
-  private client: OpenAI | null = null;
+  // Client for Text (Groq)
+  private groqClient: OpenAI | null = null;
+  // Client for Vision (OpenAI)
+  private openaiClient: OpenAI | null = null;
+  
   private readonly logger = new Logger(AiService.name);
 
   constructor(private config: ConfigService) {
-    const apiKey = this.config.get<string>('GROQ_API_KEY');
-
-    if (apiKey) {
-      this.client = new OpenAI({
-        apiKey,
+    // 1. Initialize Groq (for fast text/chat)
+    const groqKey = this.config.get<string>('GROQ_API_KEY');
+    if (groqKey) {
+      this.groqClient = new OpenAI({
+        apiKey: groqKey,
         baseURL: 'https://api.groq.com/openai/v1',
       });
-      this.logger.log('Groq AI Client initialized successfully.');
-    } else {
-      this.logger.warn('GROQ_API_KEY not found. Using Mock Calculator only.');
+      this.logger.log('Groq Client initialized.');
+    }
+
+    // 2. Initialize OpenAI (for reliable Vision/OCR)
+    const openaiKey = this.config.get<string>('OPENAI_API_KEY');
+    if (openaiKey) {
+      this.openaiClient = new OpenAI({ apiKey: openaiKey });
+      this.logger.log('OpenAI Client initialized for OCR.');
+    }
+
+    if (!groqKey && !openaiKey) {
+      this.logger.warn('No API keys found.');
     }
   }
 
+  /**
+   * OCR: Uses OpenAI (GPT-4o-mini) for reliable document extraction
+   */
   async extractFromDocument(imageBase64: string): Promise<ExtractedDocumentData> {
-    if (!this.client) throw new Error('AI client not initialized');
+    if (!this.openaiClient) throw new Error('OpenAI client not initialized for OCR');
 
     try {
-      const response = await this.client.chat.completions.create({
-        // FIX: Using the stable llava-v1.5-7b-4096-preview model
-        model: 'llava-v1.5-7b-4096-preview', 
+      const response = await this.openaiClient.chat.completions.create({
+        model: 'gpt-4o-mini', // Fast, cheap, excellent vision model
         messages: [
           {
             role: 'user',
@@ -96,26 +111,22 @@ export class AiService {
             ],
           },
         ],
-        // Note: llava does not support response_format json_object, 
-        // so we rely on the prompt instructions for JSON output.
+        response_format: { type: 'json_object' },
       });
 
       const content = response.choices[0].message.content;
       if (!content) throw new Error('Empty AI response');
       
-      // Clean potential markdown formatting if present
-      let jsonStr = content.trim();
-      if (jsonStr.startsWith("```json")) {
-        jsonStr = jsonStr.slice(7, -3).trim();
-      }
-
-      return JSON.parse(jsonStr) as ExtractedDocumentData;
+      return JSON.parse(content) as ExtractedDocumentData;
     } catch (error) {
       this.logger.error('Document Extraction Error:', error);
       throw error;
     }
   }
 
+  /**
+   * CALCULATION: Uses Groq (Llama 3.1) for fast logic
+   */
   async calculateTax(
     taxYear: number,
     incomeDetails: IncomeDetailsDto,
@@ -126,13 +137,11 @@ export class AiService {
       return { success: false, error: 'Missing input data.' };
     }
 
-    if (this.client) {
+    if (this.groqClient) {
       try {
         return await this.aiCalculation(taxYear, incomeDetails, deductions, documentContext);
       } catch (error) {
-        this.logger.error(
-          `Groq AI Error: ${error.message}. Falling back to local logic.`,
-        );
+        this.logger.error(`Groq AI Error: ${error.message}. Falling back to local logic.`);
       }
     }
 
@@ -145,8 +154,7 @@ export class AiService {
     deductions: DeductionsDto,
     documentContext?: string,
   ): Promise<AiResult> {
-    const client = this.client;
-    if (!client) throw new Error('AI client not initialized.');
+    if (!this.groqClient) throw new Error('Groq client not initialized.');
 
     const contextPrompt = documentContext 
       ? `\n\nAdditional Context from User Documents:\n${documentContext}\n\nUse this context to identify the tax jurisdiction (Federal vs State) and verify numbers.`
@@ -165,7 +173,6 @@ export class AiService {
       1. Determine jurisdiction: Is this Federal or State tax?
       2. Region Detection: If the context indicates a specific state, use that. If no state is detected, DEFAULT to 'California'.
       3. Apply the relevant tax brackets and standard deductions for that jurisdiction and year.
-      4. If State tax is applicable, calculate state tax. Otherwise calculate Federal.
       
       Return JSON strictly in this format:
       { 
@@ -177,7 +184,7 @@ export class AiService {
       }
     `;
 
-    const response = await client.chat.completions.create({
+    const response = await this.groqClient.chat.completions.create({
       model: 'llama-3.1-8b-instant',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
@@ -188,20 +195,20 @@ export class AiService {
     return JSON.parse(content);
   }
 
+  /**
+   * CHAT: Uses Groq (Llama 3.1)
+   */
   async chat(userMessage: string, history: ChatMessage[] = []): Promise<string> {
-    if (!this.client) return "I'm sorry, the AI service is offline.";
+    if (!this.groqClient) return "I'm sorry, the AI service is offline.";
 
     try {
       const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-        {
-          role: 'system',
-          content: 'You are a helpful Tax Assistant. You can answer questions about US Federal and State tax laws.',
-        },
+        { role: 'system', content: 'You are a helpful Tax Assistant.' },
         ...history,
         { role: 'user', content: userMessage }
       ];
 
-      const response = await this.client.chat.completions.create({
+      const response = await this.groqClient.chat.completions.create({
         model: 'llama-3.1-8b-instant',
         messages: messages,
       });
@@ -213,6 +220,9 @@ export class AiService {
     }
   }
 
+  /**
+   * LOCAL FALLBACK
+   */
   private async localCalculation(
     taxYear: number,
     incomeDetails: IncomeDetailsDto,
@@ -229,19 +239,14 @@ export class AiService {
       }
 
       const config = TAX_DATA[taxYear] || TAX_DATA[2024];
-
       let totalDeductions = config.standardDeduction;
 
-      if (deductions.hasDeductibleExpenses === 'Yes') {
-        totalDeductions += 5000;
-      }
-      if (deductions.donationAmount) {
-        totalDeductions += parseFloat(String(deductions.donationAmount));
-      }
+      if (deductions.hasDeductibleExpenses === 'Yes') totalDeductions += 5000;
+      if (deductions.donationAmount) totalDeductions += parseFloat(String(deductions.donationAmount));
 
       const taxableIncome = Math.max(0, grossIncome - totalDeductions);
-
       let taxOwed = 0;
+
       for (const bracket of config.brackets) {
         if (taxableIncome > bracket.min) {
           const width = bracket.max - bracket.min;
