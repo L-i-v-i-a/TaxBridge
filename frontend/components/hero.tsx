@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image'; // 1. Import Image
 import NotificationModal from '../components/NotificationModal'; 
 
 export default function Hero() {
@@ -172,11 +173,14 @@ export default function Hero() {
         >
           <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl text-black">
             <div className="flex items-center gap-4 mb-8">
-              <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center text-2xl">
-                <img 
-                src="ellipse.png" 
-                alt="Sarah • CPA"
-                className='rounded-full'
+              <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center text-2xl overflow-hidden">
+                {/* 2. Replaced img with Image component */}
+                <Image
+                  src="/ellipse.png" 
+                  alt="Sarah • CPA"
+                  width={56}
+                  height={56}
+                  className='rounded-full object-cover'
                 />
               </div>
               <div>
