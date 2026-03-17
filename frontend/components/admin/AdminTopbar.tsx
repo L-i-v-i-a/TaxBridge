@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import { Bell, Settings, User, Search } from 'lucide-react';
 
 interface AdminProfile {
@@ -11,6 +12,7 @@ interface AdminProfile {
 }
 
 export default function AdminTopbar() {
+  const router = useRouter(); // Initialize router
   const [admin, setAdmin] = useState<AdminProfile | null>(null);
 
   useEffect(() => {
@@ -43,7 +45,11 @@ export default function AdminTopbar() {
 
       {/* Right: Admin Info */}
       <div className="flex items-center space-x-4 ml-auto">
-        <button className="relative p-2 hover:bg-gray-100 rounded-full">
+        {/* Updated Button with onClick */}
+        <button 
+          onClick={() => router.push('/admin/notifications')} 
+          className="relative p-2 hover:bg-gray-100 rounded-full"
+        >
           <Bell size={20} className="text-gray-600" />
         </button>
         

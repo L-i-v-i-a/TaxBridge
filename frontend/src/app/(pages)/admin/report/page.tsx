@@ -11,9 +11,9 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell 
 } from 'recharts';
-import Topbar from '../../../../components/admin/AdminTopbar';
-import Sidebar from '../../../../components/admin/AdminSidebar';
-import StatCard from '../../../../components/admin/StatCard';
+import Topbar from '../../../../../components/admin/AdminTopbar';
+import Sidebar from '../../../../../components/admin/AdminSidebar';
+import StatCard from '../../../../../components/admin/StatCard';
 
 interface Activity {
   id: string;
