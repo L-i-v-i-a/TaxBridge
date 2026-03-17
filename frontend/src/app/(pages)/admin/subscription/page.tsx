@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Trash2, MapPin, Loader2 } from 'lucide-react';
+import Image from 'next/image'; // 1. Import Image
 // Import your existing components
 import AdminSidebar from '../../../../../components/admin/AdminSidebar';
 import AdminTopbar from '../../../../../components/admin/AdminTopbar';
@@ -103,9 +104,12 @@ export default function SubscriptionPage() {
                       <tr key={item.id} className="hover:bg-gray-50/50 transition-colors">
                         <td className="px-6 py-5">
                           <div className="flex items-center gap-3">
-                            <img 
+                            {/* 2. Replaced img with Image component */}
+                            <Image 
                               src={item.profilePicture || 'https://via.placeholder.com/40'} 
-                              alt={item.name}
+                              alt={item.name || 'Profile'}
+                              width={40}
+                              height={40}
                               className="w-10 h-10 rounded-full object-cover border border-gray-100"
                             />
                             <div>

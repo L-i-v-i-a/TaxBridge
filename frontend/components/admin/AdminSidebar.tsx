@@ -1,7 +1,6 @@
-// components/admin/AdminSidebar.tsx
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
@@ -11,7 +10,9 @@ import {
   BarChart2, 
   Settings, 
   LogOut, 
-  CreditCard
+  CreditCard,
+  Menu,
+  X
 } from 'lucide-react';
 
 const navItems = [
@@ -26,6 +27,12 @@ const navItems = [
 export default function AdminSidebar() {
   const router = useRouter();
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close sidebar on route change on mobile
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
@@ -38,42 +45,84 @@ export default function AdminSidebar() {
   };
 
   return (
-    <aside className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col shrink-0">
-      {/* Logo Section */}
-      <div className="h-16 flex items-center px-6 border-b border-gray-200">
-        <h1 className="text-xl font-bold text-[#0D23AD]">Taxbridge</h1>
-        <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-medium">Admin</span>
-      </div>
+    <>
+      {/* --- Mobile Hamburger Toggle (Visible only on mobile when sidebar is closed) --- */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="md:hidden fixed top-4 left-4 z-30 p-2 bg-white rounded-md shadow-md border border-gray-200 text-gray-600 hover:bg-gray-50"
+        aria-label="Open Sidebar"
+      >
+        <Menu size={24} />
+      </button>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
-        {navItems.map((item) => (
-          <button
-            key={item.name}
-            onClick={() => router.push(item.href)}
-            className={`
-              w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-150
-              ${isActive(item.href) 
-                ? 'bg-[#0D23AD] text-white shadow-sm' 
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
-            `}
+      {/* --- Backdrop (Visible on mobile when open) --- */}
+      {isOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-40 transition-opacity"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* --- Sidebar Container --- */}
+      <aside 
+        className={`
+          fixed inset-y-0 left-0 z-50 w-64 h-screen bg-white border-r border-gray-200 flex flex-col shrink-0
+          transition-transform duration-300 ease-in-out
+          
+          /* Mobile State: Hidden by default (-translate-x-full), visible when open (translate-x-0) */
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+          
+          /* Desktop State: Always visible and static relative position */
+          md:translate-x-0 md:static
+        `}
+      >
+        {/* Logo Section */}
+        <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200">
+          <div className="flex items-center">
+            <h1 className="text-xl font-bold text-[#0D23AD]">Taxbridge</h1>
+            <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-medium">Admin</span>
+          </div>
+          
+          {/* Mobile Close Button */}
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="md:hidden p-1 text-gray-500 hover:text-gray-700 rounded-md"
+            aria-label="Close Sidebar"
           >
-            <item.icon size={20} className={isActive(item.href) ? 'text-white' : 'text-gray-400'} />
-            <span>{item.name}</span>
+            <X size={24} />
           </button>
-        ))}
-      </nav>
+        </div>
 
-      {/* Logout Section */}
-      <div className="p-4 border-t border-gray-200">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
-        >
-          <LogOut size={20} />
-          <span>Logout</span>
-        </button>
-      </div>
-    </aside>
+        {/* Navigation */}
+        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+          {navItems.map((item) => (
+            <button
+              key={item.name}
+              onClick={() => router.push(item.href)}
+              className={`
+                w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-150
+                ${isActive(item.href) 
+                  ? 'bg-[#0D23AD] text-white shadow-sm' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
+              `}
+            >
+              <item.icon size={20} className={isActive(item.href) ? 'text-white' : 'text-gray-400'} />
+              <span>{item.name}</span>
+            </button>
+          ))}
+        </nav>
+
+        {/* Logout Section */}
+        <div className="p-4 border-t border-gray-200">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+          >
+            <LogOut size={20} />
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }
