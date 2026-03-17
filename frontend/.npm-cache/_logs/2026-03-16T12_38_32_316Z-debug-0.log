@@ -1,0 +1,1320 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@10.8.2
+2 info using node@v20.20.1
+3 silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\.npmrc
+5 silly config load:file:C:\Users\USER\.npmrc
+6 silly config load:file:C:\Users\USER\.npm-global\etc\npmrc
+7 verbose title npm install
+8 verbose argv "install"
+9 verbose logfile logs-max:10 dir:c:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\.npm-cache\_logs\2026-03-16T12_38_32_316Z-
+10 verbose logfile c:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\.npm-cache\_logs\2026-03-16T12_38_32_316Z-debug-0.log
+11 silly packumentCache heap:2197815296 maxSize:549453824 maxEntrySize:274726912
+12 silly logfile done cleaning log files
+13 silly idealTree buildDeps
+14 verbose shrinkwrap failed to load node_modules/.package-lock.json out of date, updated: node_modules
+15 http fetch GET https://registry.npmjs.org/npm attempt 1 failed with EACCES
+16 silly reify mark retired [
+16 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\clsx'
+16 silly reify ]
+17 silly reify mark retired [
+17 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-array'
+17 silly reify ]
+18 silly reify mark retired [
+18 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-color'
+18 silly reify ]
+19 silly reify mark retired [
+19 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-ease'
+19 silly reify ]
+20 silly reify mark retired [
+20 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-format'
+20 silly reify ]
+21 silly reify mark retired [
+21 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-interpolate'
+21 silly reify ]
+22 silly reify mark retired [
+22 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-path'
+22 silly reify ]
+23 silly reify mark retired [
+23 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-scale'
+23 silly reify ]
+24 silly reify mark retired [
+24 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-shape'
+24 silly reify ]
+25 silly reify mark retired [
+25 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-time'
+25 silly reify ]
+26 silly reify mark retired [
+26 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-time-format'
+26 silly reify ]
+27 silly reify mark retired [
+27 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-timer'
+27 silly reify ]
+28 silly reify mark retired [
+28 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\decimal.js-light'
+28 silly reify ]
+29 silly reify mark retired [
+29 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\engine.io-client'
+29 silly reify ]
+30 silly reify mark retired [
+30 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\engine.io-parser'
+30 silly reify ]
+31 silly reify mark retired [
+31 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\es-toolkit'
+31 silly reify ]
+32 silly reify mark retired [
+32 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\eventemitter3'
+32 silly reify ]
+33 silly reify mark retired [
+33 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\immer'
+33 silly reify ]
+34 silly reify mark retired [
+34 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\internmap'
+34 silly reify ]
+35 silly reify mark retired [
+35 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-android-arm64'
+35 silly reify ]
+36 silly reify mark retired [
+36 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-darwin-arm64'
+36 silly reify ]
+37 silly reify mark retired [
+37 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-darwin-x64'
+37 silly reify ]
+38 silly reify mark retired [
+38 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-freebsd-x64'
+38 silly reify ]
+39 silly reify mark retired [
+39 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-arm-gnueabihf'
+39 silly reify ]
+40 silly reify mark retired [
+40 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-arm64-gnu'
+40 silly reify ]
+41 silly reify mark retired [
+41 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-arm64-musl'
+41 silly reify ]
+42 silly reify mark retired [
+42 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-x64-gnu'
+42 silly reify ]
+43 silly reify mark retired [
+43 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-x64-musl'
+43 silly reify ]
+44 silly reify mark retired [
+44 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-win32-arm64-msvc'
+44 silly reify ]
+45 silly reify mark retired [
+45 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\react-redux'
+45 silly reify ]
+46 silly reify mark retired [
+46 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\recharts'
+46 silly reify ]
+47 silly reify mark retired [
+47 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\redux'
+47 silly reify ]
+48 silly reify mark retired [
+48 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\redux-thunk'
+48 silly reify ]
+49 silly reify mark retired [
+49 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\reselect'
+49 silly reify ]
+50 silly reify mark retired [
+50 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\socket.io-client'
+50 silly reify ]
+51 silly reify mark retired [
+51 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\socket.io-parser'
+51 silly reify ]
+52 silly reify mark retired [
+52 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\tiny-invariant'
+52 silly reify ]
+53 silly reify mark retired [
+53 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\use-sync-external-store'
+53 silly reify ]
+54 silly reify mark retired [
+54 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\victory-vendor'
+54 silly reify ]
+55 silly reify mark retired [
+55 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\ws'
+55 silly reify ]
+56 silly reify mark retired [
+56 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\xmlhttprequest-ssl'
+56 silly reify ]
+57 silly reify mark retired [
+57 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-darwin-arm64'
+57 silly reify ]
+58 silly reify mark retired [
+58 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-darwin-x64'
+58 silly reify ]
+59 silly reify mark retired [
+59 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-darwin-arm64'
+59 silly reify ]
+60 silly reify mark retired [
+60 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-darwin-x64'
+60 silly reify ]
+61 silly reify mark retired [
+61 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-arm'
+61 silly reify ]
+62 silly reify mark retired [
+62 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-arm64'
+62 silly reify ]
+63 silly reify mark retired [
+63 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-ppc64'
+63 silly reify ]
+64 silly reify mark retired [
+64 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-riscv64'
+64 silly reify ]
+65 silly reify mark retired [
+65 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-s390x'
+65 silly reify ]
+66 silly reify mark retired [
+66 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-x64'
+66 silly reify ]
+67 silly reify mark retired [
+67 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linuxmusl-arm64'
+67 silly reify ]
+68 silly reify mark retired [
+68 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linuxmusl-x64'
+68 silly reify ]
+69 silly reify mark retired [
+69 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-arm'
+69 silly reify ]
+70 silly reify mark retired [
+70 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-arm64'
+70 silly reify ]
+71 silly reify mark retired [
+71 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-ppc64'
+71 silly reify ]
+72 silly reify mark retired [
+72 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-riscv64'
+72 silly reify ]
+73 silly reify mark retired [
+73 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-s390x'
+73 silly reify ]
+74 silly reify mark retired [
+74 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-x64'
+74 silly reify ]
+75 silly reify mark retired [
+75 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linuxmusl-arm64'
+75 silly reify ]
+76 silly reify mark retired [
+76 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linuxmusl-x64'
+76 silly reify ]
+77 silly reify mark retired [
+77 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-wasm32'
+77 silly reify ]
+78 silly reify mark retired [
+78 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-win32-arm64'
+78 silly reify ]
+79 silly reify mark retired [
+79 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-win32-ia32'
+79 silly reify ]
+80 silly reify mark retired [
+80 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-darwin-arm64'
+80 silly reify ]
+81 silly reify mark retired [
+81 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-darwin-x64'
+81 silly reify ]
+82 silly reify mark retired [
+82 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-arm64-gnu'
+82 silly reify ]
+83 silly reify mark retired [
+83 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-arm64-musl'
+83 silly reify ]
+84 silly reify mark retired [
+84 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-x64-gnu'
+84 silly reify ]
+85 silly reify mark retired [
+85 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-x64-musl'
+85 silly reify ]
+86 silly reify mark retired [
+86 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-win32-arm64-msvc'
+86 silly reify ]
+87 silly reify mark retired [
+87 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@reduxjs\\toolkit'
+87 silly reify ]
+88 silly reify mark retired [
+88 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@socket.io\\component-emitter'
+88 silly reify ]
+89 silly reify mark retired [
+89 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@standard-schema\\utils'
+89 silly reify ]
+90 silly reify mark retired [
+90 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-android-arm64'
+90 silly reify ]
+91 silly reify mark retired [
+91 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-darwin-arm64'
+91 silly reify ]
+92 silly reify mark retired [
+92 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-freebsd-x64'
+92 silly reify ]
+93 silly reify mark retired [
+93 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-darwin-x64'
+93 silly reify ]
+94 silly reify mark retired [
+94 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-arm-gnueabihf'
+94 silly reify ]
+95 silly reify mark retired [
+95 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-arm64-gnu'
+95 silly reify ]
+96 silly reify mark retired [
+96 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-arm64-musl'
+96 silly reify ]
+97 silly reify mark retired [
+97 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-x64-gnu'
+97 silly reify ]
+98 silly reify mark retired [
+98 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-x64-musl'
+98 silly reify ]
+99 silly reify mark retired [
+99 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-wasm32-wasi'
+99 silly reify ]
+100 silly reify mark retired [
+100 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-win32-arm64-msvc'
+100 silly reify ]
+101 silly reify mark retired [
+101 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-array'
+101 silly reify ]
+102 silly reify mark retired [
+102 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-color'
+102 silly reify ]
+103 silly reify mark retired [
+103 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-ease'
+103 silly reify ]
+104 silly reify mark retired [
+104 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-interpolate'
+104 silly reify ]
+105 silly reify mark retired [
+105 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-path'
+105 silly reify ]
+106 silly reify mark retired [
+106 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-scale'
+106 silly reify ]
+107 silly reify mark retired [
+107 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-shape'
+107 silly reify ]
+108 silly reify mark retired [
+108 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-time'
+108 silly reify ]
+109 silly reify mark retired [
+109 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-timer'
+109 silly reify ]
+110 silly reify mark retired [
+110 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\use-sync-external-store'
+110 silly reify ]
+111 silly reify mark retired [
+111 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-android-arm-eabi'
+111 silly reify ]
+112 silly reify mark retired [
+112 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-android-arm64'
+112 silly reify ]
+113 silly reify mark retired [
+113 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-darwin-arm64'
+113 silly reify ]
+114 silly reify mark retired [
+114 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-darwin-x64'
+114 silly reify ]
+115 silly reify mark retired [
+115 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-freebsd-x64'
+115 silly reify ]
+116 silly reify mark retired [
+116 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm-gnueabihf'
+116 silly reify ]
+117 silly reify mark retired [
+117 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm-musleabihf'
+117 silly reify ]
+118 silly reify mark retired [
+118 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm64-gnu'
+118 silly reify ]
+119 silly reify mark retired [
+119 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm64-musl'
+119 silly reify ]
+120 silly reify mark retired [
+120 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-ppc64-gnu'
+120 silly reify ]
+121 silly reify mark retired [
+121 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-riscv64-gnu'
+121 silly reify ]
+122 silly reify mark retired [
+122 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-riscv64-musl'
+122 silly reify ]
+123 silly reify mark retired [
+123 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-s390x-gnu'
+123 silly reify ]
+124 silly reify mark retired [
+124 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-x64-gnu'
+124 silly reify ]
+125 silly reify mark retired [
+125 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-x64-musl'
+125 silly reify ]
+126 silly reify mark retired [
+126 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-wasm32-wasi'
+126 silly reify ]
+127 silly reify mark retired [
+127 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-win32-arm64-msvc'
+127 silly reify ]
+128 silly reify mark retired [
+128 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-win32-ia32-msvc'
+128 silly reify ]
+129 silly reify moves {
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\clsx': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.clsx-zP3uKqDZ',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-array': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.d3-array-8p4ZvXjo',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-color': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.d3-color-Z8KBDKA6',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-ease': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.d3-ease-nRvwGbwo',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-format': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.d3-format-qxwrJ92T',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-interpolate': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.d3-interpolate-NgvHXS82',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-path': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.d3-path-KX03jIgz',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-scale': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.d3-scale-aBlqnjsl',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-shape': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.d3-shape-SiA5xqqJ',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-time': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.d3-time-INLHWbhB',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-time-format': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.d3-time-format-ndSP1vvH',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\d3-timer': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.d3-timer-by5Wlg6Y',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\decimal.js-light': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.decimal.js-light-y9OF6WVK',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\engine.io-client': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.engine.io-client-Bn8zuFoZ',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\engine.io-parser': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.engine.io-parser-t4TBECDg',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\es-toolkit': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.es-toolkit-1lMOmggc',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\eventemitter3': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.eventemitter3-HHehdXXZ',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\immer': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.immer-CFxH8w0L',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\internmap': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.internmap-jptzwVGA',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-android-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.lightningcss-android-arm64-KR4h0dYi',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-darwin-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.lightningcss-darwin-arm64-n8IIH4ZE',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-darwin-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.lightningcss-darwin-x64-teqOrHXQ',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-freebsd-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.lightningcss-freebsd-x64-Vn0oI2Fx',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-arm-gnueabihf': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.lightningcss-linux-arm-gnueabihf-ELBDTlmT',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-arm64-gnu': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.lightningcss-linux-arm64-gnu-gDN6Yk0k',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-arm64-musl': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.lightningcss-linux-arm64-musl-uDkb1joI',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-x64-gnu': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.lightningcss-linux-x64-gnu-UXGD6xbR',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-x64-musl': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.lightningcss-linux-x64-musl-gbhxBlm4',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-win32-arm64-msvc': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.lightningcss-win32-arm64-msvc-mtxQIXPI',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\react-redux': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.react-redux-x3m2A2dy',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\recharts': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.recharts-HncgmQ7O',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\redux': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.redux-4n0xkgz2',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\redux-thunk': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.redux-thunk-u8VaMR5r',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\reselect': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.reselect-K9VTGfVa',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\socket.io-client': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.socket.io-client-cSgJ92Mp',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\socket.io-parser': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.socket.io-parser-Up0igkcd',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\tiny-invariant': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.tiny-invariant-755zsZ6i',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\use-sync-external-store': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.use-sync-external-store-bacjM9uA',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\victory-vendor': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.victory-vendor-4V0xlKVF',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\ws': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.ws-YoF6sVZk',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\xmlhttprequest-ssl': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\.xmlhttprequest-ssl-IKP6nihy',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-darwin-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-darwin-arm64-mp0FMw5I',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-darwin-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-darwin-x64-yLiB2iZG',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-darwin-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-libvips-darwin-arm64-8SrdzmAW',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-darwin-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-libvips-darwin-x64-PvF8rzGl',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-arm': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-libvips-linux-arm-1sYrLAi5',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-libvips-linux-arm64-VwQH8u32',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-ppc64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-libvips-linux-ppc64-Rkyo6f4O',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-riscv64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-libvips-linux-riscv64-UYvXUYNm',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-s390x': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-libvips-linux-s390x-mQiKbmdy',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-libvips-linux-x64-ObSFgYsW',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linuxmusl-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-libvips-linuxmusl-arm64-D7Mhfi8T',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linuxmusl-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-libvips-linuxmusl-x64-vd7i6JNJ',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-arm': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-linux-arm-gKkzMneq',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-linux-arm64-Berl55JN',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-ppc64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-linux-ppc64-SG50DqE7',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-riscv64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-linux-riscv64-5zoL1ymN',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-s390x': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-linux-s390x-71ClFFxO',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-linux-x64-X3C1wri6',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linuxmusl-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-linuxmusl-arm64-8hRzIsmy',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linuxmusl-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-linuxmusl-x64-aklxsHoU',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-wasm32': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-wasm32-npD6R2Z0',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-win32-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-win32-arm64-172EKvhl',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-win32-ia32': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\.sharp-win32-ia32-NhuYMBnW',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-darwin-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\.swc-darwin-arm64-OHdUKQYI',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-darwin-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\.swc-darwin-x64-AmAp9ING',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-arm64-gnu': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\.swc-linux-arm64-gnu-FZTtaZJx',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-arm64-musl': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\.swc-linux-arm64-musl-uGJJtlFT',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-x64-gnu': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\.swc-linux-x64-gnu-n0qyT7Jg',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-x64-musl': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\.swc-linux-x64-musl-JAl7bYlO',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-win32-arm64-msvc': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\.swc-win32-arm64-msvc-dmfa8bI1',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@reduxjs\\toolkit': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@reduxjs\\.toolkit-mps1wxLG',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@socket.io\\component-emitter': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@socket.io\\.component-emitter-91ucncqX',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@standard-schema\\utils': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@standard-schema\\.utils-aLtkkR1d',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-android-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\.oxide-android-arm64-jvKwJiQZ',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-darwin-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\.oxide-darwin-arm64-5YyPgFBM',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-freebsd-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\.oxide-freebsd-x64-Zbr9LnBl',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-darwin-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\.oxide-darwin-x64-6TgvhTfr',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-arm-gnueabihf': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\.oxide-linux-arm-gnueabihf-Ak6MUohJ',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-arm64-gnu': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\.oxide-linux-arm64-gnu-KSpCL1ac',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-arm64-musl': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\.oxide-linux-arm64-musl-4GPEXeyU',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-x64-gnu': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\.oxide-linux-x64-gnu-rWX7uITk',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-x64-musl': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\.oxide-linux-x64-musl-21XT8Bel',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-wasm32-wasi': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\.oxide-wasm32-wasi-k243SVTb',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-win32-arm64-msvc': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\.oxide-win32-arm64-msvc-OHMwo9o0',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-array': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\.d3-array-w8o2gpzR',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-color': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\.d3-color-r61gVklH',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-ease': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\.d3-ease-FQOXVrz7',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-interpolate': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\.d3-interpolate-PI96IZEy',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-path': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\.d3-path-NmFR6biT',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-scale': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\.d3-scale-GVPzI8oK',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-shape': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\.d3-shape-17JxB7ZJ',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-time': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\.d3-time-nbmPTLwE',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\d3-timer': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\.d3-timer-pMAr4URL',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\use-sync-external-store': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@types\\.use-sync-external-store-ZPQDIMda',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-android-arm-eabi': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-android-arm-eabi-cfNuuos8',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-android-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-android-arm64-G6yQUPsK',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-darwin-arm64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-darwin-arm64-QHXJQmT6',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-darwin-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-darwin-x64-BPR1HOe9',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-freebsd-x64': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-freebsd-x64-TqcWdfUC',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm-gnueabihf': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-linux-arm-gnueabihf-0Z92rOuw',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm-musleabihf': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-linux-arm-musleabihf-RTGNhFWd',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm64-gnu': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-linux-arm64-gnu-C46NOjri',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm64-musl': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-linux-arm64-musl-2zHIw2lM',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-ppc64-gnu': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-linux-ppc64-gnu-HCDA3QmE',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-riscv64-gnu': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-linux-riscv64-gnu-DETPZ9xw',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-riscv64-musl': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-linux-riscv64-musl-G38ORfxM',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-s390x-gnu': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-linux-s390x-gnu-XHYBRYHF',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-x64-gnu': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-linux-x64-gnu-5TH6j5I6',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-x64-musl': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-linux-x64-musl-r9v0F1Rw',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-wasm32-wasi': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-wasm32-wasi-s0rNaSMD',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-win32-arm64-msvc': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-win32-arm64-msvc-wjFsQRYT',
+129 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-win32-ia32-msvc': 'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\.resolver-binding-win32-ia32-msvc-pjrA8ZhZ'
+129 silly reify }
+130 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@tailwindcss\oxide-wasm32-wasi
+131 silly reify mark deleted [
+131 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-wasm32-wasi'
+131 silly reify ]
+132 silly audit bulk request {
+132 silly audit   '@alloc/quick-lru': [ '5.2.0' ],
+132 silly audit   '@babel/code-frame': [ '7.29.0' ],
+132 silly audit   '@babel/compat-data': [ '7.29.0' ],
+132 silly audit   '@babel/core': [ '7.29.0' ],
+132 silly audit   '@babel/generator': [ '7.29.1' ],
+132 silly audit   '@babel/helper-compilation-targets': [ '7.28.6' ],
+132 silly audit   '@babel/helper-globals': [ '7.28.0' ],
+132 silly audit   '@babel/helper-module-imports': [ '7.28.6' ],
+132 silly audit   '@babel/helper-module-transforms': [ '7.28.6' ],
+132 silly audit   '@babel/helper-string-parser': [ '7.27.1' ],
+132 silly audit   '@babel/helper-validator-identifier': [ '7.28.5' ],
+132 silly audit   '@babel/helper-validator-option': [ '7.27.1' ],
+132 silly audit   '@babel/helpers': [ '7.28.6' ],
+132 silly audit   '@babel/parser': [ '7.29.0' ],
+132 silly audit   '@babel/template': [ '7.28.6' ],
+132 silly audit   '@babel/traverse': [ '7.29.0' ],
+132 silly audit   '@babel/types': [ '7.29.0' ],
+132 silly audit   '@emnapi/core': [ '1.8.1' ],
+132 silly audit   '@emnapi/runtime': [ '1.8.1' ],
+132 silly audit   '@emnapi/wasi-threads': [ '1.1.0' ],
+132 silly audit   '@eslint-community/eslint-utils': [ '4.9.1' ],
+132 silly audit   'eslint-visitor-keys': [ '3.4.3', '5.0.1', '4.2.1' ],
+132 silly audit   '@eslint-community/regexpp': [ '4.12.2' ],
+132 silly audit   '@eslint/config-array': [ '0.21.2' ],
+132 silly audit   '@eslint/config-helpers': [ '0.4.2' ],
+132 silly audit   '@eslint/core': [ '0.17.0' ],
+132 silly audit   '@eslint/eslintrc': [ '3.3.5' ],
+132 silly audit   '@eslint/js': [ '9.39.4' ],
+132 silly audit   '@eslint/object-schema': [ '2.1.7' ],
+132 silly audit   '@eslint/plugin-kit': [ '0.4.1' ],
+132 silly audit   '@humanfs/core': [ '0.19.1' ],
+132 silly audit   '@humanfs/node': [ '0.16.7' ],
+132 silly audit   '@humanwhocodes/module-importer': [ '1.0.1' ],
+132 silly audit   '@humanwhocodes/retry': [ '0.4.3' ],
+132 silly audit   '@img/colour': [ '1.1.0' ],
+132 silly audit   '@img/sharp-darwin-arm64': [ '0.34.5' ],
+132 silly audit   '@img/sharp-darwin-x64': [ '0.34.5' ],
+132 silly audit   '@img/sharp-libvips-darwin-arm64': [ '1.2.4' ],
+132 silly audit   '@img/sharp-libvips-darwin-x64': [ '1.2.4' ],
+132 silly audit   '@img/sharp-libvips-linux-arm': [ '1.2.4' ],
+132 silly audit   '@img/sharp-libvips-linux-arm64': [ '1.2.4' ],
+132 silly audit   '@img/sharp-libvips-linux-ppc64': [ '1.2.4' ],
+132 silly audit   '@img/sharp-libvips-linux-riscv64': [ '1.2.4' ],
+132 silly audit   '@img/sharp-libvips-linux-s390x': [ '1.2.4' ],
+132 silly audit   '@img/sharp-libvips-linux-x64': [ '1.2.4' ],
+132 silly audit   '@img/sharp-libvips-linuxmusl-arm64': [ '1.2.4' ],
+132 silly audit   '@img/sharp-libvips-linuxmusl-x64': [ '1.2.4' ],
+132 silly audit   '@img/sharp-linux-arm': [ '0.34.5' ],
+132 silly audit   '@img/sharp-linux-arm64': [ '0.34.5' ],
+132 silly audit   '@img/sharp-linux-ppc64': [ '0.34.5' ],
+132 silly audit   '@img/sharp-linux-riscv64': [ '0.34.5' ],
+132 silly audit   '@img/sharp-linux-s390x': [ '0.34.5' ],
+132 silly audit   '@img/sharp-linux-x64': [ '0.34.5' ],
+132 silly audit   '@img/sharp-linuxmusl-arm64': [ '0.34.5' ],
+132 silly audit   '@img/sharp-linuxmusl-x64': [ '0.34.5' ],
+132 silly audit   '@img/sharp-wasm32': [ '0.34.5' ],
+132 silly audit   '@img/sharp-win32-arm64': [ '0.34.5' ],
+132 silly audit   '@img/sharp-win32-ia32': [ '0.34.5' ],
+132 silly audit   '@img/sharp-win32-x64': [ '0.34.5' ],
+132 silly audit   '@jridgewell/gen-mapping': [ '0.3.13' ],
+132 silly audit   '@jridgewell/remapping': [ '2.3.5' ],
+132 silly audit   '@jridgewell/resolve-uri': [ '3.1.2' ],
+132 silly audit   '@jridgewell/sourcemap-codec': [ '1.5.5' ],
+132 silly audit   '@jridgewell/trace-mapping': [ '0.3.31' ],
+132 silly audit   '@napi-rs/wasm-runtime': [ '0.2.12' ],
+132 silly audit   '@next/env': [ '16.1.6' ],
+132 silly audit   '@next/eslint-plugin-next': [ '16.1.6' ],
+132 silly audit   '@next/swc-darwin-arm64': [ '16.1.6' ],
+132 silly audit   '@next/swc-darwin-x64': [ '16.1.6' ],
+132 silly audit   '@next/swc-linux-arm64-gnu': [ '16.1.6' ],
+132 silly audit   '@next/swc-linux-arm64-musl': [ '16.1.6' ],
+132 silly audit   '@next/swc-linux-x64-gnu': [ '16.1.6' ],
+132 silly audit   '@next/swc-linux-x64-musl': [ '16.1.6' ],
+132 silly audit   '@next/swc-win32-arm64-msvc': [ '16.1.6' ],
+132 silly audit   '@next/swc-win32-x64-msvc': [ '16.1.6' ],
+132 silly audit   '@nodelib/fs.scandir': [ '2.1.5' ],
+132 silly audit   '@nodelib/fs.stat': [ '2.0.5' ],
+132 silly audit   '@nodelib/fs.walk': [ '1.2.8' ],
+132 silly audit   '@nolyfill/is-core-module': [ '1.0.39' ],
+132 silly audit   '@reduxjs/toolkit': [ '2.11.2' ],
+132 silly audit   immer: [ '11.1.4', '10.2.0' ],
+132 silly audit   '@rtsao/scc': [ '1.1.0' ],
+132 silly audit   '@socket.io/component-emitter': [ '3.1.2' ],
+132 silly audit   '@standard-schema/spec': [ '1.1.0' ],
+132 silly audit   '@standard-schema/utils': [ '0.3.0' ],
+132 silly audit   '@swc/helpers': [ '0.5.15' ],
+132 silly audit   '@tailwindcss/node': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide-android-arm64': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide-darwin-arm64': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide-darwin-x64': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide-freebsd-x64': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide-linux-arm-gnueabihf': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide-linux-arm64-gnu': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide-linux-arm64-musl': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide-linux-x64-gnu': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide-linux-x64-musl': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide-win32-arm64-msvc': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/oxide-win32-x64-msvc': [ '4.2.1' ],
+132 silly audit   '@tailwindcss/postcss': [ '4.2.1' ],
+132 silly audit   '@tybys/wasm-util': [ '0.10.1' ],
+132 silly audit   '@types/d3-array': [ '3.2.2' ],
+132 silly audit   '@types/d3-color': [ '3.1.3' ],
+132 silly audit   '@types/d3-ease': [ '3.0.2' ],
+132 silly audit   '@types/d3-interpolate': [ '3.0.4' ],
+132 silly audit   '@types/d3-path': [ '3.1.1' ],
+132 silly audit   '@types/d3-scale': [ '4.0.9' ],
+132 silly audit   '@types/d3-shape': [ '3.1.8' ],
+132 silly audit   '@types/d3-time': [ '3.0.4' ],
+132 silly audit   '@types/d3-timer': [ '3.0.2' ],
+132 silly audit   '@types/estree': [ '1.0.8' ],
+132 silly audit   '@types/json-schema': [ '7.0.15' ],
+132 silly audit   '@types/json5': [ '0.0.29' ],
+132 silly audit   '@types/node': [ '20.19.37' ],
+132 silly audit   '@types/react': [ '19.2.14' ],
+132 silly audit   '@types/react-dom': [ '19.2.3' ],
+132 silly audit   '@types/use-sync-external-store': [ '0.0.6' ],
+132 silly audit   '@typescript-eslint/eslint-plugin': [ '8.57.0' ],
+132 silly audit   ignore: [ '7.0.5', '5.3.2' ],
+132 silly audit   '@typescript-eslint/parser': [ '8.57.0' ],
+132 silly audit   '@typescript-eslint/project-service': [ '8.57.0' ],
+132 silly audit   '@typescript-eslint/scope-manager': [ '8.57.0' ],
+132 silly audit   '@typescript-eslint/tsconfig-utils': [ '8.57.0' ],
+132 silly audit   '@typescript-eslint/type-utils': [ '8.57.0' ],
+132 silly audit   '@typescript-eslint/types': [ '8.57.0' ],
+132 silly audit   '@typescript-eslint/typescript-estree': [ '8.57.0' ],
+132 silly audit   'balanced-match': [ '4.0.4', '1.0.2' ],
+132 silly audit   'brace-expansion': [ '5.0.4', '1.1.12' ],
+132 silly audit   minimatch: [ '10.2.4', '3.1.5' ],
+132 silly audit   semver: [ '7.7.4', '6.3.1' ],
+132 silly audit   '@typescript-eslint/utils': [ '8.57.0' ],
+132 silly audit   '@typescript-eslint/visitor-keys': [ '8.57.0' ],
+132 silly audit   '@unrs/resolver-binding-android-arm-eabi': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-android-arm64': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-darwin-arm64': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-darwin-x64': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-freebsd-x64': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-linux-arm-gnueabihf': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-linux-arm-musleabihf': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-linux-arm64-gnu': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-linux-arm64-musl': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-linux-ppc64-gnu': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-linux-riscv64-gnu': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-linux-riscv64-musl': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-linux-s390x-gnu': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-linux-x64-gnu': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-linux-x64-musl': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-wasm32-wasi': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-win32-arm64-msvc': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-win32-ia32-msvc': [ '1.11.1' ],
+132 silly audit   '@unrs/resolver-binding-win32-x64-msvc': [ '1.11.1' ],
+132 silly audit   acorn: [ '8.16.0' ],
+132 silly audit   'acorn-jsx': [ '5.3.2' ],
+132 silly audit   ajv: [ '6.14.0' ],
+132 silly audit   'ansi-styles': [ '4.3.0' ],
+132 silly audit   argparse: [ '2.0.1' ],
+132 silly audit   'aria-query': [ '5.3.2' ],
+132 silly audit   'array-buffer-byte-length': [ '1.0.2' ],
+132 silly audit   'array-includes': [ '3.1.9' ],
+132 silly audit   'array.prototype.findlast': [ '1.2.5' ],
+132 silly audit   'array.prototype.findlastindex': [ '1.2.6' ],
+132 silly audit   'array.prototype.flat': [ '1.3.3' ],
+132 silly audit   'array.prototype.flatmap': [ '1.3.3' ],
+132 silly audit   'array.prototype.tosorted': [ '1.1.4' ],
+132 silly audit   'arraybuffer.prototype.slice': [ '1.0.4' ],
+132 silly audit   'ast-types-flow': [ '0.0.8' ],
+132 silly audit   'async-function': [ '1.0.0' ],
+132 silly audit   'available-typed-arrays': [ '1.0.7' ],
+132 silly audit   'axe-core': [ '4.11.1' ],
+132 silly audit   'axobject-query': [ '4.1.0' ],
+132 silly audit   'baseline-browser-mapping': [ '2.10.0' ],
+132 silly audit   braces: [ '3.0.3' ],
+132 silly audit   browserslist: [ '4.28.1' ],
+132 silly audit   'call-bind': [ '1.0.8' ],
+132 silly audit   'call-bind-apply-helpers': [ '1.0.2' ],
+132 silly audit   'call-bound': [ '1.0.4' ],
+132 silly audit   callsites: [ '3.1.0' ],
+132 silly audit   'caniuse-lite': [ '1.0.30001777' ],
+132 silly audit   chalk: [ '4.1.2' ],
+132 silly audit   'client-only': [ '0.0.1' ],
+132 silly audit   clsx: [ '2.1.1' ],
+132 silly audit   'color-convert': [ '2.0.1' ],
+132 silly audit   'color-name': [ '1.1.4' ],
+132 silly audit   'concat-map': [ '0.0.1' ],
+132 silly audit   'convert-source-map': [ '2.0.0' ],
+132 silly audit   'cross-spawn': [ '7.0.6' ],
+132 silly audit   csstype: [ '3.2.3' ],
+132 silly audit   'd3-array': [ '3.2.4' ],
+132 silly audit   'd3-color': [ '3.1.0' ],
+132 silly audit   'd3-ease': [ '3.0.1' ],
+132 silly audit   'd3-format': [ '3.1.2' ],
+132 silly audit   'd3-interpolate': [ '3.0.1' ],
+132 silly audit   'd3-path': [ '3.1.0' ],
+132 silly audit   'd3-scale': [ '4.0.2' ],
+132 silly audit   'd3-shape': [ '3.2.0' ],
+132 silly audit   'd3-time': [ '3.1.0' ],
+132 silly audit   'd3-time-format': [ '4.1.0' ],
+132 silly audit   'd3-timer': [ '3.0.1' ],
+132 silly audit   'damerau-levenshtein': [ '1.0.8' ],
+132 silly audit   'data-view-buffer': [ '1.0.2' ],
+132 silly audit   'data-view-byte-length': [ '1.0.2' ],
+132 silly audit   'data-view-byte-offset': [ '1.0.1' ],
+132 silly audit   debug: [ '4.4.3', '3.2.7' ],
+132 silly audit   'decimal.js-light': [ '2.5.1' ],
+132 silly audit   'deep-is': [ '0.1.4' ],
+132 silly audit   'define-data-property': [ '1.1.4' ],
+132 silly audit   'define-properties': [ '1.2.1' ],
+132 silly audit   'detect-libc': [ '2.1.2' ],
+132 silly audit   doctrine: [ '2.1.0' ],
+132 silly audit   'dunder-proto': [ '1.0.1' ],
+132 silly audit   'electron-to-chromium': [ '1.5.307' ],
+132 silly audit   'emoji-regex': [ '9.2.2' ],
+132 silly audit   'engine.io-client': [ '6.6.4' ],
+132 silly audit   'engine.io-parser': [ '5.2.3' ],
+132 silly audit   'enhanced-resolve': [ '5.20.0' ],
+132 silly audit   'es-abstract': [ '1.24.1' ],
+132 silly audit   'es-define-property': [ '1.0.1' ],
+132 silly audit   'es-errors': [ '1.3.0' ],
+132 silly audit   'es-iterator-helpers': [ '1.2.2' ],
+132 silly audit   'es-object-atoms': [ '1.1.1' ],
+132 silly audit   'es-set-tostringtag': [ '2.1.0' ],
+132 silly audit   'es-shim-unscopables': [ '1.1.0' ],
+132 silly audit   'es-to-primitive': [ '1.3.0' ],
+132 silly audit   'es-toolkit': [ '1.45.1' ],
+132 silly audit   escalade: [ '3.2.0' ],
+132 silly audit   'escape-string-regexp': [ '4.0.0' ],
+132 silly audit   eslint: [ '9.39.4' ],
+132 silly audit   'eslint-config-next': [ '16.1.6' ],
+132 silly audit   globals: [ '16.4.0', '14.0.0' ],
+132 silly audit   'eslint-import-resolver-node': [ '0.3.9' ],
+132 silly audit   'eslint-import-resolver-typescript': [ '3.10.1' ],
+132 silly audit   'eslint-module-utils': [ '2.12.1' ],
+132 silly audit   'eslint-plugin-import': [ '2.32.0' ],
+132 silly audit   'eslint-plugin-jsx-a11y': [ '6.10.2' ],
+132 silly audit   'eslint-plugin-react': [ '7.37.5' ],
+132 silly audit   'eslint-plugin-react-hooks': [ '7.0.1' ],
+132 silly audit   resolve: [ '2.0.0-next.6', '1.22.11' ],
+132 silly audit   'eslint-scope': [ '8.4.0' ],
+132 silly audit   espree: [ '10.4.0' ],
+132 silly audit   esquery: [ '1.7.0' ],
+132 silly audit   esrecurse: [ '4.3.0' ],
+132 silly audit   estraverse: [ '5.3.0' ],
+132 silly audit   esutils: [ '2.0.3' ],
+132 silly audit   eventemitter3: [ '5.0.4' ],
+132 silly audit   'fast-deep-equal': [ '3.1.3' ],
+132 silly audit   'fast-glob': [ '3.3.1' ],
+132 silly audit   'glob-parent': [ '5.1.2', '6.0.2' ],
+132 silly audit   'fast-json-stable-stringify': [ '2.1.0' ],
+132 silly audit   'fast-levenshtein': [ '2.0.6' ],
+132 silly audit   fastq: [ '1.20.1' ],
+132 silly audit   'file-entry-cache': [ '8.0.0' ],
+132 silly audit   'fill-range': [ '7.1.1' ],
+132 silly audit   'find-up': [ '5.0.0' ],
+132 silly audit   'flat-cache': [ '4.0.1' ],
+132 silly audit   flatted: [ '3.4.1' ],
+132 silly audit   'for-each': [ '0.3.5' ],
+132 silly audit   'framer-motion': [ '12.36.0' ],
+132 silly audit   'function-bind': [ '1.1.2' ],
+132 silly audit   'function.prototype.name': [ '1.1.8' ],
+132 silly audit   'functions-have-names': [ '1.2.3' ],
+132 silly audit   'generator-function': [ '2.0.1' ],
+132 silly audit   gensync: [ '1.0.0-beta.2' ],
+132 silly audit   'get-intrinsic': [ '1.3.0' ],
+132 silly audit   'get-proto': [ '1.0.1' ],
+132 silly audit   'get-symbol-description': [ '1.1.0' ],
+132 silly audit   'get-tsconfig': [ '4.13.6' ],
+132 silly audit   globalthis: [ '1.0.4' ],
+132 silly audit   gopd: [ '1.2.0' ],
+132 silly audit   'graceful-fs': [ '4.2.11' ],
+132 silly audit   'has-bigints': [ '1.1.0' ],
+132 silly audit   'has-flag': [ '4.0.0' ],
+132 silly audit   'has-property-descriptors': [ '1.0.2' ],
+132 silly audit   'has-proto': [ '1.2.0' ],
+132 silly audit   'has-symbols': [ '1.1.0' ],
+132 silly audit   'has-tostringtag': [ '1.0.2' ],
+132 silly audit   hasown: [ '2.0.2' ],
+132 silly audit   'hermes-estree': [ '0.25.1' ],
+132 silly audit   'hermes-parser': [ '0.25.1' ],
+132 silly audit   'import-fresh': [ '3.3.1' ],
+132 silly audit   imurmurhash: [ '0.1.4' ],
+132 silly audit   'internal-slot': [ '1.1.0' ],
+132 silly audit   internmap: [ '2.0.3' ],
+132 silly audit   'is-array-buffer': [ '3.0.5' ],
+132 silly audit   'is-async-function': [ '2.1.1' ],
+132 silly audit   'is-bigint': [ '1.1.0' ],
+132 silly audit   'is-boolean-object': [ '1.2.2' ],
+132 silly audit   'is-bun-module': [ '2.0.0' ],
+132 silly audit   'is-callable': [ '1.2.7' ],
+132 silly audit   'is-core-module': [ '2.16.1' ],
+132 silly audit   'is-data-view': [ '1.0.2' ],
+132 silly audit   'is-date-object': [ '1.1.0' ],
+132 silly audit   'is-extglob': [ '2.1.1' ],
+132 silly audit   'is-finalizationregistry': [ '1.1.1' ],
+132 silly audit   'is-generator-function': [ '1.1.2' ],
+132 silly audit   'is-glob': [ '4.0.3' ],
+132 silly audit   'is-map': [ '2.0.3' ],
+132 silly audit   'is-negative-zero': [ '2.0.3' ],
+132 silly audit   'is-number': [ '7.0.0' ],
+132 silly audit   'is-number-object': [ '1.1.1' ],
+132 silly audit   'is-regex': [ '1.2.1' ],
+132 silly audit   'is-set': [ '2.0.3' ],
+132 silly audit   'is-shared-array-buffer': [ '1.0.4' ],
+132 silly audit   'is-string': [ '1.1.1' ],
+132 silly audit   'is-symbol': [ '1.1.1' ],
+132 silly audit   'is-typed-array': [ '1.1.15' ],
+132 silly audit   'is-weakmap': [ '2.0.2' ],
+132 silly audit   'is-weakref': [ '1.1.1' ],
+132 silly audit   'is-weakset': [ '2.0.4' ],
+132 silly audit   isarray: [ '2.0.5' ],
+132 silly audit   isexe: [ '2.0.0' ],
+132 silly audit   'iterator.prototype': [ '1.1.5' ],
+132 silly audit   jiti: [ '2.6.1' ],
+132 silly audit   'js-tokens': [ '4.0.0' ],
+132 silly audit   'js-yaml': [ '4.1.1' ],
+132 silly audit   jsesc: [ '3.1.0' ],
+132 silly audit   'json-buffer': [ '3.0.1' ],
+132 silly audit   'json-schema-traverse': [ '0.4.1' ],
+132 silly audit   'json-stable-stringify-without-jsonify': [ '1.0.1' ],
+132 silly audit   json5: [ '2.2.3', '1.0.2' ],
+132 silly audit   'jsx-ast-utils': [ '3.3.5' ],
+132 silly audit   keyv: [ '4.5.4' ],
+132 silly audit   'language-subtag-registry': [ '0.3.23' ],
+132 silly audit   'language-tags': [ '1.0.9' ],
+132 silly audit   levn: [ '0.4.1' ],
+132 silly audit   lightningcss: [ '1.31.1' ],
+132 silly audit   'lightningcss-android-arm64': [ '1.31.1' ],
+132 silly audit   'lightningcss-darwin-arm64': [ '1.31.1' ],
+132 silly audit   'lightningcss-darwin-x64': [ '1.31.1' ],
+132 silly audit   'lightningcss-freebsd-x64': [ '1.31.1' ],
+132 silly audit   'lightningcss-linux-arm-gnueabihf': [ '1.31.1' ],
+132 silly audit   'lightningcss-linux-arm64-gnu': [ '1.31.1' ],
+132 silly audit   'lightningcss-linux-arm64-musl': [ '1.31.1' ],
+132 silly audit   'lightningcss-linux-x64-gnu': [ '1.31.1' ],
+132 silly audit   'lightningcss-linux-x64-musl': [ '1.31.1' ],
+132 silly audit   'lightningcss-win32-arm64-msvc': [ '1.31.1' ],
+132 silly audit   'lightningcss-win32-x64-msvc': [ '1.31.1' ],
+132 silly audit   'locate-path': [ '6.0.0' ],
+132 silly audit   'lodash.merge': [ '4.6.2' ],
+132 silly audit   'loose-envify': [ '1.4.0' ],
+132 silly audit   'lru-cache': [ '5.1.1' ],
+132 silly audit   'lucide-react': [ '0.577.0' ],
+132 silly audit   'magic-string': [ '0.30.21' ],
+132 silly audit   'math-intrinsics': [ '1.1.0' ],
+132 silly audit   merge2: [ '1.4.1' ],
+132 silly audit   micromatch: [ '4.0.8' ],
+132 silly audit   minimist: [ '1.2.8' ],
+132 silly audit   'motion-dom': [ '12.36.0' ],
+132 silly audit   'motion-utils': [ '12.36.0' ],
+132 silly audit   ms: [ '2.1.3' ],
+132 silly audit   nanoid: [ '3.3.11' ],
+132 silly audit   'napi-postinstall': [ '0.3.4' ],
+132 silly audit   'natural-compare': [ '1.4.0' ],
+132 silly audit   next: [ '16.1.6' ],
+132 silly audit   postcss: [ '8.4.31', '8.5.8' ],
+132 silly audit   'node-exports-info': [ '1.6.0' ],
+132 silly audit   'node-releases': [ '2.0.36' ],
+132 silly audit   'object-assign': [ '4.1.1' ],
+132 silly audit   'object-inspect': [ '1.13.4' ],
+132 silly audit   'object-keys': [ '1.1.1' ],
+132 silly audit   'object.assign': [ '4.1.7' ],
+132 silly audit   'object.entries': [ '1.1.9' ],
+132 silly audit   'object.fromentries': [ '2.0.8' ],
+132 silly audit   'object.groupby': [ '1.0.3' ],
+132 silly audit   'object.values': [ '1.2.1' ],
+132 silly audit   optionator: [ '0.9.4' ],
+132 silly audit   'own-keys': [ '1.0.1' ],
+132 silly audit   'p-limit': [ '3.1.0' ],
+132 silly audit   'p-locate': [ '5.0.0' ],
+132 silly audit   'parent-module': [ '1.0.1' ],
+132 silly audit   'path-exists': [ '4.0.0' ],
+132 silly audit   'path-key': [ '3.1.1' ],
+132 silly audit   'path-parse': [ '1.0.7' ],
+132 silly audit   picocolors: [ '1.1.1' ],
+132 silly audit   picomatch: [ '2.3.1', '4.0.3' ],
+132 silly audit   'possible-typed-array-names': [ '1.1.0' ],
+132 silly audit   'prelude-ls': [ '1.2.1' ],
+132 silly audit   'prop-types': [ '15.8.1' ],
+132 silly audit   punycode: [ '2.3.1' ],
+132 silly audit   'queue-microtask': [ '1.2.3' ],
+132 silly audit   react: [ '19.2.3' ],
+132 silly audit   'react-dom': [ '19.2.3' ],
+132 silly audit   'react-is': [ '16.13.1' ],
+132 silly audit   'react-redux': [ '9.2.0' ],
+132 silly audit   recharts: [ '3.8.0' ],
+132 silly audit   redux: [ '5.0.1' ],
+132 silly audit   'redux-thunk': [ '3.1.0' ],
+132 silly audit   'reflect.getprototypeof': [ '1.0.10' ],
+132 silly audit   'regexp.prototype.flags': [ '1.5.4' ],
+132 silly audit   reselect: [ '5.1.1' ],
+132 silly audit   'resolve-from': [ '4.0.0' ],
+132 silly audit   'resolve-pkg-maps': [ '1.0.0' ],
+132 silly audit   reusify: [ '1.1.0' ],
+132 silly audit   'run-parallel': [ '1.2.0' ],
+132 silly audit   'safe-array-concat': [ '1.1.3' ],
+132 silly audit   'safe-push-apply': [ '1.0.0' ],
+132 silly audit   'safe-regex-test': [ '1.1.0' ],
+132 silly audit   scheduler: [ '0.27.0' ],
+132 silly audit   'set-function-length': [ '1.2.2' ],
+132 silly audit   'set-function-name': [ '2.0.2' ],
+132 silly audit   'set-proto': [ '1.0.0' ],
+132 silly audit   sharp: [ '0.34.5' ],
+132 silly audit   'shebang-command': [ '2.0.0' ],
+132 silly audit   'shebang-regex': [ '3.0.0' ],
+132 silly audit   'side-channel': [ '1.1.0' ],
+132 silly audit   'side-channel-list': [ '1.0.0' ],
+132 silly audit   'side-channel-map': [ '1.0.1' ],
+132 silly audit   'side-channel-weakmap': [ '1.0.2' ],
+132 silly audit   'socket.io-client': [ '4.8.3' ],
+132 silly audit   'socket.io-parser': [ '4.2.5' ],
+132 silly audit   'source-map-js': [ '1.2.1' ],
+132 silly audit   'stable-hash': [ '0.0.5' ],
+132 silly audit   'stop-iteration-iterator': [ '1.1.0' ],
+132 silly audit   'string.prototype.includes': [ '2.0.1' ],
+132 silly audit   'string.prototype.matchall': [ '4.0.12' ],
+132 silly audit   'string.prototype.repeat': [ '1.0.0' ],
+132 silly audit   'string.prototype.trim': [ '1.2.10' ],
+132 silly audit   'string.prototype.trimend': [ '1.0.9' ],
+132 silly audit   'string.prototype.trimstart': [ '1.0.8' ],
+132 silly audit   'strip-bom': [ '3.0.0' ],
+132 silly audit   'strip-json-comments': [ '3.1.1' ],
+132 silly audit   'styled-jsx': [ '5.1.6' ],
+132 silly audit   'supports-color': [ '7.2.0' ],
+132 silly audit   'supports-preserve-symlinks-flag': [ '1.0.0' ],
+132 silly audit   tailwindcss: [ '4.2.1' ],
+132 silly audit   tapable: [ '2.3.0' ],
+132 silly audit   'tiny-invariant': [ '1.3.3' ],
+132 silly audit   tinyglobby: [ '0.2.15' ],
+132 silly audit   fdir: [ '6.5.0' ],
+132 silly audit   'to-regex-range': [ '5.0.1' ],
+132 silly audit   'ts-api-utils': [ '2.4.0' ],
+132 silly audit   'tsconfig-paths': [ '3.15.0' ],
+132 silly audit   tslib: [ '2.8.1' ],
+132 silly audit   'type-check': [ '0.4.0' ],
+132 silly audit   'typed-array-buffer': [ '1.0.3' ],
+132 silly audit   'typed-array-byte-length': [ '1.0.3' ],
+132 silly audit   'typed-array-byte-offset': [ '1.0.4' ],
+132 silly audit   'typed-array-length': [ '1.0.7' ],
+132 silly audit   typescript: [ '5.9.3' ],
+132 silly audit   'typescript-eslint': [ '8.57.0' ],
+132 silly audit   'unbox-primitive': [ '1.1.0' ],
+132 silly audit   'undici-types': [ '6.21.0' ],
+132 silly audit   'unrs-resolver': [ '1.11.1' ],
+132 silly audit   'update-browserslist-db': [ '1.2.3' ],
+132 silly audit   'uri-js': [ '4.4.1' ],
+132 silly audit   'use-sync-external-store': [ '1.6.0' ],
+132 silly audit   'victory-vendor': [ '37.3.6' ],
+132 silly audit   which: [ '2.0.2' ],
+132 silly audit   'which-boxed-primitive': [ '1.1.1' ],
+132 silly audit   'which-builtin-type': [ '1.2.1' ],
+132 silly audit   'which-collection': [ '1.0.2' ],
+132 silly audit   'which-typed-array': [ '1.1.20' ],
+132 silly audit   'word-wrap': [ '1.2.5' ],
+132 silly audit   ws: [ '8.18.3' ],
+132 silly audit   'xmlhttprequest-ssl': [ '2.1.2' ],
+132 silly audit   yallist: [ '3.1.1' ],
+132 silly audit   'yocto-queue': [ '0.1.0' ],
+132 silly audit   zod: [ '4.3.6' ],
+132 silly audit   'zod-validation-error': [ '4.0.2' ],
+132 silly audit   '@tailwindcss/oxide-wasm32-wasi': [ '4.2.1' ]
+132 silly audit }
+133 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-win32-ia32-msvc
+134 silly reify mark deleted [
+134 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-win32-ia32-msvc'
+134 silly reify ]
+135 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-win32-arm64-msvc
+136 silly reify mark deleted [
+136 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-win32-arm64-msvc'
+136 silly reify ]
+137 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-wasm32-wasi
+138 silly reify mark deleted [
+138 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-wasm32-wasi'
+138 silly reify ]
+139 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-linux-x64-musl
+140 silly reify mark deleted [
+140 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-x64-musl'
+140 silly reify ]
+141 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-linux-x64-gnu
+142 silly reify mark deleted [
+142 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-x64-gnu'
+142 silly reify ]
+143 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-linux-s390x-gnu
+144 silly reify mark deleted [
+144 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-s390x-gnu'
+144 silly reify ]
+145 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-linux-riscv64-musl
+146 silly reify mark deleted [
+146 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-riscv64-musl'
+146 silly reify ]
+147 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-linux-riscv64-gnu
+148 silly reify mark deleted [
+148 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-riscv64-gnu'
+148 silly reify ]
+149 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-linux-ppc64-gnu
+150 silly reify mark deleted [
+150 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-ppc64-gnu'
+150 silly reify ]
+151 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-linux-arm64-musl
+152 silly reify mark deleted [
+152 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm64-musl'
+152 silly reify ]
+153 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-linux-arm64-gnu
+154 silly reify mark deleted [
+154 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm64-gnu'
+154 silly reify ]
+155 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-linux-arm-musleabihf
+156 silly reify mark deleted [
+156 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm-musleabihf'
+156 silly reify ]
+157 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-linux-arm-gnueabihf
+158 silly reify mark deleted [
+158 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-linux-arm-gnueabihf'
+158 silly reify ]
+159 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-freebsd-x64
+160 silly reify mark deleted [
+160 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-freebsd-x64'
+160 silly reify ]
+161 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-darwin-x64
+162 silly reify mark deleted [
+162 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-darwin-x64'
+162 silly reify ]
+163 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-darwin-arm64
+164 silly reify mark deleted [
+164 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-darwin-arm64'
+164 silly reify ]
+165 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-android-arm64
+166 silly reify mark deleted [
+166 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-android-arm64'
+166 silly reify ]
+167 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@unrs\resolver-binding-android-arm-eabi
+168 silly reify mark deleted [
+168 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@unrs\\resolver-binding-android-arm-eabi'
+168 silly reify ]
+169 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@tailwindcss\oxide-win32-arm64-msvc
+170 silly reify mark deleted [
+170 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-win32-arm64-msvc'
+170 silly reify ]
+171 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@tailwindcss\oxide-linux-x64-musl
+172 silly reify mark deleted [
+172 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-x64-musl'
+172 silly reify ]
+173 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@tailwindcss\oxide-linux-x64-gnu
+174 silly reify mark deleted [
+174 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-x64-gnu'
+174 silly reify ]
+175 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@tailwindcss\oxide-linux-arm64-musl
+176 silly reify mark deleted [
+176 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-arm64-musl'
+176 silly reify ]
+177 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@tailwindcss\oxide-linux-arm64-gnu
+178 silly reify mark deleted [
+178 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-arm64-gnu'
+178 silly reify ]
+179 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@tailwindcss\oxide-linux-arm-gnueabihf
+180 silly reify mark deleted [
+180 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-linux-arm-gnueabihf'
+180 silly reify ]
+181 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@tailwindcss\oxide-darwin-x64
+182 silly reify mark deleted [
+182 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-darwin-x64'
+182 silly reify ]
+183 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@tailwindcss\oxide-freebsd-x64
+184 silly reify mark deleted [
+184 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-freebsd-x64'
+184 silly reify ]
+185 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@tailwindcss\oxide-darwin-arm64
+186 silly reify mark deleted [
+186 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-darwin-arm64'
+186 silly reify ]
+187 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@tailwindcss\oxide-android-arm64
+188 silly reify mark deleted [
+188 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@tailwindcss\\oxide-android-arm64'
+188 silly reify ]
+189 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@next\swc-win32-arm64-msvc
+190 silly reify mark deleted [
+190 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-win32-arm64-msvc'
+190 silly reify ]
+191 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@next\swc-linux-x64-musl
+192 silly reify mark deleted [
+192 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-x64-musl'
+192 silly reify ]
+193 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@next\swc-linux-x64-gnu
+194 silly reify mark deleted [
+194 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-x64-gnu'
+194 silly reify ]
+195 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@next\swc-linux-arm64-musl
+196 silly reify mark deleted [
+196 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-arm64-musl'
+196 silly reify ]
+197 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@next\swc-linux-arm64-gnu
+198 silly reify mark deleted [
+198 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-linux-arm64-gnu'
+198 silly reify ]
+199 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@next\swc-darwin-x64
+200 silly reify mark deleted [
+200 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-darwin-x64'
+200 silly reify ]
+201 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@next\swc-darwin-arm64
+202 silly reify mark deleted [
+202 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@next\\swc-darwin-arm64'
+202 silly reify ]
+203 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-win32-ia32
+204 silly reify mark deleted [
+204 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-win32-ia32'
+204 silly reify ]
+205 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-win32-arm64
+206 silly reify mark deleted [
+206 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-win32-arm64'
+206 silly reify ]
+207 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-wasm32
+208 silly reify mark deleted [
+208 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-wasm32'
+208 silly reify ]
+209 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-linuxmusl-x64
+210 silly reify mark deleted [
+210 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linuxmusl-x64'
+210 silly reify ]
+211 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-linuxmusl-arm64
+212 silly reify mark deleted [
+212 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linuxmusl-arm64'
+212 silly reify ]
+213 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-linux-x64
+214 silly reify mark deleted [
+214 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-x64'
+214 silly reify ]
+215 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-linux-s390x
+216 silly reify mark deleted [
+216 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-s390x'
+216 silly reify ]
+217 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-linux-riscv64
+218 silly reify mark deleted [
+218 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-riscv64'
+218 silly reify ]
+219 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-linux-ppc64
+220 silly reify mark deleted [
+220 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-ppc64'
+220 silly reify ]
+221 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-linux-arm64
+222 silly reify mark deleted [
+222 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-arm64'
+222 silly reify ]
+223 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-linux-arm
+224 silly reify mark deleted [
+224 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-linux-arm'
+224 silly reify ]
+225 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-libvips-linuxmusl-x64
+226 silly reify mark deleted [
+226 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linuxmusl-x64'
+226 silly reify ]
+227 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-libvips-linuxmusl-arm64
+228 silly reify mark deleted [
+228 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linuxmusl-arm64'
+228 silly reify ]
+229 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-libvips-linux-x64
+230 silly reify mark deleted [
+230 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-x64'
+230 silly reify ]
+231 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-libvips-linux-s390x
+232 silly reify mark deleted [
+232 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-s390x'
+232 silly reify ]
+233 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-libvips-linux-riscv64
+234 silly reify mark deleted [
+234 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-riscv64'
+234 silly reify ]
+235 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-libvips-linux-ppc64
+236 silly reify mark deleted [
+236 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-ppc64'
+236 silly reify ]
+237 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-libvips-linux-arm64
+238 silly reify mark deleted [
+238 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-arm64'
+238 silly reify ]
+239 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-libvips-linux-arm
+240 silly reify mark deleted [
+240 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-linux-arm'
+240 silly reify ]
+241 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-libvips-darwin-x64
+242 silly reify mark deleted [
+242 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-darwin-x64'
+242 silly reify ]
+243 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-libvips-darwin-arm64
+244 silly reify mark deleted [
+244 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-libvips-darwin-arm64'
+244 silly reify ]
+245 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-darwin-x64
+246 silly reify mark deleted [
+246 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-darwin-x64'
+246 silly reify ]
+247 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\@img\sharp-darwin-arm64
+248 silly reify mark deleted [
+248 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\@img\\sharp-darwin-arm64'
+248 silly reify ]
+249 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\lightningcss-win32-arm64-msvc
+250 silly reify mark deleted [
+250 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-win32-arm64-msvc'
+250 silly reify ]
+251 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\lightningcss-linux-x64-musl
+252 silly reify mark deleted [
+252 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-x64-musl'
+252 silly reify ]
+253 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\lightningcss-linux-x64-gnu
+254 silly reify mark deleted [
+254 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-x64-gnu'
+254 silly reify ]
+255 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\lightningcss-linux-arm64-musl
+256 silly reify mark deleted [
+256 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-arm64-musl'
+256 silly reify ]
+257 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\lightningcss-linux-arm64-gnu
+258 silly reify mark deleted [
+258 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-arm64-gnu'
+258 silly reify ]
+259 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\lightningcss-linux-arm-gnueabihf
+260 silly reify mark deleted [
+260 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-linux-arm-gnueabihf'
+260 silly reify ]
+261 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\lightningcss-freebsd-x64
+262 silly reify mark deleted [
+262 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-freebsd-x64'
+262 silly reify ]
+263 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\lightningcss-darwin-x64
+264 silly reify mark deleted [
+264 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-darwin-x64'
+264 silly reify ]
+265 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\lightningcss-darwin-arm64
+266 silly reify mark deleted [
+266 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-darwin-arm64'
+266 silly reify ]
+267 verbose reify failed optional dependency C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\node_modules\lightningcss-android-arm64
+268 silly reify mark deleted [
+268 silly reify   'C:\\Users\\USER\\Desktop\\Dev-files\\Taxbridge\\TaxBridge\\frontend\\node_modules\\lightningcss-android-arm64'
+268 silly reify ]
+269 silly tarball no local data for @types/use-sync-external-store@https://registry.npmjs.org/@types/use-sync-external-store/-/use-sync-external-store-0.0.6.tgz. Extracting by manifest.
+270 silly tarball no local data for @types/d3-timer@https://registry.npmjs.org/@types/d3-timer/-/d3-timer-3.0.2.tgz. Extracting by manifest.
+271 silly tarball no local data for @types/d3-time@https://registry.npmjs.org/@types/d3-time/-/d3-time-3.0.4.tgz. Extracting by manifest.
+272 silly tarball no local data for @types/d3-shape@https://registry.npmjs.org/@types/d3-shape/-/d3-shape-3.1.8.tgz. Extracting by manifest.
+273 silly tarball no local data for @types/d3-scale@https://registry.npmjs.org/@types/d3-scale/-/d3-scale-4.0.9.tgz. Extracting by manifest.
+274 silly tarball no local data for @types/d3-path@https://registry.npmjs.org/@types/d3-path/-/d3-path-3.1.1.tgz. Extracting by manifest.
+275 silly tarball no local data for @types/d3-interpolate@https://registry.npmjs.org/@types/d3-interpolate/-/d3-interpolate-3.0.4.tgz. Extracting by manifest.
+276 silly tarball no local data for @types/d3-ease@https://registry.npmjs.org/@types/d3-ease/-/d3-ease-3.0.2.tgz. Extracting by manifest.
+277 silly tarball no local data for @types/d3-color@https://registry.npmjs.org/@types/d3-color/-/d3-color-3.1.3.tgz. Extracting by manifest.
+278 silly tarball no local data for @types/d3-array@https://registry.npmjs.org/@types/d3-array/-/d3-array-3.2.2.tgz. Extracting by manifest.
+279 silly tarball no local data for @standard-schema/utils@https://registry.npmjs.org/@standard-schema/utils/-/utils-0.3.0.tgz. Extracting by manifest.
+280 silly tarball no local data for @socket.io/component-emitter@https://registry.npmjs.org/@socket.io/component-emitter/-/component-emitter-3.1.2.tgz. Extracting by manifest.
+281 silly tarball no local data for @reduxjs/toolkit@https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-2.11.2.tgz. Extracting by manifest.
+282 silly tarball no local data for xmlhttprequest-ssl@https://registry.npmjs.org/xmlhttprequest-ssl/-/xmlhttprequest-ssl-2.1.2.tgz. Extracting by manifest.
+283 silly tarball no local data for ws@https://registry.npmjs.org/ws/-/ws-8.18.3.tgz. Extracting by manifest.
+284 silly tarball no local data for victory-vendor@https://registry.npmjs.org/victory-vendor/-/victory-vendor-37.3.6.tgz. Extracting by manifest.
+285 silly tarball no local data for use-sync-external-store@https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.6.0.tgz. Extracting by manifest.
+286 silly tarball no local data for tiny-invariant@https://registry.npmjs.org/tiny-invariant/-/tiny-invariant-1.3.3.tgz. Extracting by manifest.
+287 silly tarball no local data for socket.io-parser@https://registry.npmjs.org/socket.io-parser/-/socket.io-parser-4.2.5.tgz. Extracting by manifest.
+288 silly tarball no local data for socket.io-client@https://registry.npmjs.org/socket.io-client/-/socket.io-client-4.8.3.tgz. Extracting by manifest.
+289 silly tarball no local data for reselect@https://registry.npmjs.org/reselect/-/reselect-5.1.1.tgz. Extracting by manifest.
+290 silly tarball no local data for redux-thunk@https://registry.npmjs.org/redux-thunk/-/redux-thunk-3.1.0.tgz. Extracting by manifest.
+291 silly tarball no local data for redux@https://registry.npmjs.org/redux/-/redux-5.0.1.tgz. Extracting by manifest.
+292 silly tarball no local data for recharts@https://registry.npmjs.org/recharts/-/recharts-3.8.0.tgz. Extracting by manifest.
+293 silly tarball no local data for react-redux@https://registry.npmjs.org/react-redux/-/react-redux-9.2.0.tgz. Extracting by manifest.
+294 silly tarball no local data for internmap@https://registry.npmjs.org/internmap/-/internmap-2.0.3.tgz. Extracting by manifest.
+295 silly tarball no local data for immer@https://registry.npmjs.org/immer/-/immer-10.2.0.tgz. Extracting by manifest.
+296 silly tarball no local data for eventemitter3@https://registry.npmjs.org/eventemitter3/-/eventemitter3-5.0.4.tgz. Extracting by manifest.
+297 silly tarball no local data for es-toolkit@https://registry.npmjs.org/es-toolkit/-/es-toolkit-1.45.1.tgz. Extracting by manifest.
+298 silly tarball no local data for engine.io-parser@https://registry.npmjs.org/engine.io-parser/-/engine.io-parser-5.2.3.tgz. Extracting by manifest.
+299 silly tarball no local data for engine.io-client@https://registry.npmjs.org/engine.io-client/-/engine.io-client-6.6.4.tgz. Extracting by manifest.
+300 silly tarball no local data for decimal.js-light@https://registry.npmjs.org/decimal.js-light/-/decimal.js-light-2.5.1.tgz. Extracting by manifest.
+301 silly tarball no local data for d3-timer@https://registry.npmjs.org/d3-timer/-/d3-timer-3.0.1.tgz. Extracting by manifest.
+302 silly tarball no local data for d3-time-format@https://registry.npmjs.org/d3-time-format/-/d3-time-format-4.1.0.tgz. Extracting by manifest.
+303 silly tarball no local data for d3-time@https://registry.npmjs.org/d3-time/-/d3-time-3.1.0.tgz. Extracting by manifest.
+304 silly tarball no local data for d3-shape@https://registry.npmjs.org/d3-shape/-/d3-shape-3.2.0.tgz. Extracting by manifest.
+305 silly tarball no local data for d3-scale@https://registry.npmjs.org/d3-scale/-/d3-scale-4.0.2.tgz. Extracting by manifest.
+306 silly tarball no local data for d3-path@https://registry.npmjs.org/d3-path/-/d3-path-3.1.0.tgz. Extracting by manifest.
+307 silly tarball no local data for d3-interpolate@https://registry.npmjs.org/d3-interpolate/-/d3-interpolate-3.0.1.tgz. Extracting by manifest.
+308 silly tarball no local data for d3-format@https://registry.npmjs.org/d3-format/-/d3-format-3.1.2.tgz. Extracting by manifest.
+309 silly tarball no local data for d3-ease@https://registry.npmjs.org/d3-ease/-/d3-ease-3.0.1.tgz. Extracting by manifest.
+310 silly tarball no local data for d3-color@https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz. Extracting by manifest.
+311 silly tarball no local data for d3-array@https://registry.npmjs.org/d3-array/-/d3-array-3.2.4.tgz. Extracting by manifest.
+312 silly tarball no local data for clsx@https://registry.npmjs.org/clsx/-/clsx-2.1.1.tgz. Extracting by manifest.
+313 silly tarball no local data for immer@https://registry.npmjs.org/immer/-/immer-11.1.4.tgz. Extracting by manifest.
+314 silly audit bulk request failed undefined
+315 http fetch GET https://registry.npmjs.org/@types/use-sync-external-store/-/use-sync-external-store-0.0.6.tgz attempt 1 failed with EACCES
+316 http fetch GET https://registry.npmjs.org/@types/d3-timer/-/d3-timer-3.0.2.tgz attempt 1 failed with EACCES
+317 http fetch GET https://registry.npmjs.org/@types/d3-time/-/d3-time-3.0.4.tgz attempt 1 failed with EACCES
+318 http fetch GET https://registry.npmjs.org/@types/d3-shape/-/d3-shape-3.1.8.tgz attempt 1 failed with EACCES
+319 http fetch GET https://registry.npmjs.org/@types/d3-scale/-/d3-scale-4.0.9.tgz attempt 1 failed with EACCES
+320 http fetch GET https://registry.npmjs.org/@types/d3-path/-/d3-path-3.1.1.tgz attempt 1 failed with EACCES
+321 http fetch GET https://registry.npmjs.org/@types/d3-interpolate/-/d3-interpolate-3.0.4.tgz attempt 1 failed with EACCES
+322 http fetch GET https://registry.npmjs.org/@types/d3-ease/-/d3-ease-3.0.2.tgz attempt 1 failed with EACCES
+323 http fetch GET https://registry.npmjs.org/@types/d3-color/-/d3-color-3.1.3.tgz attempt 1 failed with EACCES
+324 http fetch GET https://registry.npmjs.org/@types/d3-array/-/d3-array-3.2.2.tgz attempt 1 failed with EACCES
+325 http fetch GET https://registry.npmjs.org/@standard-schema/utils/-/utils-0.3.0.tgz attempt 1 failed with EACCES
+326 http fetch GET https://registry.npmjs.org/@socket.io/component-emitter/-/component-emitter-3.1.2.tgz attempt 1 failed with EACCES
+327 http fetch GET https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-2.11.2.tgz attempt 1 failed with EACCES
+328 http fetch GET https://registry.npmjs.org/xmlhttprequest-ssl/-/xmlhttprequest-ssl-2.1.2.tgz attempt 1 failed with EACCES
+329 verbose audit error FetchError: request to https://registry.npmjs.org/-/npm/v1/security/audits/quick failed, reason: 
+329 verbose audit error     at ClientRequest.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\minipass-fetch\lib\index.js:130:14)
+329 verbose audit error     at ClientRequest.emit (node:events:524:28)
+329 verbose audit error     at emitErrorEvent (node:_http_client:101:11)
+329 verbose audit error     at _destroy (node:_http_client:884:9)
+329 verbose audit error     at onSocketNT (node:_http_client:904:5)
+329 verbose audit error     at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+329 verbose audit error   code: 'EACCES',
+329 verbose audit error   errno: 'EACCES',
+329 verbose audit error   type: 'system'
+329 verbose audit error }
+330 silly audit error undefined
+331 silly audit report null
+332 http fetch GET https://registry.npmjs.org/npm attempt 2 failed with EACCES
+333 http fetch GET https://registry.npmjs.org/@types/use-sync-external-store/-/use-sync-external-store-0.0.6.tgz attempt 2 failed with EACCES
+334 http fetch GET https://registry.npmjs.org/@types/d3-timer/-/d3-timer-3.0.2.tgz attempt 2 failed with EACCES
+335 http fetch GET https://registry.npmjs.org/@types/d3-time/-/d3-time-3.0.4.tgz attempt 2 failed with EACCES
+336 http fetch GET https://registry.npmjs.org/@types/d3-shape/-/d3-shape-3.1.8.tgz attempt 2 failed with EACCES
+337 http fetch GET https://registry.npmjs.org/@types/d3-scale/-/d3-scale-4.0.9.tgz attempt 2 failed with EACCES
+338 http fetch GET https://registry.npmjs.org/@types/d3-path/-/d3-path-3.1.1.tgz attempt 2 failed with EACCES
+339 http fetch GET https://registry.npmjs.org/@types/d3-interpolate/-/d3-interpolate-3.0.4.tgz attempt 2 failed with EACCES
+340 http fetch GET https://registry.npmjs.org/@types/d3-ease/-/d3-ease-3.0.2.tgz attempt 2 failed with EACCES
+341 http fetch GET https://registry.npmjs.org/@types/d3-color/-/d3-color-3.1.3.tgz attempt 2 failed with EACCES
+342 http fetch GET https://registry.npmjs.org/@types/d3-array/-/d3-array-3.2.2.tgz attempt 2 failed with EACCES
+343 http fetch GET https://registry.npmjs.org/@standard-schema/utils/-/utils-0.3.0.tgz attempt 2 failed with EACCES
+344 http fetch GET https://registry.npmjs.org/@socket.io/component-emitter/-/component-emitter-3.1.2.tgz attempt 2 failed with EACCES
+345 http fetch GET https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-2.11.2.tgz attempt 2 failed with EACCES
+346 http fetch GET https://registry.npmjs.org/xmlhttprequest-ssl/-/xmlhttprequest-ssl-2.1.2.tgz attempt 2 failed with EACCES
+347 http fetch GET https://registry.npmjs.org/npm attempt 3 failed with EACCES
+348 http fetch GET https://registry.npmjs.org/@types/use-sync-external-store/-/use-sync-external-store-0.0.6.tgz attempt 3 failed with EACCES
+349 http fetch GET https://registry.npmjs.org/@types/d3-timer/-/d3-timer-3.0.2.tgz attempt 3 failed with EACCES
+350 http fetch GET https://registry.npmjs.org/@types/d3-time/-/d3-time-3.0.4.tgz attempt 3 failed with EACCES
+351 http fetch GET https://registry.npmjs.org/@types/d3-shape/-/d3-shape-3.1.8.tgz attempt 3 failed with EACCES
+352 http fetch GET https://registry.npmjs.org/@types/d3-scale/-/d3-scale-4.0.9.tgz attempt 3 failed with EACCES
+353 http fetch GET https://registry.npmjs.org/@types/d3-path/-/d3-path-3.1.1.tgz attempt 3 failed with EACCES
+354 http fetch GET https://registry.npmjs.org/@types/d3-interpolate/-/d3-interpolate-3.0.4.tgz attempt 3 failed with EACCES
+355 http fetch GET https://registry.npmjs.org/@types/d3-ease/-/d3-ease-3.0.2.tgz attempt 3 failed with EACCES
+356 http fetch GET https://registry.npmjs.org/@types/d3-color/-/d3-color-3.1.3.tgz attempt 3 failed with EACCES
+357 http fetch GET https://registry.npmjs.org/@types/d3-array/-/d3-array-3.2.2.tgz attempt 3 failed with EACCES
+358 http fetch GET https://registry.npmjs.org/@standard-schema/utils/-/utils-0.3.0.tgz attempt 3 failed with EACCES
+359 http fetch GET https://registry.npmjs.org/@socket.io/component-emitter/-/component-emitter-3.1.2.tgz attempt 3 failed with EACCES
+360 http fetch GET https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-2.11.2.tgz attempt 3 failed with EACCES
+361 http fetch GET https://registry.npmjs.org/xmlhttprequest-ssl/-/xmlhttprequest-ssl-2.1.2.tgz attempt 3 failed with EACCES
+362 verbose cwd C:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend
+363 verbose os Windows_NT 10.0.19045
+364 verbose node v20.20.1
+365 verbose npm  v10.8.2
+366 error Exit handler never called!
+367 error This is an error with npm itself. Please report this error at:
+368 error   <https://github.com/npm/cli/issues>
+369 verbose exit 0
+370 info ok
+371 error A complete log of this run can be found in: c:\Users\USER\Desktop\Dev-files\Taxbridge\TaxBridge\frontend\.npm-cache\_logs\2026-03-16T12_38_32_316Z-debug-0.log

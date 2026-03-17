@@ -48,7 +48,10 @@ export class AuthService {
     const gmailPass = this.config.get<string>('GMAIL_APP_PASSWORD');
 
     if (gmailUser && gmailPass) {
-      this.transporter = nodemailer.createTransport({
+      const createTransport = nodemailer.createTransport as unknown as (
+        options: Record<string, unknown>,
+      ) => { sendMail: (options: Record<string, unknown>) => Promise<unknown> };
+      this.transporter = createTransport({
         service: 'gmail',
         auth: {
           user: gmailUser,
@@ -69,7 +72,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
     // Create Paystack Customer
-    let paystackCustomerId: string | null = null;
+    let paystackCustomerId = null;
     try {
       const customer = await this.paystack.createCustomer(
         dto.email,
@@ -253,7 +256,11 @@ export class AuthService {
     return { message: 'Password reset successful' };
   }
 
-  async changePassword(userId: string, oldPassword: string, newPassword: string) {
+  async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string,
+  ) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new UnauthorizedException('User not found');
 
