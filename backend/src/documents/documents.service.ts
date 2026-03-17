@@ -1,12 +1,9 @@
 // src/documents/documents.service.ts
 import { Injectable, NotFoundException, ForbiddenException, Logger, InternalServerErrorException, BadRequestException } from '@nestjs/common';
-
-import { join } from 'path';
-
-import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs';
-
 import { PrismaService } from '../prisma.service';
 import { AiService } from '../ai/ai.service';
+import { join } from 'path';
+import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class DocumentsService {
