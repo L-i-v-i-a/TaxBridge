@@ -29,7 +29,7 @@ export default function SignUpForm() {
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
-    // Updated validation for First Name and Last Name
+    // Validation for First Name and Last Name
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
       setError("Please fill in all required fields.");
       return;
@@ -46,6 +46,14 @@ export default function SignUpForm() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    // Validation for Phone Number (Must start with + and country code)
+    const phoneRegex = /^\+[1-9]\d{1,14}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      setError("Phone number must start with '+' followed by country code (e.g., +234...).");
+      setLoading(false);
+      return;
+    }
 
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://backend-production-c062.up.railway.app";
@@ -67,15 +75,19 @@ export default function SignUpForm() {
       alert("Account created successfully! Please login.");
       router.push("/signin");
 
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      // Fixed: Replaced 'any' with 'unknown' and added type check
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleLogin = () => {
-    // This initiates the OAuth flow -> Backend -> Google -> Backend -> Frontend Callback
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://backend-production-c062.up.railway.app";
     window.location.href = `${apiUrl}/auth/google`;
   };
@@ -220,11 +232,12 @@ export default function SignUpForm() {
             <input
               type="text"
               name="phone"
-              placeholder="08066008669"
+              placeholder="+234 806 600 8669"
               value={formData.phone}
               onChange={handleChange}
             className="mt-2 h-12 w-full rounded-[10px] border border-[#D7D7E0] bg-white/80 px-4 text-sm text-[#1C1C1C] shadow-sm transition focus:outline-none focus:border-[#2F4AD0] focus:ring-4 focus:ring-[#2F4AD0]/20 min-[1440px]:h-[54px]"
             />
+            <p className="text-xs text-gray-400 mt-1">Start with country code (e.g. +1, +234)</p>
           </div>
           <div>
             <label className="text-sm text-[#5B5B5B]">SSN</label>

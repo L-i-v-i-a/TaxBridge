@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { useRouter } from "next/navigation";
 
 export default function SignInForm() {
   const router = useRouter();
@@ -48,8 +48,13 @@ export default function SignInForm() {
         router.push("/dashboard");
       }
 
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      // Safe handling of the unknown error type
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
     }

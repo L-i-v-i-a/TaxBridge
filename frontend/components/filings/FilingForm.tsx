@@ -53,6 +53,20 @@ type FormData = {
 
 type DocumentCategory = 'identity' | 'income' | 'deduction' | 'business';
 
+// Defined specific types for the API payloads to avoid using 'any'
+interface IncomePayload {
+  source: string;
+  employmentType: string;
+  grossIncome: string;
+  withholdingAmount?: string;
+}
+
+interface DeductionsPayload {
+  hasDeductibleExpenses: 'Yes' | 'No';
+  hasDependents: 'Yes' | 'No';
+  donationAmount?: number;
+}
+
 export default function FilingForm({ serviceType }: FilingFormProps) {
   const router = useRouter();
   const [step, setStep] = useState(0);
@@ -255,26 +269,24 @@ export default function FilingForm({ serviceType }: FilingFormProps) {
     body.append('type', formData.taxType);
     body.append('personalInfo', JSON.stringify(formData.personalInfo));
 
-    // --- CRITICAL FIX: Construct payloads matching EXACT backend DTO structure ---
+    // --- FIX APPLIED: Typed payloads instead of 'any' ---
     
-    // 1. Income Payload (Remove multipleSources, multipleEmployers)
-    const incomePayload: any = {
+    // 1. Income Payload
+    const incomePayload: IncomePayload = {
       source: formData.incomeDetails.source,
       employmentType: formData.incomeDetails.employmentType,
       grossIncome: formData.incomeDetails.grossIncome,
     };
-    // Only add withholdingAmount if it exists (backend expects NumberString)
     if (formData.withholding?.amount) {
       incomePayload.withholdingAmount = formData.withholding.amount;
     }
     body.append('incomeDetails', JSON.stringify(incomePayload));
 
-    // 2. Deductions Payload (Remove medicalDental, healthInsurance, etc.)
-    const deductionsPayload: any = {
+    // 2. Deductions Payload
+    const deductionsPayload: DeductionsPayload = {
       hasDeductibleExpenses: formData.deductions.hasDeductibleExpenses,
       hasDependents: formData.deductions.hasDependents,
     };
-    // Only add donationAmount if it exists (backend expects Number)
     if (formData.deductions.donatedAmount) {
       deductionsPayload.donationAmount = parseFloat(formData.deductions.donatedAmount);
     }
@@ -299,7 +311,6 @@ export default function FilingForm({ serviceType }: FilingFormProps) {
       } else {
         const errorData = await response.json();
         console.error('Submission error:', errorData);
-        // Show specific error message from backend if available
         const message = errorData.message ? JSON.stringify(errorData.message) : 'Submission failed';
         alert(message);
       }
@@ -403,7 +414,7 @@ export default function FilingForm({ serviceType }: FilingFormProps) {
               {formData.deductions.hasDependents === 'Yes' && (
                 <>
                   <div><label className={labelClasses}>Number of dependents</label><input type="number" className={inputClasses} value={formData.deductions.numDependents || ''} onChange={(e) => updateDeductions('numDependents', e.target.value)} min="1" /></div>
-                  <div className="md:col-span-2"><label className={labelClasses}>Names & ages (e.g. Soliu Umar, 24)</label><textarea className={inputClasses} rows={2} value={`${formData.deductions.dependentNames || ''} | ${formData.deductions.dependentAges || ''}`} onChange={(e) => { const [names, ages] = e.target.value.split('|').map(s => s.trim()); updateDeductions('dependentNames', names); updateDeductions('dependentAges', ages); }} /></div>
+                  <div className="md:col-span-2"><label className={labelClasses}>Names & ages (e.g. Soliu Umar, 24)</label><textarea className={inputClasses} rows={2} value={`${formData.deductions.dependentNames || ''} | ${formData.deductions.dependentAges || ''}`} onChange={(e) => { const [names, ages] = e.target.value.split('|').map(s => s.trim()); updateDeductions('dependentNames', names || ''); updateDeductions('dependentAges', ages || ''); }} /></div>
                 </>
               )}
 

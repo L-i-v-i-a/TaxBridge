@@ -40,7 +40,7 @@ export default function HomePage() {
       <div
         className="relative overflow-hidden pt-20"
         style={{
-          backgroundImage: "linear-gradient(rgba(13, 35, 173, 0.7), rgba(13, 35, 173, 0.7)), url('/hero.PNG')",
+          backgroundImage: "linear-gradient(rgba(13, 35, 173, 0.7), rgba(13, 35, 173, 0.7)), url('/hero.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

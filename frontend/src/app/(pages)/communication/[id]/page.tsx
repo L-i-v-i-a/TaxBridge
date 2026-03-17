@@ -126,6 +126,13 @@ export default function ChatRoomPage() {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    
+    // FIX: Check if socket exists before starting upload
+    if (!socket || !isConnected) {
+      alert('Connecting to server... please wait.');
+      return;
+    }
+
     setUploading(true);
     const token = localStorage.getItem('access_token');
     const formData = new FormData();
@@ -222,7 +229,6 @@ export default function ChatRoomPage() {
         <main className="flex-1 overflow-y-auto pt-32 pb-32 bg-[#F8F9FC]">
           <div className="max-w-4xl mx-auto px-6 space-y-8">
             
-            {/* CORRECTED TERNARY LOGIC */}
             {loading ? (
               <div className="flex justify-center items-center mt-10">
                 <Loader2 className="animate-spin text-gray-400" size={32} />

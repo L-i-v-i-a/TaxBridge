@@ -1,13 +1,41 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
-import { FileText, CheckCircle, Clock, FileUp, TrendingUp, TrendingDown } from 'lucide-react';
+import { FileText, Clock, FileUp, TrendingUp, TrendingDown } from 'lucide-react';
 
-export default function Dashboard({ stats }: { stats: any }) {
+// 1. Define specific types for stats
+interface StatCards {
+  totalRefunds: number;
+  refundGrowth: number;
+  filedReturns: number;
+  filingSince: string;
+  avgProcessingDays: number;
+  daysFaster: number;
+  docsUploaded: number;
+}
+
+interface RefundHistoryItem {
+  year: string;
+  amount: number;
+}
+
+interface DeductionItem {
+  name: string;
+  value: number;
+}
+
+interface DashboardStats {
+  cards: StatCards;
+  refundHistory: RefundHistoryItem[];
+  deductions: DeductionItem[];
+}
+
+// 2. Helper to safely format currency
+const formatCurrency = (amount: number | undefined) => {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount || 0);
+};
+
+export default function Dashboard({ stats }: { stats?: DashboardStats }) {
   const COLORS = ['#4285F4', '#9061F9', '#31C48D', '#F97316', '#6B7280'];
   const { cards, refundHistory, deductions } = stats || {};
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount || 0);
-  };
 
   return (
     <div className="space-y-6">
@@ -19,9 +47,9 @@ export default function Dashboard({ stats }: { stats: any }) {
             <div>
               <p className="text-sm font-medium text-gray-500">Total Refunds</p>
               <h3 className="text-2xl font-bold mt-1">{formatCurrency(cards?.totalRefunds)}</h3>
-              <div className={`flex items-center gap-1 text-xs mt-1 ${cards?.refundGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                {cards?.refundGrowth >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                <span>{Math.abs(cards?.refundGrowth)}% vs last year</span>
+              <div className={`flex items-center gap-1 text-xs mt-1 ${cards?.refundGrowth && cards.refundGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                {cards?.refundGrowth && cards.refundGrowth >= 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                <span>{Math.abs(cards?.refundGrowth || 0)}% vs last year</span>
               </div>
             </div>
             <div className="p-3 bg-green-50 rounded-lg text-green-600">
@@ -84,7 +112,14 @@ export default function Dashboard({ stats }: { stats: any }) {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                 <XAxis dataKey="year" tickLine={false} axisLine={false} tick={{ fill: '#9CA3AF', fontSize: 12 }} />
                 <YAxis tickLine={false} axisLine={false} tick={{ fill: '#9CA3AF', fontSize: 12 }} />
-                <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                {/* FIX: Removed explicit type annotation on value to avoid conflict with undefined. 
+                    Checks type at runtime instead. */}
+                <Tooltip 
+                  formatter={(value) => {
+                    if (typeof value === 'number') return formatCurrency(value);
+                    return String(value ?? '');
+                  }} 
+                />
                 <Bar dataKey="amount" fill="#000000" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -107,11 +142,18 @@ export default function Dashboard({ stats }: { stats: any }) {
                     paddingAngle={2}
                     dataKey="value"
                   >
-                    {deductions.map((entry: any, index: number) => (
+                    {/* FIX: Used DeductionItem interface instead of any */}
+                    {deductions.map((entry: DeductionItem, index: number) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                  {/* FIX: Same Tooltip fix as above */}
+                  <Tooltip 
+                    formatter={(value) => {
+                      if (typeof value === 'number') return formatCurrency(value);
+                      return String(value ?? '');
+                    }} 
+                  />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
@@ -123,7 +165,8 @@ export default function Dashboard({ stats }: { stats: any }) {
            {/* Legend for Pie */}
            {deductions && deductions.length > 0 && (
              <div className="flex flex-wrap justify-center gap-4 mt-4">
-               {deductions.map((entry: any, index: number) => (
+               {/* FIX: Used DeductionItem interface instead of any */}
+               {deductions.map((entry: DeductionItem, index: number) => (
                  <div key={index} className="flex items-center gap-1.5 text-xs text-gray-600">
                    <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
                    {entry.name}

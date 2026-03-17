@@ -39,7 +39,7 @@ export default function Home() {
     <main
       className="flex min-h-screen  items-center justify-center"
       style={{
-        backgroundImage: "linear-gradient(rgba(13, 35, 173, 0.7), rgba(13, 35, 173, 0.7)), url('/hero.PNG')",
+        backgroundImage: "linear-gradient(rgba(13, 35, 173, 0.7), rgba(13, 35, 173, 0.7)), url('/hero.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
