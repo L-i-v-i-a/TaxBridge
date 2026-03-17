@@ -11,8 +11,8 @@ export interface AiResult {
   success: boolean;
   amount?: number;
   error?: string;
-  taxType?: string; // e.g., "Federal", "State"
-  region?: string | null; // e.g., "California", "New York" (null if Federal)
+  taxType?: string;
+  region?: string | null;
 }
 
 export interface IncomeDetailsDto {
@@ -30,12 +30,11 @@ export interface ChatMessage {
   content: string;
 }
 
-// Structured output for document extraction
 export interface ExtractedDocumentData {
-  documentType: string; // e.g., "W2", "1099-INT", "State Tax Form"
+  documentType: string;
   summary: string;
-  extractedFields: Record<string, any>; // Key-value pairs
-  confidenceScore: number; // 0.0 to 1.0
+  extractedFields: Record<string, any>;
+  confidenceScore: number;
 }
 
 @Injectable()
@@ -57,16 +56,13 @@ export class AiService {
     }
   }
 
-  /**
-   * DOCUMENT OCR & EXTRACTION
-   * Uses Llama 3.2 90B Vision to analyze document images.
-   */
   async extractFromDocument(imageBase64: string): Promise<ExtractedDocumentData> {
     if (!this.client) throw new Error('AI client not initialized');
 
     try {
       const response = await this.client.chat.completions.create({
-        model: 'llama-3.2-90b-vision-preview', // Updated to stable vision model
+        // UPDATED: Using the stable Vision model
+        model: 'llama-3.2-11b-vision', 
         messages: [
           {
             role: 'user',
@@ -113,10 +109,6 @@ export class AiService {
     }
   }
 
-  /**
-   * TAX CALCULATION FEATURE
-   * Now handles context to determine Region and Tax Type.
-   */
   async calculateTax(
     taxYear: number,
     incomeDetails: IncomeDetailsDto,
@@ -179,7 +171,7 @@ export class AiService {
     `;
 
     const response = await client.chat.completions.create({
-      model: 'llama-3.1-8b-instant', // Fast model for logic
+      model: 'llama-3.1-8b-instant',
       messages: [{ role: 'user', content: prompt }],
       response_format: { type: 'json_object' },
     });
@@ -189,9 +181,6 @@ export class AiService {
     return JSON.parse(content);
   }
 
-  /**
-   * CHAT FEATURE
-   */
   async chat(userMessage: string, history: ChatMessage[] = []): Promise<string> {
     if (!this.client) return "I'm sorry, the AI service is offline.";
 
@@ -217,10 +206,6 @@ export class AiService {
     }
   }
 
-  /**
-   * LOCAL CALCULATOR (Fallback)
-   * Currently supports US Federal Tax Brackets.
-   */
   private async localCalculation(
     taxYear: number,
     incomeDetails: IncomeDetailsDto,
@@ -264,7 +249,7 @@ export class AiService {
         success: true,
         amount: Math.round(finalAmount * 100) / 100,
         taxType: 'Federal',
-        region: null // Explicitly null for Federal
+        region: null
       };
     } catch (err) {
       this.logger.error('Local calculation failed', err);
