@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
   Users, 
-  FileText, 
   MessageSquare, 
   BarChart2, 
   Settings, 
@@ -20,8 +20,8 @@ const navItems = [
   { name: 'Management', href: '/admin/users', icon: Users },
   { name: 'Subscription', href: '/admin/subscription', icon: CreditCard },
   { name: 'Communication', href: '/admin/communication', icon: MessageSquare },
-  { name: 'Report', href: '/admin/reports', icon: BarChart2 },
-  { name: 'Setting', href: '/admin/settings', icon: Settings },
+  { name: 'Reports', href: '/admin/reports', icon: BarChart2 },
+  { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
 export default function AdminSidebar() {
@@ -29,8 +29,7 @@ export default function AdminSidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Close sidebar on route change (e.g., browser back button)
-  // Wrapped in setTimeout to prevent synchronous setState warning
+  // ✅ Fix: Use setTimeout to avoid synchronous setState warning during route changes
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOpen(false);
@@ -43,11 +42,6 @@ export default function AdminSidebar() {
     router.push('/login');
   };
 
-  const handleNavClick = (href: string) => {
-    setIsOpen(false); // Close immediately on click
-    router.push(href);
-  };
-
   const isActive = (href: string) => {
     if (href === '/admin') return pathname === '/admin';
     return pathname.startsWith(href);
@@ -55,80 +49,69 @@ export default function AdminSidebar() {
 
   return (
     <>
-      {/* --- Mobile Hamburger Toggle (Visible only on mobile when sidebar is closed) --- */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="md:hidden fixed top-4 left-4 z-30 p-2 bg-white rounded-md shadow-md border border-gray-200 text-gray-600 hover:bg-gray-50"
-        aria-label="Open Sidebar"
+      {/* Mobile Toggle Button - Visible only below 'lg' breakpoint */}
+      <button 
+        onClick={() => setIsOpen(!isOpen)} 
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md border border-gray-100 text-gray-600 focus:outline-none hover:bg-gray-50 transition-colors"
+        aria-label="Toggle Menu"
       >
-        <Menu size={24} />
+        {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* --- Backdrop (Visible on mobile when open) --- */}
+      {/* Mobile Overlay - Blurs background when sidebar is open */}
       {isOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/50 z-40 transition-opacity"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      {/* --- Sidebar Container --- */}
-      <aside 
-        className={`
-          fixed inset-y-0 left-0 z-50 w-64 h-screen bg-white border-r border-gray-200 flex flex-col shrink-0
-          transition-transform duration-300 ease-in-out
-          
-          /* Mobile State: Hidden by default (-translate-x-full), visible when open (translate-x-0) */
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-          
-          /* Desktop State: Always visible and static relative position */
-          md:translate-x-0 md:static
-        `}
-      >
+      {/* Sidebar Container */}
+      <aside className={`
+        fixed top-0 left-0 z-40 h-screen w-64 bg-white border-r border-gray-200 
+        flex flex-col transform transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        lg:translate-x-0 lg:static lg:z-auto shrink-0
+      `}>
+        
         {/* Logo Section */}
-        <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200">
-          <div className="flex items-center">
-            <h1 className="text-xl font-bold text-[#0D23AD]">Taxbridge</h1>
-            <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-medium">Admin</span>
-          </div>
-          
-          {/* Mobile Close Button */}
-          <button 
-            onClick={() => setIsOpen(false)}
-            className="md:hidden p-1 text-gray-500 hover:text-gray-700 rounded-md"
-            aria-label="Close Sidebar"
-          >
-            <X size={24} />
-          </button>
+        <div className="px-6 py-8">
+          <Link href="/admin" className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-[#0D23AD] tracking-tight">TaxBridge</span>
+            <span className="text-[10px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-black uppercase">Admin</span>
+          </Link>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
-          {navItems.map((item) => (
-            <button
-              key={item.name}
-              onClick={() => handleNavClick(item.href)}
-              className={`
-                w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-150
-                ${isActive(item.href) 
-                  ? 'bg-[#0D23AD] text-white shadow-sm' 
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
-              `}
-            >
-              <item.icon size={20} className={isActive(item.href) ? 'text-white' : 'text-gray-400'} />
-              <span>{item.name}</span>
-            </button>
-          ))}
+        {/* Navigation Links */}
+        <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
+          {navItems.map((item) => {
+            const active = isActive(item.href);
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`
+                  flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group
+                  ${active 
+                    ? 'bg-[#0D23AD] text-white shadow-lg shadow-blue-100' 
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
+                `}
+              >
+                <item.icon className={`w-5 h-5 transition-colors ${active ? 'text-white' : 'text-gray-400 group-hover:text-gray-600'}`} />
+                <span className="ml-3">{item.name}</span>
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Logout Section */}
-        <div className="p-4 border-t border-gray-200">
+        {/* Logout Footer */}
+        <div className="p-4 mt-auto border-t border-gray-100">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+            className="flex items-center w-full px-4 py-3 text-sm font-medium text-red-500 rounded-xl hover:bg-red-50 transition-colors group"
           >
-            <LogOut size={20} />
-            <span>Logout</span>
+            <LogOut className="w-5 h-5 text-red-400 group-hover:text-red-500" />
+            <span className="ml-3">Logout</span>
           </button>
         </div>
       </aside>
