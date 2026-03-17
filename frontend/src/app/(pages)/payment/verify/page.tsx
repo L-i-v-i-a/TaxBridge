@@ -1,23 +1,21 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
-export default function PaymentVerifyPage() {
+// 1. The main content component that uses useSearchParams
+function PaymentVerifyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'loading' | 'success' | 'failed'>('loading');
   const [message, setMessage] = useState('');
   
-  // Use a ref to prevent double-execution in React Strict Mode
   const verificationStarted = useRef(false);
 
   useEffect(() => {
-    // 1. Get reference
     const reference = searchParams.get('reference');
     
-    // 2. Define the verification function
     const verifyPayment = async (ref: string) => {
       try {
         const token = localStorage.getItem('access_token');
@@ -42,17 +40,14 @@ export default function PaymentVerifyPage() {
       }
     };
 
-    // 3. Execution Logic
     if (verificationStarted.current) return;
 
     if (!reference) {
-      // FIX: Wrap in setTimeout to defer setState and avoid synchronous render cascade
+      // Wrapped in setTimeout to avoid synchronous setState warning
       const timer = setTimeout(() => {
         setStatus('failed');
         setMessage('No payment reference found.');
       }, 0);
-      
-      // Cleanup timeout if component unmounts
       return () => clearTimeout(timer);
     } else {
       verificationStarted.current = true;
@@ -100,5 +95,21 @@ export default function PaymentVerifyPage() {
         )}
       </div>
     </div>
+  );
+}
+
+// 2. The default export wraps the content in Suspense
+export default function PaymentVerifyPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="bg-white p-10 rounded-2xl shadow-xl max-w-md w-full text-center border border-gray-100">
+          <Loader2 className="mx-auto animate-spin text-[#0D23AD] mb-4" size={48} />
+          <h2 className="text-xl font-semibold text-gray-800">Loading...</h2>
+        </div>
+      </div>
+    }>
+      <PaymentVerifyContent />
+    </Suspense>
   );
 }
