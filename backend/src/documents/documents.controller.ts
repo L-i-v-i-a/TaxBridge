@@ -10,26 +10,14 @@ import {
   Request,
   UseInterceptors,
   UploadedFile,
-  Body,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiConsumes } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
-import { diskStorage } from 'multer';
+import { memoryStorage } from 'multer'; 
 
-import { extname } from 'path';
-
-import { DocumentsService } from './documents.service';
-
-// Configure Multer for file storage
-const storage = diskStorage({
-  destination: './uploads/documents',
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
-  },
-});
+import { DocumentsService } from './documents.service';// Import memoryStorage
 
 @ApiTags('Documents')
 @ApiBearerAuth()
@@ -41,7 +29,8 @@ export class DocumentsController {
   @Post()
   @ApiOperation({ summary: 'Upload a document and extract data via AI' })
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('file', { storage }))
+  // FIX: Explicitly use memoryStorage to ensure file.buffer is populated
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
   async upload(
     @Request() req,
     @UploadedFile() file: Express.Multer.File,

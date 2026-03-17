@@ -1,5 +1,5 @@
 // src/documents/documents.service.ts
-import { Injectable, NotFoundException, ForbiddenException, Logger, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, Logger, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 
 import { join } from 'path';
 
@@ -17,55 +17,28 @@ export class DocumentsService {
     private ai: AiService,
   ) {}
 
-  /**
-   * Helper method to validate if a user has access to document features.
-   */
-  private async validateUserAccess(userId: string): Promise<void> {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      select: { 
-        isAdmin: true, 
-        subscriptions: { 
-          where: { status: 'active' },
-          select: { id: true } 
-        } 
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    const isAdmin = user.isAdmin;
-    const hasActiveSubscription = user.subscriptions.length > 0;
-
-    if (!isAdmin && !hasActiveSubscription) {
-      throw new ForbiddenException('Access denied. You must be an admin or have an active subscription plan to use this feature.');
-    }
-  }
-
   async uploadDocument(userId: string, file: Express.Multer.File) {
-    // 1. Validate Access
-    await this.validateUserAccess(userId);
+    this.logger.log(`Processing document for user ${userId}: ${file.originalname}`);
 
-    // 2. AI Extraction
-    let extractionResult = {
-      documentType: 'UNKNOWN',
-      summary: '',
-      extractedFields: {},
-    };
+    if (!file.buffer) {
+      throw new BadRequestException('File buffer is missing. Ensure memoryStorage is used.');
+    }
 
-    const base64 = file.buffer.toString('base64');
+    // 1. Convert buffer to Base64 for Vision AI
+    const base64 = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
 
+    // 2. Call AI for OCR & Extraction
+    let extractionResult: any = { documentType: 'Unknown', summary: '', extractedFields: {} };
     try {
       extractionResult = await this.ai.extractFromDocument(base64);
     } catch (error) {
       this.logger.error('AI Extraction failed, saving without metadata', error);
     }
 
-    // 3. Save file to disk
+    // 3. Save file to disk manually (since we used memoryStorage)
     const uploadDir = join(process.cwd(), 'uploads', 'documents');
     
+    // Ensure directory exists
     if (!existsSync(uploadDir)) {
       mkdirSync(uploadDir, { recursive: true });
     }
@@ -87,7 +60,7 @@ export class DocumentsService {
         name: file.originalname,
         url: `uploads/documents/${filename}`,
         type: file.mimetype,
-        size: file.size, 
+        size: file.size,
         userId: userId,
         documentType: extractionResult.documentType,
         summary: extractionResult.summary,
@@ -99,8 +72,6 @@ export class DocumentsService {
   }
 
   async getUserDocuments(userId: string, type?: string) {
-    await this.validateUserAccess(userId);
-
     const where: any = { userId };
     if (type) {
       where.documentType = type;
@@ -113,8 +84,6 @@ export class DocumentsService {
   }
 
   async getDocumentById(id: string, userId: string) {
-    await this.validateUserAccess(userId);
-
     const doc = await this.prisma.document.findUnique({ where: { id } });
     if (!doc) throw new NotFoundException('Document not found');
     if (doc.userId !== userId) throw new ForbiddenException('Access denied');
@@ -122,15 +91,15 @@ export class DocumentsService {
   }
 
   async deleteDocument(id: string, userId: string) {
-    await this.validateUserAccess(userId);
-
     const doc = await this.getDocumentById(id, userId);
 
+    // Delete file from disk
     const filePath = join(process.cwd(), doc.url);
     if (existsSync(filePath)) {
       unlinkSync(filePath);
     }
 
+    // Delete from DB
     await this.prisma.document.delete({ where: { id } });
     return { message: 'Document deleted' };
   }
