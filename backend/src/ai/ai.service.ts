@@ -83,11 +83,11 @@ export class AiService {
       let model;
       try {
         // Try the specific latest version
-        model = this.googleClient.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+        model = this.googleClient.getGenerativeModel({ model: 'gemini-3-flash-preview' });
       } catch (e) {
         // Fallback to stable vision model
-        this.logger.warn('Gemini 1.5 not found, falling back to gemini-1.0-pro-vision');
-        model = this.googleClient.getGenerativeModel({ model: 'gemini-1.0-pro-vision' });
+        this.logger.warn('Gemini 1.5 not found, falling back to gemini-2.5-flash');
+        model = this.googleClient.getGenerativeModel({ model: 'gemini-2.5-flash' });
       }
 
       const prompt = `You are a professional Tax Document Analyzer. Analyze this image.
