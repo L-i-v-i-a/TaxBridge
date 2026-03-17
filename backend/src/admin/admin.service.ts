@@ -1,5 +1,5 @@
 // src/admin/admin.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { FilingStatus } from '@prisma/client';
 
@@ -127,5 +127,53 @@ export class AdminService {
           }
         : null,
     }));
+  }
+
+  async getUserDetails(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        profilePicture: true,
+        isAdmin: true,
+        createdAt: true,
+        subscriptions: {
+          select: {
+            status: true,
+            startDate: true,
+            nextPaymentDate: true,
+            plan: { select: { title: true, price: true } },
+          },
+        },
+        filings: {
+          take: 5,
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            filingId: true,
+            status: true,
+            amount: true,
+            createdAt: true,
+          },
+        },
+        _count: {
+          select: { filings: true, documents: true },
+        },
+      },
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    // Format for frontend
+    return {
+      ...user,
+      stats: {
+        totalFilings: user._count.filings,
+        documentsUploaded: user._count.documents,
+      },
+    };
   }
 }

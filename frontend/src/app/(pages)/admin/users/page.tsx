@@ -1,34 +1,60 @@
-// app/admin/users/page.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Loader2, ShieldCheck, UserCircle, FileText, CreditCard } from 'lucide-react';
+import { Search, Loader2, UserCircle, X, Mail, Phone, Calendar, FileText, CreditCard, BarChart2 } from 'lucide-react';
 import Topbar from '../../../../../components/admin/AdminTopbar';
 import Sidebar from '../../../../../components/admin/AdminSidebar';
 
-interface User {
+// Interface for the list item
+interface UserListItem {
   id: string;
   name: string;
   email: string;
   profilePicture: string | null;
   joinedDate: string;
+  subscription: { id: string; planName: string; status: string } | null;
+  lastFiling: { id: string; status: string } | null;
+}
+
+// Interface for filings inside UserDetail
+interface UserFiling {
+  id: string;
+  filingId: string;
+  status: string;
+  amount: number | null;
+  createdAt: string;
+}
+
+// Interface for detailed view (does not extend UserListItem due to structural differences)
+interface UserDetail {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  profilePicture: string | null;
+  isAdmin: boolean;
+  createdAt: string;
   subscription: {
-    id: string;
-    planName: string;
     status: string;
+    startDate: string;
+    nextPaymentDate: string | null;
+    plan: { title: string; price: number };
   } | null;
-  lastFiling: {
-    id: string;
-    status: string;
-  } | null;
+  filings: UserFiling[];
+  stats: { totalFilings: number; documentsUploaded: number };
 }
 
 export default function AdminUsersPage() {
   const router = useRouter();
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+
+  // Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
+  const [modalLoading, setModalLoading] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -41,16 +67,31 @@ export default function AdminUsersPage() {
       const res = await fetch('https://backend-production-c062.up.railway.app/admin/users', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.ok) {
-        setUsers(await res.json());
-      } else {
-        // Handle 403 or 401
-        router.push('/login');
-      }
+      if (res.ok) setUsers(await res.json());
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchUserDetails = async (userId: string) => {
+    setModalLoading(true);
+    setIsModalOpen(true);
+    setSelectedUser(null);
+
+    const token = localStorage.getItem('access_token');
+    try {
+      const res = await fetch(`https://backend-production-c062.up.railway.app/admin/users/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        setSelectedUser(await res.json());
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setModalLoading(false);
     }
   };
 
@@ -141,7 +182,7 @@ export default function AdminUsersPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button 
-                            onClick={() => router.push(`/admin/users/${user.id}`)}
+                            onClick={() => fetchUserDetails(user.id)}
                             className="text-[#0D23AD] hover:text-[#0a1b8a] text-xs font-medium"
                           >
                             View Details
@@ -153,16 +194,114 @@ export default function AdminUsersPage() {
                 </table>
                 
                 {filteredUsers.length === 0 && (
-                  <div className="text-center py-10 text-gray-500">
-                    No users found.
-                  </div>
+                  <div className="text-center py-10 text-gray-500">No users found.</div>
                 )}
               </div>
             )}
-
           </div>
         </main>
       </div>
+
+      {/* User Details Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 transition-opacity" onClick={() => setIsModalOpen(false)}>
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            
+            <div className="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              {/* Header */}
+              <div className="bg-white px-6 pt-6 pb-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center">
+                    <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden mr-4">
+                       {selectedUser?.profilePicture ? (
+                         <img src={selectedUser.profilePicture} className="w-full h-full object-cover" alt="Profile" />
+                       ) : (
+                         <UserCircle className="text-blue-600" size={28} />
+                       )}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900">{selectedUser?.name}</h3>
+                      <p className="text-xs text-gray-500">{selectedUser?.isAdmin ? 'Administrator' : 'Standard User'}</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-500">
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Body */}
+              {modalLoading ? (
+                <div className="p-10 flex justify-center">
+                  <Loader2 className="animate-spin text-blue-600" size={32} />
+                </div>
+              ) : selectedUser && (
+                <div className="px-6 pb-6 space-y-4">
+                  {/* Contact Info */}
+                  <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Mail size={14} className="mr-2 text-gray-400" /> {selectedUser.email}
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Phone size={14} className="mr-2 text-gray-400" /> {selectedUser.phone || 'Not provided'}
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Calendar size={14} className="mr-2 text-gray-400" /> Joined {new Date(selectedUser.createdAt).toLocaleDateString()}
+                    </div>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-blue-50 p-3 rounded-lg text-center">
+                      <p className="text-xl font-bold text-blue-700">{selectedUser.stats?.totalFilings || 0}</p>
+                      <p className="text-xs text-blue-600">Filings</p>
+                    </div>
+                    <div className="bg-green-50 p-3 rounded-lg text-center">
+                      <p className="text-xl font-bold text-green-700">{selectedUser.stats?.documentsUploaded || 0}</p>
+                      <p className="text-xs text-green-600">Documents</p>
+                    </div>
+                  </div>
+
+                  {/* Subscription */}
+                  {selectedUser.subscription && (
+                    <div className="border border-gray-100 p-4 rounded-lg">
+                      <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">Subscription</h4>
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium text-gray-800">{selectedUser.subscription.plan?.title}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${
+                           selectedUser.subscription.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                        }`}>
+                          {selectedUser.subscription.status}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Recent Filings */}
+                  {selectedUser.filings && selectedUser.filings.length > 0 && (
+                     <div>
+                       <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">Recent Filings</h4>
+                       <div className="space-y-2">
+                         {selectedUser.filings.map((f: UserFiling) => (
+                           <div key={f.id} className="flex justify-between text-sm border-b border-gray-50 pb-2">
+                             <span className="text-gray-700">{f.filingId}</span>
+                             <span className={`text-xs ${f.status === 'COMPLETED' ? 'text-green-600' : 'text-yellow-600'}`}>{f.status}</span>
+                           </div>
+                         ))}
+                       </div>
+                     </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
