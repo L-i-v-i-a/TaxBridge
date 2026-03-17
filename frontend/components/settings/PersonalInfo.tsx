@@ -45,7 +45,7 @@ export default function PersonalInfo() {
           filingStatus: data.filingStatus || '',
         });
         setEmail(data.email);
-        setProfilePic(data.profilePicture ? `http://localhost:3000/${data.profilePicture}` : null);
+        setProfilePic(data.profilePicture ? `https://backend-production-c062.up.railway.app/${data.profilePicture}` : null);
       })
       .finally(() => setLoading(false));
   }, []);

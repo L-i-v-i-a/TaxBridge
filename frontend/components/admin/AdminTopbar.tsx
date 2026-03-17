@@ -18,7 +18,7 @@ export default function AdminTopbar() {
       const token = localStorage.getItem('access_token');
       if (!token) return;
       try {
-        const res = await fetch('http://localhost:3000/auth/profile', {
+        const res = await fetch('https://backend-production-c062.up.railway.app/auth/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) setAdmin(await res.json());

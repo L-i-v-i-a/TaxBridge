@@ -48,7 +48,7 @@ export default function SignUpForm() {
     setError(null);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://backend-production-c062.up.railway.app";
       
       const response = await fetch(`${apiUrl}/auth/signup`, {
         method: "POST",
@@ -76,7 +76,7 @@ export default function SignUpForm() {
 
   const handleGoogleLogin = () => {
     // This initiates the OAuth flow -> Backend -> Google -> Backend -> Frontend Callback
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://backend-production-c062.up.railway.app";
     window.location.href = `${apiUrl}/auth/google`;
   };
 

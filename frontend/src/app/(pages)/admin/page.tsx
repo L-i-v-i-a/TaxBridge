@@ -49,10 +49,10 @@ export default function AdminDashboard() {
     if (!token) return router.push('/login');
     try {
       const [statsRes, actRes] = await Promise.all([
-        fetch('http://localhost:3000/admin/dashboard', {
+        fetch('https://backend-production-c062.up.railway.app/admin/dashboard', {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch('http://localhost:3000/admin/activities', {
+        fetch('https://backend-production-c062.up.railway.app/admin/activities', {
           headers: { Authorization: `Bearer ${token}` },
         })
       ]);
@@ -88,7 +88,7 @@ export default function AdminDashboard() {
     const token = getToken();
 
     try {
-      const res = await fetch(`http://localhost:3000/filings/${selectedFiling.id}`, {
+      const res = await fetch(`https://backend-production-c062.up.railway.app/filings/${selectedFiling.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ export default function AdminDashboard() {
     
     const token = getToken();
     try {
-      const res = await fetch(`http://localhost:3000/filings/${item.id}`, {
+      const res = await fetch(`https://backend-production-c062.up.railway.app/filings/${item.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export default function AdminDashboard() {
     
     const token = getToken();
     try {
-      const res = await fetch(`http://localhost:3000/filings/${item.id}`, {
+      const res = await fetch(`https://backend-production-c062.up.railway.app/filings/${item.id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

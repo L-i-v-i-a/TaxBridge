@@ -23,7 +23,7 @@ export default function PaymentVerifyPage() {
     const verifyPayment = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const res = await fetch(`http://localhost:3000/subscriptions/verify?reference=${reference}`, {
+        const res = await fetch(`https://backend-production-c062.up.railway.app/subscriptions/verify?reference=${reference}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

@@ -23,7 +23,7 @@ const TopBar = () => {
       if (!token) return;
 
       try {
-        const response = await fetch('http://localhost:3000/auth/profile', {
+        const response = await fetch('https://backend-production-c062.up.railway.app/auth/profile', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

@@ -46,7 +46,7 @@ export default function ChatRoomPage() {
       const token = localStorage.getItem('access_token');
       if (!token) return;
       try {
-        const res = await fetch('http://localhost:3000/auth/profile', {
+        const res = await fetch('https://backend-production-c062.up.railway.app/auth/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) setCurrentUser(await res.json());
@@ -64,7 +64,7 @@ export default function ChatRoomPage() {
       if (!id || !token) return;
 
       try {
-        const res = await fetch(`http://localhost:3000/chat/conversations/${id}`, {
+        const res = await fetch(`https://backend-production-c062.up.railway.app/chat/conversations/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {
@@ -131,7 +131,7 @@ export default function ChatRoomPage() {
     const formData = new FormData();
     formData.append('files', file);
     try {
-      const uploadRes = await fetch('http://localhost:3000/chat/upload', {
+      const uploadRes = await fetch('https://backend-production-c062.up.railway.app/chat/upload', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -156,7 +156,7 @@ export default function ChatRoomPage() {
   const handleReaction = async (messageId: string, emoji: string) => {
     const token = localStorage.getItem('access_token');
     try {
-      await fetch(`http://localhost:3000/chat/messages/${messageId}/react`, {
+      await fetch(`https://backend-production-c062.up.railway.app/chat/messages/${messageId}/react`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -255,8 +255,8 @@ export default function ChatRoomPage() {
                             ? 'bg-[#0D23AD] text-white rounded-br-sm'
                             : 'bg-white text-gray-700 rounded-bl-sm border border-gray-100'
                         }`}>
-                          {msg.type === 'IMAGE' && msg.fileUrl && <img src={`http://localhost:3000/${msg.fileUrl}`} alt="Attachment" className="rounded-lg mb-2 max-w-full" />}
-                          {msg.type === 'FILE' && msg.fileUrl && <a href={`http://localhost:3000/${msg.fileUrl}`} target="_blank" rel="noreferrer" className="underline block mb-1">📎 {msg.content}</a>}
+                          {msg.type === 'IMAGE' && msg.fileUrl && <img src={`https://backend-production-c062.up.railway.app/${msg.fileUrl}`} alt="Attachment" className="rounded-lg mb-2 max-w-full" />}
+                          {msg.type === 'FILE' && msg.fileUrl && <a href={`https://backend-production-c062.up.railway.app/${msg.fileUrl}`} target="_blank" rel="noreferrer" className="underline block mb-1">📎 {msg.content}</a>}
                           {msg.type === 'TEXT' && <p className="leading-relaxed text-[15px]">{msg.content}</p>}
                           <span className={`text-[10px] block mt-1 ${isUser ? 'text-blue-100' : 'text-gray-400'}`}>
                             {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

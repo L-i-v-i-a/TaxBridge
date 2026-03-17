@@ -286,7 +286,7 @@ export default function FilingForm({ serviceType }: FilingFormProps) {
     });
 
     try {
-      const response = await fetch(`http://localhost:3000/filings?serviceType=${serviceType}`, {
+      const response = await fetch(`https://backend-production-c062.up.railway.app/filings?serviceType=${serviceType}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,

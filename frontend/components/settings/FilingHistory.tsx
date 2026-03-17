@@ -12,7 +12,7 @@ export default function FilingHistory() {
     const token = localStorage.getItem('access_token');
     if (!token) return;
 
-    fetch('http://localhost:3000/filings', {
+    fetch('https://backend-production-c062.up.railway.app/filings', {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(res => res.json())
@@ -52,7 +52,7 @@ export default function FilingHistory() {
     const token = localStorage.getItem('access_token');
     
     try {
-      const res = await fetch(`http://localhost:3000/settings/documents/${doc.id}/download`, {
+      const res = await fetch(`https://backend-production-c062.up.railway.app/settings/documents/${doc.id}/download`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

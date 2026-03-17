@@ -1,5 +1,5 @@
 // lib/api.ts
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://backend-production-c062.up.railway.app';
 
 async function apiFetch(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem('access_token');

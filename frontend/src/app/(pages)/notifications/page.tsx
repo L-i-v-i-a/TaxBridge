@@ -41,7 +41,7 @@ export default function NotificationsPage() {
     if (activeTab !== 'ALL') params.append('type', activeTab);
 
     try {
-      const res = await fetch(`http://localhost:3000/notifications?${params.toString()}`, {
+      const res = await fetch(`https://backend-production-c062.up.railway.app/notifications?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) setNotifications(await res.json());
@@ -55,7 +55,7 @@ export default function NotificationsPage() {
   const handleMarkAsRead = async (id: string, link: string | null) => {
     const token = localStorage.getItem('access_token');
     try {
-      await fetch(`http://localhost:3000/notifications/${id}/read`, {
+      await fetch(`https://backend-production-c062.up.railway.app/notifications/${id}/read`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -93,7 +93,7 @@ export default function NotificationsPage() {
               <button 
                 onClick={async () => {
                     const token = localStorage.getItem('access_token');
-                    await fetch('http://localhost:3000/notifications/read-all', {
+                    await fetch('https://backend-production-c062.up.railway.app/notifications/read-all', {
                         method: 'PATCH',
                         headers: { Authorization: `Bearer ${token}` }
                     });
