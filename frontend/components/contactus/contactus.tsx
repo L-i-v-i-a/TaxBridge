@@ -1,31 +1,69 @@
 "use client";
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import NotificationModal from '../../components/NotificationModal'; // Adjust path as needed
 
 const ContactUs = () => {
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
+    target: mounted ? sectionRef : undefined,
     offset: ['start end', 'end start'],
   });
+
   const parallaxY = useTransform(scrollYProgress, [0, 1], [40, -40]);
+
+  // Scroll-based card animation
+  const cardScale1 = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1.03, 1]);
+  const cardRotate1 = useTransform(scrollYProgress, [0, 1], [-2, 2]);
+  const cardScale2 = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1.02, 1]);
+  const cardRotate2 = useTransform(scrollYProgress, [0, 1], [2, -2]);
+  const cardScale3 = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1.015, 1]);
+  const cardRotate3 = useTransform(scrollYProgress, [0, 1], [-1, 1]);
+
   // Animation variants
   const fadeInLeft = {
     hidden: { opacity: 0, x: -50 },
-    visible: { opacity: 1, x: 0 }
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { staggerChildren: 0.12, delayChildren: 0.12 }
+    }
   };
 
   const fadeInRight = {
     hidden: { opacity: 0, x: 50 },
-    visible: { opacity: 1, x: 0 }
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { staggerChildren: 0.12, delayChildren: 0.12 }
+    }
+  };
+
+  const itemFadeUp = {
+    hidden: { opacity: 0, y: 16 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } }
   };
 
   const hoverable = {
     whileHover: { scale: 1.02, y: -2 },
     whileTap: { scale: 0.98 }
+  };
+
+  const cardFloat = {
+    hidden: { opacity: 0, y: 24 },
+    visible: (custom: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: 'easeOut', delay: 0.1 * custom }
+    })
   };
 
   // State for form inputs
@@ -123,18 +161,20 @@ const ContactUs = () => {
             variants={fadeInLeft}
             className="bg-[#0021A5] text-white p-10 lg:p-16 rounded-3xl shadow-xl h-full flex flex-col justify-center"
           >
-            <h1 className="text-5xl font-bold mb-6">Contact Us</h1>
-            <p className="text-blue-100 text-lg mb-10 leading-relaxed">
+            <motion.h1 variants={itemFadeUp} className="text-5xl font-bold mb-6">Contact Us</motion.h1>
+            <motion.p variants={itemFadeUp} className="text-blue-100 text-lg mb-10 leading-relaxed">
               Reach out to us at anytime, we are active 24/7 for any of your enquiry. 
               We give a quick feedback for every enquiry.
-            </p>
+            </motion.p>
 
             <div className="space-y-8">
               {/* Email */}
               <motion.div
                 className="flex items-center gap-5"
                 {...hoverable}
+                variants={itemFadeUp}
                 transition={{ duration: 0.2 }}
+                style={{ scale: cardScale1, rotate: cardRotate1 }}
               >
                 <div className="bg-[#FF7A00] p-3 rounded-lg">
                   <Mail size={24} className="text-white" />
@@ -146,6 +186,7 @@ const ContactUs = () => {
               <motion.div
                 className="flex items-start gap-5"
                 {...hoverable}
+                variants={itemFadeUp}
                 transition={{ duration: 0.2 }}
               >
                 <div className="bg-[#FF7A00] p-3 rounded-lg mt-1">
@@ -161,6 +202,10 @@ const ContactUs = () => {
               <motion.div
                 className="flex items-center gap-5"
                 {...hoverable}
+                variants={cardFloat}
+                initial="hidden"
+                animate="visible"
+                custom={2}
                 transition={{ duration: 0.2 }}
               >
                 <div className="bg-[#FF7A00] p-3 rounded-lg">
@@ -239,7 +284,7 @@ const ContactUs = () => {
           </motion.div>
 
         </div>
-      </div>
+      </motion.div>
 
       {/* Notification Modal */}
       <NotificationModal 
