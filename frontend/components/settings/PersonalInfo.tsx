@@ -2,8 +2,30 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getProfile, updateProfile } from '../../utilis/api';
 import { Loader2, Save, Camera, User } from 'lucide-react';
 
+// 1. Define interface for Form State
+interface ProfileFormData {
+  firstName: string;
+  lastName: string;
+  username: string;
+  phone: string;
+  occupation: string;
+  ein: string;
+  numberOfDependents: string; // Input is string
+  streetAddress: string;
+  zipCode: string;
+  city: string;
+  state: string;
+  country: string;
+  filingStatus: string;
+}
+
+// 2. Define interface for API Payload (number conversion)
+interface UpdateProfilePayload extends Omit<ProfileFormData, 'numberOfDependents'> {
+  numberOfDependents?: number;
+}
+
 export default function PersonalInfo() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<ProfileFormData>({
     firstName: '',
     lastName: '',
     username: '',
@@ -71,19 +93,27 @@ export default function PersonalInfo() {
     e.preventDefault();
     setSaving(true);
     try {
-      // Prepare data (convert numberOfDependents to number if present)
-      const dataToSend: any = { ...form };
-      if (dataToSend.numberOfDependents) {
-        dataToSend.numberOfDependents = parseInt(dataToSend.numberOfDependents);
-      } else {
-        delete dataToSend.numberOfDependents; // Remove if empty to avoid validation errors
+      // 3. Use specific types instead of 'any'
+      const payload: UpdateProfilePayload = {
+        ...form,
+        numberOfDependents: form.numberOfDependents ? parseInt(form.numberOfDependents, 10) : undefined,
+      };
+
+      // Remove undefined keys if necessary (optional, but good for clean payloads)
+      if (!payload.numberOfDependents) {
+        delete payload.numberOfDependents;
       }
 
-      await updateProfile(dataToSend, selectedFile);
+      await updateProfile(payload, selectedFile);
       alert('Profile updated!');
-      setSelectedFile(null); // Clear file state after upload
-    } catch (err: any) {
-      alert(err.message || 'Failed to update profile');
+      setSelectedFile(null); 
+    } catch (err: unknown) {
+      // 4. Handle unknown error safely
+      if (err instanceof Error) {
+        alert(err.message || 'Failed to update profile');
+      } else {
+        alert('Failed to update profile');
+      }
     } finally {
       setSaving(false);
     }

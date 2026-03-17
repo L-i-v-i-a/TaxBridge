@@ -1,49 +1,43 @@
-
 "use client";
 
 import { motion } from "framer-motion";
-import { FileText, Sparkles,
-  Upload,
-  MessageSquare,
-  PlayCircle,
-  Files  } from 'lucide-react';
-
+import { FileText, Sparkles, Upload, MessageSquare, PlayCircle, Files } from 'lucide-react';
 
 export default function HomeFeatures() {
   const features = [
     {
       title: "Smart Filing Assistant",
       desc: "Personalized guidance based on your job type, deductions, and previous returns.",
-      icon: <FileText className="w-6 h-6 fill-current" />
+      icon: <FileText className="w-6 h-6 fill-current" />,
     },
     {
       title: "AI Tax Analyzer",
       desc: "Detects missing data, errors, or unclaimed credits instantly.",
-      icon: <Sparkles className="w-6 h-6 fill-current" />
+      icon: <Sparkles className="w-6 h-6 fill-current" />,
     },
     {
       title: "Document Upload & OCR",
       desc: "Scan or upload tax documents — the system automatically extracts relevant info.",
-      icon: <Upload className="w-6 h-6 stroke-[3px]" />
+      icon: <Upload className="w-6 h-6 stroke-[3px]" />,
     },
     {
       title: "Chat with Experts",
       desc: "Real humans available via live chat or video call 24/7.",
-      icon: <MessageSquare className="w-6 h-6 fill-current" />
+      icon: <MessageSquare className="w-6 h-6 fill-current" />,
     },
     {
       title: "Progress Tracker",
       desc: "Visual timeline showing your filing status from \"Preparing\" to \"Refund Received.\"",
-      icon: <PlayCircle className="w-6 h-6 fill-current" />
+      icon: <PlayCircle className="w-6 h-6 fill-current" />,
     },
     {
       title: "Multi-Year Filing",
       desc: "File for multiple years at once or fix past returns easily.",
-      icon: <Files className="w-6 h-6 fill-current" />
-    }
+      icon: <Files className="w-6 h-6 fill-current" />,
+    },
   ];
 
-  // Animation variants
+  // Animation variants – fixed easing values
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -60,7 +54,10 @@ export default function HomeFeatures() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: {
+        duration: 0.6,
+        ease: "circOut",           // valid Framer Motion easing
+      },
     },
   };
 
@@ -70,12 +67,15 @@ export default function HomeFeatures() {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: {
+        duration: 0.6,
+        ease: "circOut",           // fixed – was invalid "easeOut"
+      },
     },
     hover: {
       y: -5,
       scale: 1.02,
-      transition: { duration: 0.3 }
+      transition: { duration: 0.3 },
     },
   };
 
@@ -84,11 +84,14 @@ export default function HomeFeatures() {
     visible: {
       scale: 1,
       rotate: 0,
-      transition: { duration: 0.5, ease: "easeOut" }
+      transition: {
+        duration: 0.5,
+        ease: "circOut",           // fixed
+      },
     },
     hover: {
       rotate: 360,
-      transition: { duration: 0.6 }
+      transition: { duration: 0.6 },
     },
   };
 
@@ -102,10 +105,7 @@ export default function HomeFeatures() {
     >
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <motion.div
-          className="text-center mb-16"
-          variants={headerVariants}
-        >
+        <motion.div className="text-center mb-16" variants={headerVariants}>
           <motion.h2
             className="text-4xl font-bold text-[#0D153B] mb-4"
             variants={headerVariants}
@@ -143,22 +143,14 @@ export default function HomeFeatures() {
               </motion.div>
 
               {/* Text Content */}
-              <motion.div
-                variants={cardVariants}
-              >
-                <motion.h3
-                  className="text-xl font-bold text-[#0D153B] mb-2"
-                  variants={cardVariants}
-                >
+              <div>
+                <h3 className="text-xl font-bold text-[#0D153B] mb-2">
                   {item.title}
-                </motion.h3>
-                <motion.p
-                  className="text-gray-500 text-sm leading-relaxed"
-                  variants={cardVariants}
-                >
+                </h3>
+                <p className="text-gray-500 text-sm leading-relaxed">
                   {item.desc}
-                </motion.p>
-              </motion.div>
+                </p>
+              </div>
             </motion.div>
           ))}
         </motion.div>

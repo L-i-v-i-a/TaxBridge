@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
-  FileText, 
-  History, 
+  FileText,  
   CreditCard, 
   Settings, 
   LogOut, 
@@ -17,6 +16,7 @@ import {
 
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  {name: 'Management', href: '/documents', icon: LayoutDashboard },
   { name: 'Tax Filing', href: '/filings', icon: FileText },
   { name: 'Communication', href: '/communication', icon: MessageCircle },
   { name: 'Subscription', href: '/subscription', icon: CreditCard },
