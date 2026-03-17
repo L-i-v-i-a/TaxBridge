@@ -1,4 +1,6 @@
 // src/ai/ai.service.ts
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
@@ -39,93 +41,94 @@ export interface ExtractedDocumentData {
 
 @Injectable()
 export class AiService {
-  // Client for Text (Groq)
+  // Groq Client (Text)
   private groqClient: OpenAI | null = null;
-  // Client for Vision (OpenAI)
-  private openaiClient: OpenAI | null = null;
+  // Google Client (Vision)
+  private googleClient: GoogleGenerativeAI | null = null;
   
   private readonly logger = new Logger(AiService.name);
 
   constructor(private config: ConfigService) {
-    // 1. Initialize Groq (for fast text/chat)
+    // 1. Init Groq
     const groqKey = this.config.get<string>('GROQ_API_KEY');
     if (groqKey) {
       this.groqClient = new OpenAI({
         apiKey: groqKey,
         baseURL: 'https://api.groq.com/openai/v1',
       });
-      this.logger.log('Groq Client initialized.');
+      this.logger.log('Groq Client initialized (Text).');
     }
 
-    // 2. Initialize OpenAI (for reliable Vision/OCR)
-    const openaiKey = this.config.get<string>('OPENAI_API_KEY');
-    if (openaiKey) {
-      this.openaiClient = new OpenAI({ apiKey: openaiKey });
-      this.logger.log('OpenAI Client initialized for OCR.');
-    }
-
-    if (!groqKey && !openaiKey) {
-      this.logger.warn('No API keys found.');
+    // 2. Init Google
+    const googleKey = this.config.get<string>('GOOGLE_API_KEY');
+    if (googleKey) {
+      this.googleClient = new GoogleGenerativeAI(googleKey);
+      this.logger.log('Google Gemini Client initialized (Vision/OCR).');
     }
   }
 
   /**
-   * OCR: Uses OpenAI (GPT-4o-mini) for reliable document extraction
+   * OCR: Uses Google Gemini 1.5 Flash (Free Tier)
    */
   async extractFromDocument(imageBase64: string): Promise<ExtractedDocumentData> {
-    if (!this.openaiClient) throw new Error('OpenAI client not initialized for OCR');
+    if (!this.googleClient) throw new Error('Google Client not initialized');
 
     try {
-      const response = await this.openaiClient.chat.completions.create({
-        model: 'gpt-4o-mini', // Fast, cheap, excellent vision model
-        messages: [
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'text',
-                text: `You are a professional Tax Document Analyzer. Analyze this image.
-                1. Identify the document type (e.g., W-2, 1099, State Tax Return, Donation Receipt).
-                2. Determine the tax jurisdiction: Is this Federal or a specific State? If state, which one?
-                3. Extract all relevant financial numbers (Wages, Taxes Withheld, Amounts, Dates).
-                4. Summarize the content briefly.
-                
-                Return strictly JSON format matching this interface:
-                { 
-                  "documentType": string, 
-                  "summary": string, 
-                  "extractedFields": { 
-                    "jurisdiction": "Federal" | "State", 
-                    "region": "string (e.g., California) or null if Federal",
-                    "wages": number,
-                    "tax_withheld": number 
-                  }, 
-                  "confidenceScore": number 
-                }
-                `,
-              },
-              {
-                type: 'image_url',
-                image_url: { url: imageBase64 },
-              },
-            ],
-          },
-        ],
-        response_format: { type: 'json_object' },
-      });
-
-      const content = response.choices[0].message.content;
-      if (!content) throw new Error('Empty AI response');
+      // Remove data URI prefix if present (e.g. "data:image/jpeg;base64,")
+      const base64Data = imageBase64.split(',')[1] || imageBase64;
       
-      return JSON.parse(content) as ExtractedDocumentData;
+      // Determine mimeType
+      const mimeType = imageBase64.split(';')[0]?.split(':')[1] || 'image/jpeg';
+
+      const model = this.googleClient.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+      const prompt = `You are a professional Tax Document Analyzer. Analyze this image.
+      1. Identify the document type (e.g., W-2, 1099, State Tax Return, Donation Receipt).
+      2. Determine the tax jurisdiction: Is this Federal or a specific State? If state, which one?
+      3. Extract all relevant financial numbers (Wages, Taxes Withheld, Amounts, Dates).
+      4. Summarize the content briefly.
+      
+      Return strictly JSON format matching this interface:
+      { 
+        "documentType": string, 
+        "summary": string, 
+        "extractedFields": { 
+          "jurisdiction": "Federal" | "State", 
+          "region": "string (e.g., California) or null if Federal",
+          "wages": number,
+          "tax_withheld": number 
+        }, 
+        "confidenceScore": number 
+      }`;
+
+      const result = await model.generateContent([
+        prompt,
+        {
+          inlineData: {
+            mimeType: mimeType,
+            data: base64Data,
+          },
+        },
+      ]);
+
+      const response = await result.response;
+      const text = response.text();
+      
+      // Clean potential markdown formatting
+      let jsonStr = text.trim();
+      if (jsonStr.startsWith("```json")) {
+        jsonStr = jsonStr.slice(7, -3).trim();
+      }
+
+      return JSON.parse(jsonStr) as ExtractedDocumentData;
     } catch (error) {
-      this.logger.error('Document Extraction Error:', error);
+      this.logger.error('Google OCR Error:', error);
       throw error;
     }
   }
 
   /**
-   * CALCULATION: Uses Groq (Llama 3.1) for fast logic
+   * CALCULATION: Uses Groq (Llama 3.1)
    */
   async calculateTax(
     taxYear: number,
