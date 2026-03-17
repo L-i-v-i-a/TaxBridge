@@ -57,21 +57,24 @@ export default function DashboardPage() {
     );
   }
 
+  // --- SAFE DATA EXTRACTION ---
+  // Extracting values with fallbacks to prevent "possibly undefined" errors
+  const stats = data?.stats;
+  const income = stats?.totalIncome ?? 0;
+  const expenses = stats?.totalExpenses ?? 0;
+  const netPosition = stats?.netPosition ?? 0;
+  const filingsCount = stats?.totalFilings ?? 0;
+
   return (
     <div className="h-screen flex overflow-hidden bg-gray-50">
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content Area */}
       <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Top Bar */}
         <TopBar />
 
-        {/* Main Content Scroll Area */}
         <main className="flex-1 overflow-y-auto p-6 lg:p-8">
           <div className="max-w-7xl mx-auto space-y-6">
             
-            {/* Page Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
               <p className="text-gray-500 mt-1">Welcome back! Here is an overview of your taxes.</p>
@@ -81,33 +84,34 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <StatsCard 
                 title="Total Income" 
-                value={`$${data?.stats.totalIncome.toLocaleString() || 0}`} 
+                value={`$${income.toLocaleString()}`} 
                 icon={DollarSign} 
               />
               <StatsCard 
                 title="Total Expenses" 
-                value={`$${data?.stats.totalExpenses.toLocaleString() || 0}`} 
+                value={`$${expenses.toLocaleString()}`} 
                 icon={TrendingUp} 
                 trendColor="text-red-500"
               />
               <StatsCard 
                 title="Net Position" 
-                value={`$${data?.stats.netPosition.toLocaleString() || 0}`} 
+                value={`$${netPosition.toLocaleString()}`} 
                 icon={Activity} 
-                trend={data?.stats.netPosition >= 0 ? "Profit" : "Loss"}
-                trendColor={data?.stats.netPosition >= 0 ? "text-green-500" : "text-red-500"}
+                trend={netPosition >= 0 ? "Profit" : "Loss"}
+                trendColor={netPosition >= 0 ? "text-green-500" : "text-red-500"}
               />
               <StatsCard 
                 title="Total Filings" 
-                value={data?.stats.totalFilings || 0} 
+                value={filingsCount} 
                 icon={FileText} 
               />
             </div>
 
             {/* Charts Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <MonthlyActivityChart data={data?.charts.monthlyActivity || []} />
-              <FilingStatusChart data={data?.charts.filingStatus || []} />
+              {/* Fallback to empty array if chart data is missing */}
+              <MonthlyActivityChart data={data?.charts?.monthlyActivity || []} />
+              <FilingStatusChart data={data?.charts?.filingStatus || []} />
             </div>
 
             {/* Recent Activity */}

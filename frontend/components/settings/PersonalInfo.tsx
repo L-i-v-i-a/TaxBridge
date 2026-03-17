@@ -10,7 +10,7 @@ interface ProfileFormData {
   phone: string;
   occupation: string;
   ein: string;
-  numberOfDependents: string; // Input is string
+  numberOfDependents: string;
   streetAddress: string;
   zipCode: string;
   city: string;
@@ -19,8 +19,10 @@ interface ProfileFormData {
   filingStatus: string;
 }
 
-// 2. Define interface for API Payload (number conversion)
+// 2. Define interface for API Payload
+// Added [key: string]: any to satisfy the index signature requirement of UpdateProfileDto
 interface UpdateProfilePayload extends Omit<ProfileFormData, 'numberOfDependents'> {
+  [key: string]: string | number | undefined;
   numberOfDependents?: number;
 }
 
@@ -80,7 +82,6 @@ export default function PersonalInfo() {
     if (e.target.files?.[0]) {
       const file = e.target.files[0];
       setSelectedFile(file);
-      // Preview image
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfilePic(reader.result as string);
@@ -93,22 +94,22 @@ export default function PersonalInfo() {
     e.preventDefault();
     setSaving(true);
     try {
-      // 3. Use specific types instead of 'any'
+      // 3. Construct the payload with the correct type
       const payload: UpdateProfilePayload = {
         ...form,
         numberOfDependents: form.numberOfDependents ? parseInt(form.numberOfDependents, 10) : undefined,
       };
 
-      // Remove undefined keys if necessary (optional, but good for clean payloads)
+      // Clean up undefined values if your backend prefers them absent
       if (!payload.numberOfDependents) {
         delete payload.numberOfDependents;
       }
 
       await updateProfile(payload, selectedFile);
       alert('Profile updated!');
-      setSelectedFile(null); 
+      setSelectedFile(null);
     } catch (err: unknown) {
-      // 4. Handle unknown error safely
+      // 4. Safe error handling
       if (err instanceof Error) {
         alert(err.message || 'Failed to update profile');
       } else {

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { FileText, Sparkles, Upload, MessageSquare, PlayCircle, Files } from 'lucide-react';
 
 export default function HomeFeatures() {
@@ -37,8 +37,8 @@ export default function HomeFeatures() {
     },
   ];
 
-  // Animation variants – fixed easing values
-  const containerVariants = {
+  // Animation variants – Explicitly typed as Variants
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -49,19 +49,19 @@ export default function HomeFeatures() {
     },
   };
 
-  const headerVariants = {
+  const headerVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "circOut",           // valid Framer Motion easing
+        ease: "circOut",
       },
     },
   };
 
-  const cardVariants = {
+  const cardVariants: Variants = {
     hidden: { opacity: 0, y: 40, scale: 0.95 },
     visible: {
       opacity: 1,
@@ -69,7 +69,7 @@ export default function HomeFeatures() {
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: "circOut",           // fixed – was invalid "easeOut"
+        ease: "circOut",
       },
     },
     hover: {
@@ -79,14 +79,14 @@ export default function HomeFeatures() {
     },
   };
 
-  const iconVariants = {
+  const iconVariants: Variants = {
     hidden: { scale: 0, rotate: -180 },
     visible: {
       scale: 1,
       rotate: 0,
       transition: {
         duration: 0.5,
-        ease: "circOut",           // fixed
+        ease: "circOut",
       },
     },
     hover: {

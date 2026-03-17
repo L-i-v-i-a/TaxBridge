@@ -10,11 +10,48 @@ import { getProfile, getStats } from '../../../../utilis/api';
 import Topbar from '../../../../components/dashboard/Topbar';
 import Sidebar from '../../../../components/dashboard/Sidebar';
 
+// 1. Define specific types to avoid 'any'
+interface UserProfile {
+  name: string;
+  email: string;
+  profilePicture: string | null;
+}
+
+interface StatCards {
+  totalRefunds: number;
+  refundGrowth: number;
+  filedReturns: number;
+  filingSince: string;
+  avgProcessingDays: number;
+  daysFaster: number;
+  docsUploaded: number;
+}
+
+interface RefundHistoryItem {
+  year: string;
+  amount: number;
+}
+
+interface DeductionItem {
+  name: string;
+  value: number;
+}
+
+interface DashboardStats {
+  cards: StatCards;
+  refundHistory: RefundHistoryItem[];
+  deductions: DeductionItem[];
+}
+
 export default function Settings() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isPassModal, setIsPassModal] = useState(false);
-  const [stats, setStats] = useState(null);
-  const [profile, setProfile] = useState<any>(null);
+  
+  // 2. Fix: Initialize as undefined (matching optional prop) and use specific type
+  const [stats, setStats] = useState<DashboardStats | undefined>(undefined);
+  
+  // 3. Fix: Replace 'any' with specific UserProfile interface
+  const [profile, setProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     getStats().then(setStats);
@@ -34,7 +71,7 @@ export default function Settings() {
               <div className="flex items-center gap-6">
                 <div className="w-20 h-20 rounded-full bg-blue-100 overflow-hidden border-4 border-white shadow-lg flex items-center justify-center text-blue-600 text-2xl font-bold">
                   {profile?.profilePicture ? (
-                    <img src={profile.profilePicture} className="w-full h-full object-cover" />
+                    <img src={profile.profilePicture} className="w-full h-full object-cover" alt="Profile" />
                   ) : (
                     profile?.name?.charAt(0) || 'U'
                   )}

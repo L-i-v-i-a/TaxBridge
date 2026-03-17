@@ -1,4 +1,3 @@
-// app/notifications/page.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -9,6 +8,7 @@ import Sidebar from '../../../../components/dashboard/Sidebar';
 
 type NotificationType = 'FILING' | 'CHAT' | 'SYSTEM';
 type StatusFilter = 'ALL' | 'UNREAD' | 'READ';
+type TabType = NotificationType | 'ALL'; // Define this to avoid 'any'
 
 interface Notification {
   id: string;
@@ -25,7 +25,7 @@ export default function NotificationsPage() {
   const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<NotificationType | 'ALL'>('ALL');
+  const [activeTab, setActiveTab] = useState<TabType>('ALL');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('UNREAD');
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function NotificationsPage() {
       });
       if (res.ok) setNotifications(await res.json());
     } catch (err) {
-      console.error(err);
+      console.error(err instanceof Error ? err.message : err);
     } finally {
       setLoading(false);
     }
@@ -60,17 +60,15 @@ export default function NotificationsPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       
-      // Remove from list if filter is UNREAD
       if (statusFilter === 'UNREAD') {
         setNotifications(prev => prev.filter(n => n.id !== id));
       } else {
-        // Update state locally
         setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
       }
       
       if (link) router.push(link);
     } catch (err) {
-      console.error(err);
+      console.error(err instanceof Error ? err.message : err);
     }
   };
 
@@ -79,6 +77,13 @@ export default function NotificationsPage() {
     if (type === 'CHAT') return <MessageSquare className="text-orange-500" size={20} />;
     return <Bell className="text-gray-500" size={20} />;
   };
+
+  // Define tab constants outside the render loop or with a specific type
+  const tabs: { key: TabType; label: string }[] = [
+    { key: 'ALL', label: 'All' },
+    { key: 'FILING', label: 'Filings' },
+    { key: 'CHAT', label: 'Alerts' },
+  ];
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -93,11 +98,15 @@ export default function NotificationsPage() {
               <button 
                 onClick={async () => {
                     const token = localStorage.getItem('access_token');
-                    await fetch('https://backend-production-c062.up.railway.app/notifications/read-all', {
-                        method: 'PATCH',
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-                    fetchNotifications();
+                    try {
+                      await fetch('https://backend-production-c062.up.railway.app/notifications/read-all', {
+                          method: 'PATCH',
+                          headers: { Authorization: `Bearer ${token}` }
+                      });
+                      fetchNotifications();
+                    } catch (err) {
+                      console.error(err);
+                    }
                 }}
                 className="text-sm text-[#0D23AD] font-medium hover:underline"
               >
@@ -108,11 +117,10 @@ export default function NotificationsPage() {
             {/* Tabs & Filters */}
             <div className="bg-white rounded-xl border shadow-sm mb-6 p-4">
               <div className="flex flex-wrap gap-2">
-                {/* Status Filters */}
-                {['UNREAD', 'ALL', 'READ'].map((s) => (
+                {(['UNREAD', 'ALL', 'READ'] as StatusFilter[]).map((s) => (
                   <button
                     key={s}
-                    onClick={() => setStatusFilter(s as StatusFilter)}
+                    onClick={() => setStatusFilter(s)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition ${
                       statusFilter === s ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
@@ -123,15 +131,10 @@ export default function NotificationsPage() {
               </div>
 
               <div className="flex gap-4 mt-4 border-t pt-4">
-                {/* Category Tabs */}
-                {[
-                  { key: 'ALL', label: 'All' },
-                  { key: 'FILING', label: 'Filings' },
-                  { key: 'CHAT', label: 'Alerts' },
-                ].map((tab) => (
+                {tabs.map((tab) => (
                   <button
                     key={tab.key}
-                    onClick={() => setActiveTab(tab.key as any)}
+                    onClick={() => setActiveTab(tab.key)}
                     className={`flex-1 py-2 rounded-lg text-sm font-medium border transition ${
                       activeTab === tab.key 
                         ? 'bg-blue-50 border-blue-200 text-blue-700' 
