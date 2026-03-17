@@ -1,52 +1,90 @@
 // lib/api.ts
 const BASE_URL = 'https://backend-production-c062.up.railway.app';
 
+// Define specific types for API payloads
+interface UpdateProfileDto {
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+  phone?: string;
+  occupation?: string;
+  ein?: string;
+  numberOfDependents?: number;
+  streetAddress?: string;
+  zipCode?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  filingStatus?: string;
+  [key: string]: string | number | undefined; // Index signature for flexibility
+}
+
+interface ChangePasswordDto {
+  oldPassword: string;
+  newPassword: string;
+}
+
+/**
+ * Helper for standard JSON requests.
+ */
 async function apiFetch(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem('access_token');
-  const headers = {
-    'Content-Type': 'application/json',
-    ...options.headers,
-  } as HeadersInit;
+  
+  // Fix: Use the Headers class for type-safe header manipulation
+  const headers = new Headers(options.headers);
+
+  // Automatically handle Content-Type based on body type
+  if (!(options.body instanceof FormData)) {
+    headers.set('Content-Type', 'application/json');
+  }
 
   if (token) {
-    (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
+    headers.set('Authorization', `Bearer ${token}`);
   }
 
   const response = await fetch(`${BASE_URL}${endpoint}`, { ...options, headers });
   
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Network response was not ok');
+    let errorMessage = 'Network response was not ok';
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorMessage;
+    } catch (e) {
+      // Ignore if response is not JSON
+    }
+    throw new Error(errorMessage);
   }
   
+  // Handle 204 No Content
   if (response.status === 204) return null;
   
   return response.json();
 }
 
+// ---------------------------------------------------------
+// AUTH
+// ---------------------------------------------------------
+
 export const getProfile = () => apiFetch('/auth/profile');
 
-// Updated to handle File uploads
-export const updateProfile = async (data: any, file?: File | null) => {
+export const updateProfile = async (data: UpdateProfileDto, file?: File | null) => {
   const token = localStorage.getItem('access_token');
   
-  // If a file is provided, use FormData
   if (file) {
     const formData = new FormData();
     
-    // Append all text fields
     Object.keys(data).forEach(key => {
-      if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
-        formData.append(key, data[key]);
+      const value = data[key];
+      if (value !== undefined && value !== null) {
+        formData.append(key, String(value));
       }
     });
     
-    // Append the file with the specific field name expected by backend
     formData.append('profilePicture', file);
 
     const response = await fetch(`${BASE_URL}/auth/profile`, {
       method: 'PATCH',
-      headers: { Authorization: `Bearer ${token}` }, // Let browser set Content-Type
+      headers: { Authorization: `Bearer ${token}` }, // Let browser set Content-Type for FormData
       body: formData,
     });
 
@@ -57,35 +95,49 @@ export const updateProfile = async (data: any, file?: File | null) => {
     return response.json();
   }
 
-  // Otherwise, use JSON
   return apiFetch('/auth/profile', { 
     method: 'PATCH', 
     body: JSON.stringify(data) 
   });
 };
 
-export const changePassword = (data: any) => apiFetch('/auth/change-password', { method: 'POST', body: JSON.stringify(data) });
+export const changePassword = (data: ChangePasswordDto) => 
+  apiFetch('/auth/change-password', { method: 'POST', body: JSON.stringify(data) });
+
+// ---------------------------------------------------------
+// SETTINGS & FILINGS
+// ---------------------------------------------------------
+
 export const getStats = () => apiFetch('/settings/stats');
 export const getFilings = () => apiFetch('/filings');
-export const getDocuments = () => apiFetch('/settings/documents');
 
-export const uploadDocument = async (file: File, filingId: string) => {
-  const token = localStorage.getItem('access_token');
+// ---------------------------------------------------------
+// SETTINGS/FILING DOCUMENTS (Linked to specific filings)
+// ---------------------------------------------------------
+
+export const getFilingDocuments = () => apiFetch('/settings/documents');
+
+export const uploadFilingDocument = async (file: File, filingId: string) => {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('filingId', filingId);
   formData.append('name', file.name);
 
+  const token = localStorage.getItem('access_token');
   const response = await fetch(`${BASE_URL}/settings/documents`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
     body: formData,
   });
-  if (!response.ok) throw new Error('Upload failed');
+  
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.message || 'Upload failed');
+  }
   return response.json();
 };
 
-export const downloadDocument = async (id: string) => {
+export const downloadFilingDocument = async (id: string) => {
   const token = localStorage.getItem('access_token');
   const response = await fetch(`${BASE_URL}/settings/documents/${id}/download`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -94,4 +146,39 @@ export const downloadDocument = async (id: string) => {
   return response.blob();
 };
 
-export const deleteDocument = (id: string) => apiFetch(`/settings/documents/${id}`, { method: 'DELETE' });
+export const deleteFilingDocument = (id: string) => 
+  apiFetch(`/settings/documents/${id}`, { method: 'DELETE' });
+
+
+// ---------------------------------------------------------
+// DOCUMENT MANAGER (New OCR Feature)
+// ---------------------------------------------------------
+
+export const getDocuments = async (type?: string) => {
+  const url = type 
+    ? `/documents?type=${encodeURIComponent(type)}`
+    : '/documents';
+  return apiFetch(url);
+};
+
+export const uploadDocument = async (file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const token = localStorage.getItem('access_token');
+  const response = await fetch(`${BASE_URL}/documents`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.message || 'Upload failed');
+  }
+  return response.json();
+};
+
+export const deleteDocument = async (id: string) => {
+  return apiFetch(`/documents/${id}`, { method: 'DELETE' });
+};
