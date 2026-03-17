@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { RecentActivity } from '@/types/dashboard';
+import { RecentActivity } from '../../types/dashboard';
 
 interface Props { data: RecentActivity[]; }
 
