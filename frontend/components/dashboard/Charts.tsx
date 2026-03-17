@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
-import { ChartData, MonthlyData } from '@/types/dashboard';
+import { ChartData, MonthlyData } from '../../types/dashboard';
 
 interface StatusChartProps { data: ChartData[]; }
 interface ActivityChartProps { data: MonthlyData[]; }

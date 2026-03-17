@@ -23,7 +23,7 @@ export default function FilingsPage() {
 
       try {
         // Fetch Stats
-        const statsRes = await fetch('http://localhost:3000/filings/stats', {
+        const statsRes = await fetch('https://backend-production-c062.up.railway.app/filings/stats', {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (statsRes.ok) {

@@ -28,7 +28,7 @@ export default function SubscriptionPage() {
   const fetchSubscriptions = async () => {
     const token = localStorage.getItem('access_token');
     try {
-      const res = await fetch('http://localhost:3000/subscriptions/admin/all', {
+      const res = await fetch('https://backend-production-c062.up.railway.app/subscriptions/admin/all', {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -51,7 +51,7 @@ export default function SubscriptionPage() {
 
     const token = localStorage.getItem('access_token');
     try {
-      const res = await fetch(`http://localhost:3000/subscriptions/admin/${subId}`, {
+      const res = await fetch(`https://backend-production-c062.up.railway.app/subscriptions/admin/${subId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

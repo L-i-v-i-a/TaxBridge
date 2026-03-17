@@ -38,7 +38,7 @@ export default function AdminUsersPage() {
     setLoading(true);
     const token = localStorage.getItem('access_token');
     try {
-      const res = await fetch('http://localhost:3000/admin/users', {
+      const res = await fetch('https://backend-production-c062.up.railway.app/admin/users', {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {

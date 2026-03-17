@@ -44,7 +44,7 @@ export default function AdminChatRoomPage() {
       if (!id) return;
 
       try {
-        const res = await fetch(`http://localhost:3000/chat/conversations/${id}`, {
+        const res = await fetch(`https://backend-production-c062.up.railway.app/chat/conversations/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {
@@ -96,7 +96,7 @@ export default function AdminChatRoomPage() {
     setSending(true);
 
     try {
-      await fetch('http://localhost:3000/chat/messages', {
+      await fetch('https://backend-production-c062.up.railway.app/chat/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -170,10 +170,10 @@ export default function AdminChatRoomPage() {
                         : 'bg-white text-gray-800 rounded-bl-sm border border-gray-200'
                     }`}>
                       {msg.type === 'IMAGE' && msg.fileUrl && (
-                        <img src={`http://localhost:3000/${msg.fileUrl}`} alt="Attachment" className="rounded-lg mb-2 max-w-full" />
+                        <img src={`https://backend-production-c062.up.railway.app/${msg.fileUrl}`} alt="Attachment" className="rounded-lg mb-2 max-w-full" />
                       )}
                       {msg.type === 'FILE' && msg.fileUrl && (
-                        <a href={`http://localhost:3000/${msg.fileUrl}`} target="_blank" rel="noreferrer" className="underline block mb-1 text-sm">
+                        <a href={`https://backend-production-c062.up.railway.app/${msg.fileUrl}`} target="_blank" rel="noreferrer" className="underline block mb-1 text-sm">
                           📎 {msg.content}
                         </a>
                       )}

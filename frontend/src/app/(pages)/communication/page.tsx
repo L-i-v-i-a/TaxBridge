@@ -30,7 +30,7 @@ export default function CommunicationPage() {
     if (!token) return;
     
     try {
-      const res = await fetch('http://localhost:3000/chat/conversations', {
+      const res = await fetch('https://backend-production-c062.up.railway.app/chat/conversations', {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -56,7 +56,7 @@ export default function CommunicationPage() {
     }
 
     try {
-      const res = await fetch('http://localhost:3000/chat/conversations', {
+      const res = await fetch('https://backend-production-c062.up.railway.app/chat/conversations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

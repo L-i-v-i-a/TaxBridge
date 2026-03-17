@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { MonthlyData } from '@/types/dashboard';
+import { MonthlyData } from '../../types/dashboard';
 
 interface Props {
   data: MonthlyData[];

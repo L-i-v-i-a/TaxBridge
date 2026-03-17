@@ -62,7 +62,7 @@ const ContactUs = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/contact', {
+      const response = await fetch('https://backend-production-c062.up.railway.app/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ const ContactUs = () => {
 
   return (
     <>
-      <div className="bg-[#1e3a8a] min-h-screen pt-20 p-16 lg:p-32">
+      <div className="bg-blue-900 bg-[url('/document.jpg')] bg-center bg-repeat bg-blend-overlay min-h-screen pt-20 p-16 lg:p-30 ">
         {/* Container holding both sides */}
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           

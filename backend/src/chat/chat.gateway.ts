@@ -10,14 +10,16 @@ import {
 } from '@nestjs/websockets';
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { OnEvent } from '@nestjs/event-emitter'; 
+import { OnEvent } from '@nestjs/event-emitter';
 
-import { SenderType } from '@prisma/client';
+import { SenderType, NotificationType, NotificationPriority } from '@prisma/client';
 
 import { Server, Socket } from 'socket.io';
 
+import { PrismaService } from '../prisma.service';
 import { AiService } from '../ai/ai.service';
 import { MailService } from '../mail/mail.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 import { ChatService } from './chat.service';
 
@@ -36,35 +38,22 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private chatService: ChatService,
     private aiService: AiService,
     private mailService: MailService,
+    private notifications: NotificationsService, // Inject Notifications
+    private prisma: PrismaService, // Inject Prisma to fetch admins
   ) {}
 
   async handleConnection(client: Socket) {
     try {
-      // 1. Retrieve token from auth or headers
       let token = client.handshake.auth.token || client.handshake.headers.authorization;
-
-      if (!token) {
-        throw new Error('No token provided');
-      }
-
-      // 2. Remove 'Bearer ' prefix if it exists
-      if (token.startsWith('Bearer ')) {
-        token = token.split(' ')[1];
-      }
-
-      // 3. Verify Token
+      if (!token) throw new Error('No token provided');
+      if (token.startsWith('Bearer ')) token = token.split(' ')[1];
+      
       const payload = await this.jwtService.verifyAsync(token);
-      client.data.user = payload; // { sub: userId, email, isAdmin }
-
-      // Join personal room for notifications
+      client.data.user = payload;
       client.join(`user-${payload.sub}`);
-
-      // If Admin, join the admin support room
+      
       if (payload.isAdmin) {
         client.join('admin-support');
-        this.logger.log(`Admin ${payload.sub} connected`);
-      } else {
-        this.logger.log(`User ${payload.sub} connected`);
       }
     } catch (e) {
       this.logger.error(`Connection failed: ${e.message}`);
@@ -72,51 +61,64 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  async handleDisconnect(client: Socket) {
-    // Cleanup logic if needed
-  }
+  async handleDisconnect(client: Socket) {}
 
   @SubscribeMessage('joinConversation')
   async handleJoinRoom(@ConnectedSocket() client: Socket, @MessageBody() conversationId: string) {
     client.join(`conv-${conversationId}`);
-    this.logger.log(`Client ${client.id} joined room conv-${conversationId}`);
   }
 
-  // Listener for messages created via HTTP or Socket
   @OnEvent('message.created')
   async handleMessageCreatedEvent(payload: { message: any; senderId: string }) {
     const { message, senderId } = payload;
     const conversationId = message.conversationId;
 
-    // 1. Broadcast message to the conversation room
+    // 1. Broadcast the new message to the room
     this.server.to(`conv-${conversationId}`).emit('newMessage', message);
 
-    // 2. Handle Side Effects (AI, Email, Notifications)
+    // 2. Handle Side Effects (AI / Agent)
     const conversation = await this.chatService.getConversation(conversationId);
     if (!conversation) return;
 
     const isAiConversation = conversation.type === 'AI';
-    const isSenderAdmin = message.senderType === 'ADMIN';
+    const isUserSender = message.senderType === 'USER';
 
-    if (isAiConversation && !isSenderAdmin) {
+    if (isAiConversation && isUserSender) {
       // --- AI LOGIC ---
-      const aiResponseContent = await this.aiService.chat(message.content);
-      
-      // This creates a new message, which will trigger this event again recursively
-      await this.chatService.createMessage(
-        conversationId,
-        'AI_SYSTEM',
-        'AI',
-        aiResponseContent,
-        'TEXT',
-      );
+      this.server.to(`conv-${conversationId}`).emit('ai_typing', { isTyping: true });
+
+      try {
+        // Fetch recent history for context (last 10 messages)
+        const history = conversation.messages.slice(-10).map((msg: any) => ({
+          role: (msg.senderType === 'AI' ? 'assistant' : 'user') as 'user' | 'assistant',
+          content: msg.content,
+        }));
+
+        // Get AI Response
+        const aiResponseContent = await this.aiService.chat(message.content, history);
+        
+        // Save AI Message
+        await this.chatService.createMessage(
+          conversationId,
+          'AI_SYSTEM',
+          'AI',
+          aiResponseContent,
+          'TEXT',
+        );
+      } catch (error) {
+        this.logger.error('AI Response failed', error);
+      } finally {
+        this.server.to(`conv-${conversationId}`).emit('ai_typing', { isTyping: false });
+      }
     } else if (conversation.type === 'AGENT') {
       // --- AGENT LOGIC ---
+      const isSenderAdmin = message.senderType === 'ADMIN';
+      
       if (isSenderAdmin) {
-        // Admin replied -> Notify specific User
+        // 1. Real-time Socket Notification to User
         this.server.to(`user-${conversation.userId}`).emit('notification', message);
         
-        // Send Email
+        // 2. Email Notification
         const userName = conversation.user.name || 'User';
         await this.mailService.sendNewMessageNotification(
           conversation.user.email,
@@ -125,14 +127,46 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
           message.content,
           conversationId
         );
+
+        // 3. In-App Notification for User
+        await this.notifications.createNotification(
+          conversation.userId,
+          NotificationType.CHAT,
+          'New Support Message',
+          message.content.substring(0, 50) + '...',
+          NotificationPriority.LOW,
+          `/communication/${conversationId}`
+        );
+
       } else {
-        // User replied -> Notify all Admins
+        // User replied -> Notify Admins
+        
+        // 1. Real-time Socket Notification to Admin Room
         this.server.to('admin-support').emit('notification', message);
+
+        // 2. Create In-App Notification for ALL Admins
+        // Fetch all admin IDs
+        const admins = await this.prisma.user.findMany({
+          where: { isAdmin: true },
+          select: { id: true },
+        });
+
+        // Create notification for each admin
+        // Note: In a high-traffic app, use Promise.all or a bulk insert method
+        for (const admin of admins) {
+          await this.notifications.createNotification(
+            admin.id,
+            NotificationType.CHAT,
+            'New Support Ticket Reply',
+            `${conversation.user.name || 'User'}: ${message.content.substring(0, 30)}...`,
+            NotificationPriority.HIGH, // Support tickets usually high priority
+            `/admin/support/${conversationId}`
+          );
+        }
       }
     }
   }
 
-  // Keep socket listener for direct socket messages
   @SubscribeMessage('sendMessage')
   async handleSocketMessage(
     @ConnectedSocket() client: Socket,
@@ -143,7 +177,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     const senderType: SenderType = user.isAdmin ? 'ADMIN' : 'USER';
     
-    // Delegate to service (which emits the event we listen to above)
     await this.chatService.createMessage(
       data.conversationId,
       user.sub,

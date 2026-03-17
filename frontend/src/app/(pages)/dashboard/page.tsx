@@ -25,7 +25,7 @@ export default function DashboardPage() {
       }
 
       try {
-        const response = await fetch('http://localhost:3000/dashboard', {
+        const response = await fetch('https://backend-production-c062.up.railway.app/dashboard', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
