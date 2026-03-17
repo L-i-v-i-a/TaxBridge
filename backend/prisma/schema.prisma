@@ -7,42 +7,42 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  name           String?
-  firstName      String?
-  lastName       String?
-  ein            String?
+  id                 String    @id @default(uuid())
+  name               String?
+  firstName          String?
+  lastName           String?
+  ein                String?
   numberOfDependents Int?
-  occupation     String?
-  streetAddress  String?
-  zipCode        String?
-  city           String?
-  state          String?
-  country        String?
-  filingStatus   String?
-  username       String   @unique
-  phone          String?  @unique
-  email          String   @unique
-  dateOfBirth    DateTime
-  password       String
-  ssn            String?
-  profilePicture String?
-  isVerified     Boolean  @default(false)
-  isAdmin        Boolean  @default(false)
-  googleId       String?  @unique
-  otp            String?
-  otpExpiresAt   DateTime?
-  paystackCustomerId String? @unique
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  occupation         String?
+  streetAddress      String?
+  zipCode            String?
+  city               String?
+  state              String?
+  country            String?
+  filingStatus       String?
+  username           String    @unique
+  phone              String?   @unique
+  email              String    @unique
+  dateOfBirth        DateTime
+  password           String
+  ssn                String?
+  profilePicture     String?
+  isVerified         Boolean   @default(false)
+  isAdmin            Boolean   @default(false)
+  googleId           String?   @unique
+  otp                String?
+  otpExpiresAt       DateTime?
+  paystackCustomerId String?   @unique
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 
   // Relations
 
-  filings        TaxFiling[]
-  subscriptions  Subscription[]
-  conversations  Conversation[] // <--- ADDED: Relation to Chat
+  filings       TaxFiling[]
+  subscriptions Subscription[]
+  conversations Conversation[] // <--- ADDED: Relation to Chat
   notifications Notification[]
-  documents Document[]
+  documents     Document[]
 }
 
 model Subscriber {
@@ -52,32 +52,32 @@ model Subscriber {
 }
 
 model PricingPlan {
-  id               String   @id @default(uuid())
+  id               String         @id @default(uuid())
   title            String
   features         String[]
   price            Float
   discount         Float?
   type             String
-  paystackPlanCode String? @unique
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  paystackPlanCode String?        @unique
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
   subscriptions    Subscription[]
 }
 
 model Subscription {
-  id                      String   @id @default(uuid())
-  userId                  String
-  planId                  String
-  paystackSubscriptionCode String? @unique
-  paystackEmailToken      String?
-  status                  String   @default("active")
-  startDate               DateTime @default(now())
-  nextPaymentDate         DateTime?
-  endDate                 DateTime?
-  createdAt               DateTime @default(now())
-  updatedAt               DateTime @updatedAt
-  user                    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plan                    PricingPlan  @relation(fields: [planId], references: [id], onDelete: Cascade)
+  id                       String      @id @default(uuid())
+  userId                   String
+  planId                   String
+  paystackSubscriptionCode String?     @unique
+  paystackEmailToken       String?
+  status                   String      @default("active")
+  startDate                DateTime    @default(now())
+  nextPaymentDate          DateTime?
+  endDate                  DateTime?
+  createdAt                DateTime    @default(now())
+  updatedAt                DateTime    @updatedAt
+  user                     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                     PricingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
 }
 
 model Contact {
@@ -104,40 +104,40 @@ enum ServiceType {
 }
 
 model TaxFiling {
-  id           String        @id @default(uuid())
-  filingId     String        @unique
-  userId       String
-  serviceType  ServiceType   @default(FULL_FILING)
-  taxYear      Int           @default(2024)
-  type         String?
-  status       FilingStatus  @default(PENDING)
-  amount       Float?
-  personalInfo Json?
+  id            String       @id @default(uuid())
+  filingId      String       @unique
+  userId        String
+  serviceType   ServiceType  @default(FULL_FILING)
+  taxYear       Int          @default(2024)
+  type          String?
+  status        FilingStatus @default(PENDING)
+  amount        Float?
+  personalInfo  Json?
   incomeDetails Json?
-  deductions   Json?
-  documents    Document[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  
+  deductions    Json?
+  documents     Document[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
   // Relation
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Document {
-  id        String @id @default(uuid())
-  name      String
-  url       String
-  type      String? // MIME type
+  id             String  @id @default(uuid())
+  name           String
+  url            String
+  type           String? // MIME type
   // Fields for AI extraction
-  documentType String? // e.g., "W2", "Receipt"
+  documentType   String? // e.g., "W2", "Receipt"
   contentSummary String? @db.Text
-  extractedData Json? // Stored JSON from AI
-  
+  extractedData  Json? // Stored JSON from AI
+
   filingId  String? // Made optional
   filing    TaxFiling? @relation(fields: [filingId], references: [id], onDelete: Cascade)
   userId    String // Add direct relation to User
-  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
 }
 
 enum ConversationType {
@@ -160,26 +160,26 @@ enum MessageType {
 }
 
 model Conversation {
-  id        String   @id @default(uuid())
+  id        String           @id @default(uuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User             @relation(fields: [userId], references: [id])
   type      ConversationType @default(AGENT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
   messages  Message[]
 }
 
 model Message {
-  id             String   @id @default(uuid())
+  id             String       @id @default(uuid())
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id])
-  senderId       String   // User ID or Admin ID or 'AI'
+  senderId       String // User ID or Admin ID or 'AI'
   senderType     SenderType
-  content        String?  @db.Text // Text content or Sticker URL
-  type           MessageType @default(TEXT)
-  fileUrl        String?  // URL for files/images/voice notes
-  reactions      Json?    // Store reactions like [{ userId: "1", emoji: "👍" }]
-  createdAt      DateTime @default(now())
+  content        String?      @db.Text // Text content or Sticker URL
+  type           MessageType  @default(TEXT)
+  fileUrl        String? // URL for files/images/voice notes
+  reactions      Json? // Store reactions like [{ userId: "1", emoji: "👍" }]
+  createdAt      DateTime     @default(now())
 
   @@index([conversationId])
 }
@@ -197,17 +197,17 @@ enum NotificationPriority {
 }
 
 model Notification {
-  id        String @id @default(uuid())
-  userId    String
-  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  type      NotificationType
-  priority  NotificationPriority @default(LOW)
-  
-  title     String
-  message   String
-  link      String? // URL to the relevant resource (e.g., /filings/123)
-  
-  isRead    Boolean @default(false)
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type     NotificationType
+  priority NotificationPriority @default(LOW)
+
+  title   String
+  message String
+  link    String? // URL to the relevant resource (e.g., /filings/123)
+
+  isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 }
