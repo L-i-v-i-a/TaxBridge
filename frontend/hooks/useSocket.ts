@@ -12,7 +12,7 @@ export const useSocket = () => {
     const token = localStorage.getItem('access_token');
     if (!token) return;
 
-    const newSocket = io('http://localhost:3000/chat', {
+    const newSocket = io('https://backend-production-c062.up.railway.app/chat', {
       auth: {
         token: `Bearer ${token}`, 
       },

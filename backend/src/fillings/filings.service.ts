@@ -4,24 +4,33 @@ import {
   UnauthorizedException,
   InternalServerErrorException,
   ForbiddenException,
-  NotFoundException
+  NotFoundException,
+  Logger
 } from '@nestjs/common';
 
-import { ServiceType, FilingStatus, Prisma } from '@prisma/client';
+import { ServiceType, FilingStatus, Prisma, NotificationType, NotificationPriority } from '@prisma/client';
+
+import { readFileSync, existsSync } from 'fs';
+
+import { join } from 'path';
 
 import { PrismaService } from '../prisma.service';
 import { AiService, DeductionsDto } from '../ai/ai.service';
 import { MailService } from '../mail/mail.service';
+import { NotificationsService } from '../notifications/notifications.service'; 
 
 import { CreateFilingDto } from './dto/create-filing.dto';
 import { UpdateFilingDto } from './dto/update-filing.dto';
 
 @Injectable()
 export class FilingsService {
+  private readonly logger = new Logger(FilingsService.name);
+
   constructor(
     private prisma: PrismaService,
     private ai: AiService,
     private mailer: MailService,
+    private notifications: NotificationsService,
   ) {}
 
   async createFiling(
@@ -40,7 +49,51 @@ export class FilingsService {
     
     const taxYear = dto.taxYear || new Date().getFullYear();
 
-    // 2. Prepare Data Object
+    // 2. --- NEW: PROCESS DOCUMENTS & EXTRACT CONTEXT ---
+    let documentContext = '';
+    const documentsData: any[] = [];
+
+    if (files && files.length > 0) {
+      for (const file of files) {
+        try {
+          // Construct file path
+          const filePath = join(process.cwd(), 'uploads', file.filename);
+          
+          if (existsSync(filePath)) {
+            // Read file and convert to Base64
+            const fileBuffer = readFileSync(filePath);
+            const base64 = `data:${file.mimetype};base64,${fileBuffer.toString('base64')}`;
+            
+            this.logger.log(`Analyzing document: ${file.originalname}`);
+
+            // Call Vision AI
+            const extraction = await this.ai.extractFromDocument(base64);
+
+            // Prepare data for DB (Assumes schema has documentType and extractedData)
+            documentsData.push({
+              name: file.originalname,
+              url: `uploads/${file.filename}`,
+              type: file.mimetype,
+              documentType: extraction.documentType,
+              extractedData: extraction.extractedFields,
+            });
+
+            // Append to context string for Calculation AI
+            documentContext += `\n--- Document: ${file.originalname} (${extraction.documentType}) ---\n`;
+            documentContext += `Summary: ${extraction.summary}\n`;
+            documentContext += `Extracted Fields: ${JSON.stringify(extraction.extractedFields)}\n`;
+            
+          } else {
+            this.logger.warn(`File not found on disk: ${filePath}`);
+          }
+        } catch (err) {
+          this.logger.error(`Failed to process file ${file.originalname}`, err);
+          // Continue without this file's context rather than failing the whole request
+        }
+      }
+    }
+
+    // 3. Prepare Base Filing Data
     const filingData: Prisma.TaxFilingCreateInput = {
       user: { connect: { id: userId } },
       filingId: filingId,
@@ -52,18 +105,14 @@ export class FilingsService {
       deductions: dto.deductions as any,
     };
 
-    // Map uploaded files
-    if (files && files.length > 0) {
+    // Map processed documents
+    if (documentsData.length > 0) {
       filingData.documents = {
-        create: files.map((f) => ({
-          name: f.originalname,
-          url: `uploads/${f.filename}`,
-          type: f.mimetype,
-        })),
+        create: documentsData,
       };
     }
 
-    // --- LOGIC HANDLERS ---
+    // 4. --- LOGIC HANDLERS ---
 
     const aiDeductions: DeductionsDto = {
       ...dto.deductions,
@@ -72,16 +121,29 @@ export class FilingsService {
 
     // A. CALCULATION ONLY
     if (serviceType === ServiceType.CALCULATION_ONLY) {
-      const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, aiDeductions);
+      // Pass documentContext to AI
+      const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, aiDeductions, documentContext);
 
       if (aiResult.success) {
-        return this.prisma.taxFiling.create({
+        const filing = await this.prisma.taxFiling.create({
           data: {
             ...filingData,
             status: FilingStatus.COMPLETED,
-            amount: aiResult.amount
+            amount: aiResult.amount,
+            type: aiResult.taxType || dto.type || 'Federal',
           }
         });
+
+        await this.notifications.createNotification(
+          userId,
+          NotificationType.FILING,
+          'Calculation Complete',
+          `Your tax calculation for ${taxYear} is ready. Estimated refund/owe: ${aiResult.amount}`,
+          NotificationPriority.LOW,
+          `/filings/${filing.id}`
+        );
+
+        return filing;
       } else {
         const filing = await this.prisma.taxFiling.create({
           data: { ...filingData, status: FilingStatus.UNDER_REVIEW }
@@ -92,36 +154,39 @@ export class FilingsService {
           `AI Calculation Failed: ${aiResult.error}`,
           dto.personalInfo?.email
         );
+
+        await this.notifications.createNotification(
+          userId,
+          NotificationType.FILING,
+          'Manual Review Required',
+          `Your filing requires manual review by our experts.`,
+          NotificationPriority.HIGH,
+          `/filings/${filing.id}`
+        );
         
         return filing;
       }
-
-      // AI Failed -> Notify Admin
-      filingData.status = FilingStatus.UNDER_REVIEW;
-      const filing = await this.prisma.taxFiling.create({ data: filingData });
-
-      await this.mailer.sendAdminNotification(
-        filingId,
-        `AI Calculation Failed: ${aiResult.error}`,
-        dto.personalInfo?.email,
-      );
-
-      return {
-        message: 'Complex data detected. Expert assigned for manual review.',
-        data: filing,
-      };
     }
 
     // B. EXPERT GUIDED
     if (serviceType === ServiceType.EXPERT_GUIDED) {
       const filing = await this.prisma.taxFiling.create({
-        data: { ...filingData, status: FilingStatus.UNDER_REVIEW },
+        data: { ...filingData, status: FilingStatus.UNDER_REVIEW }
       });
-
+      
       await this.mailer.sendAdminNotification(
         filingId,
         'New Expert Guided Request',
         dto.personalInfo?.email
+      );
+
+      await this.notifications.createNotification(
+        userId,
+        NotificationType.FILING,
+        'Expert Request Submitted',
+        `Your request has been submitted. An expert will contact you shortly.`,
+        NotificationPriority.LOW,
+        `/filings/${filing.id}`
       );
       
       return filing;
@@ -129,16 +194,29 @@ export class FilingsService {
 
     // C. FULL FILING
     if (serviceType === ServiceType.FULL_FILING) {
-      const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, aiDeductions);
+      // Pass documentContext to AI
+      const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, aiDeductions, documentContext);
 
       if (aiResult.success) {
-        return this.prisma.taxFiling.create({
+        const filing = await this.prisma.taxFiling.create({
           data: {
             ...filingData,
             status: FilingStatus.COMPLETED,
-            amount: aiResult.amount
+            amount: aiResult.amount,
+            type: aiResult.taxType || dto.type || 'Federal',
           }
         });
+
+        await this.notifications.createNotification(
+          userId,
+          NotificationType.FILING,
+          'Filing Submitted',
+          `Your full tax filing has been successfully submitted.`,
+          NotificationPriority.LOW,
+          `/filings/${filing.id}`
+        );
+
+        return filing;
       } else {
         const filing = await this.prisma.taxFiling.create({
           data: { ...filingData, status: FilingStatus.NEEDS_INFO }
@@ -148,6 +226,15 @@ export class FilingsService {
           filingId,
           'Manual Filing Intervention Required',
           dto.personalInfo?.email
+        );
+
+        await this.notifications.createNotification(
+          userId,
+          NotificationType.FILING,
+          'More Information Needed',
+          `We need some additional details to process your filing.`,
+          NotificationPriority.HIGH,
+          `/filings/${filing.id}`
         );
         
         return filing;
@@ -165,20 +252,59 @@ export class FilingsService {
       throw new ForbiddenException('Only administrators can update filings');
     }
 
-    return this.prisma.taxFiling.update({
+    // 1. Update the filing
+    const filing = await this.prisma.taxFiling.update({
       where: { id: filingId },
       data: {
         status: dto.status,
         amount: dto.amount,
       },
     });
+
+    // 2. Create Notification for the User
+    if (dto.status) {
+      let title = 'Filing Update';
+      let message = `Your filing status changed to ${dto.status}.`;
+      
+      let priority: NotificationPriority = NotificationPriority.LOW; 
+
+      if (dto.status === FilingStatus.COMPLETED) {
+        title = 'Filing Approved!';
+        message = `Your tax filing has been approved. Amount: ${dto.amount || filing.amount}`;
+        priority = NotificationPriority.HIGH;
+      } else if (dto.status === FilingStatus.REJECTED) {
+        title = 'Filing Rejected';
+        message = `Your filing was rejected. Please review the details.`;
+        priority = NotificationPriority.HIGH;
+      } else if (dto.status === FilingStatus.NEEDS_INFO) {
+        title = 'Action Required';
+        message = `Additional information is required for your filing.`;
+        priority = NotificationPriority.HIGH;
+      }
+
+      await this.notifications.createNotification(
+        filing.userId,
+        NotificationType.FILING,
+        title,
+        message,
+        priority,
+        `/filings/${filing.id}`
+      );
+    }
+
+    return filing;
   }
 
   async getUserFilings(userId: string) {
     return this.prisma.taxFiling.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
-      include: { documents: true },
+      include: { 
+        documents: true,
+        user: {
+          select: { id: true, name: true, email: true, profilePicture: true }
+        }
+      },
     });
   }
 
@@ -209,17 +335,20 @@ export class FilingsService {
   async getFilingById(id: string, userId: string) {
     const filing = await this.prisma.taxFiling.findUnique({
       where: { id },
-      include: { documents: true, user: true }
+      include: { 
+        documents: true,
+        user: {
+          select: { id: true, name: true, email: true, profilePicture: true }
+        }
+      }
     });
 
     if (!filing) {
       throw new NotFoundException('Filing not found');
     }
 
-    // If the user is not an admin, check ownership
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
-    // FIX: Explicitly check if user is null before accessing properties
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
@@ -232,14 +361,11 @@ export class FilingsService {
   }
 
   async deleteFiling(id: string) {
-    // Check if filing exists
     const filing = await this.prisma.taxFiling.findUnique({ where: { id } });
     if (!filing) {
       throw new NotFoundException('Filing not found');
     }
 
-    // Delete associated documents first if needed, or use cascade in Prisma schema
-    // Assuming cascade is set up or we delete manually:
     await this.prisma.document.deleteMany({ where: { filingId: id } });
 
     return this.prisma.taxFiling.delete({ where: { id } });

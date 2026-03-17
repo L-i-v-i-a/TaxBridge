@@ -30,7 +30,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret,
       callbackURL:
         config.get<string>('GOOGLE_CALLBACK_URL') ||
-        'http://localhost:3000/auth/google/callback',
+        'https://backend-production-c062.up.railway.app/auth/google/callback',
       scope: ['email', 'profile'],
     });
   }

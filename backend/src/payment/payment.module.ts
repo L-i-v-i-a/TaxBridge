@@ -12,5 +12,6 @@ import { PaymentService } from './payment.service';
   imports: [AuthModule, PaystackModule],
   providers: [PaymentService, PrismaService, AdminGuard],
   controllers: [PaymentController],
+  exports: [PaymentService],
 })
 export class PaymentModule {}

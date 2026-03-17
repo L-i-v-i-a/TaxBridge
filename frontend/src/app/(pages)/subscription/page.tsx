@@ -47,7 +47,7 @@ export default function SubscriptionPage() {
     const fetchPlans = async () => {
       setLoadingPlans(true);
       try {
-        const res = await fetch(`http://localhost:3000/pricing/${billingCycle}`);
+        const res = await fetch(`https://backend-production-c062.up.railway.app/pricing/${billingCycle}`);
         if (res.ok) {
           const data = await res.json();
           setPlans(data);
@@ -68,7 +68,7 @@ export default function SubscriptionPage() {
       if (!token) return;
       
       try {
-        const res = await fetch('http://localhost:3000/subscriptions/my-subscription', {
+        const res = await fetch('https://backend-production-c062.up.railway.app/subscriptions/my-subscription', {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {
@@ -94,7 +94,7 @@ export default function SubscriptionPage() {
 
     setProcessingAction(`sub-${planId}`);
     try {
-      const res = await fetch('http://localhost:3000/subscriptions', {
+      const res = await fetch('https://backend-production-c062.up.railway.app/subscriptions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export default function SubscriptionPage() {
 
     setProcessingAction(`change-${newPlanId}`);
     try {
-      const res = await fetch('http://localhost:3000/subscriptions/change-plan', {
+      const res = await fetch('https://backend-production-c062.up.railway.app/subscriptions/change-plan', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -158,7 +158,7 @@ export default function SubscriptionPage() {
 
     setProcessingAction('update');
     try {
-      const res = await fetch('http://localhost:3000/subscriptions/update-card', {
+      const res = await fetch('https://backend-production-c062.up.railway.app/subscriptions/update-card', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -185,7 +185,7 @@ export default function SubscriptionPage() {
 
     setProcessingAction('cancel');
     try {
-      const res = await fetch('http://localhost:3000/subscriptions/cancel', {
+      const res = await fetch('https://backend-production-c062.up.railway.app/subscriptions/cancel', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });

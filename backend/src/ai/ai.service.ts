@@ -1,11 +1,9 @@
-/**
- * @file ai.service.ts
- * @description Core business logic for tax calculations and AI chat using Groq (OpenAI Compatible).
- */
-
+// src/ai/ai.service.ts
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+
 import OpenAI from 'openai';
+
 import { TAX_DATA } from './tax-data.constant';
 
 // Interfaces
@@ -13,6 +11,7 @@ export interface AiResult {
   success: boolean;
   amount?: number;
   error?: string;
+  taxType?: string; // Added: Federal or State name
 }
 
 export interface IncomeDetailsDto {
@@ -25,21 +24,31 @@ export interface DeductionsDto {
   donationAmount?: number | string;
 }
 
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+// NEW: Structured output for document extraction
+export interface ExtractedDocumentData {
+  documentType: string; // e.g., "W2", "1099-INT", "Receipt", "Bank Statement"
+  summary: string;
+  extractedFields: Record<string, any>; // Key-value pairs
+  confidenceScore: number; // 0.0 to 1.0
+}
+
 @Injectable()
 export class AiService {
-  // Renamed to 'client' since it's now Groq, but type remains OpenAI
   private client: OpenAI | null = null;
   private readonly logger = new Logger(AiService.name);
 
   constructor(private config: ConfigService) {
-    // 1. Read the GROQ API Key from environment
     const apiKey = this.config.get<string>('GROQ_API_KEY');
 
     if (apiKey) {
-      // 2. Configure OpenAI SDK to point to Groq's baseURL
       this.client = new OpenAI({
         apiKey,
-        baseURL: 'https://api.groq.com/openai/v1', // GROQ ENDPOINT
+        baseURL: 'https://api.groq.com/openai/v1',
       });
       this.logger.log('Groq AI Client initialized successfully.');
     } else {
@@ -48,22 +57,68 @@ export class AiService {
   }
 
   /**
+   * NEW: DOCUMENT OCR & EXTRACTION
+   * Uses Llama 3.2 Vision to analyze document images.
+   */
+  async extractFromDocument(imageBase64: string): Promise<ExtractedDocumentData> {
+    if (!this.client) throw new Error('AI client not initialized');
+
+    try {
+      const response = await this.client.chat.completions.create({
+        model: 'llama-3.2-11b-vision-preview', // Vision-capable model
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'text',
+                text: `You are a professional Tax Document Analyzer. Analyze this image.
+                1. Identify the document type (e.g., W-2, 1099, Donation Receipt, Medical Bill).
+                2. Extract all relevant financial numbers (Income, Taxes Withheld, Amounts, Dates).
+                3. Summarize the content briefly.
+                
+                Return strictly JSON format matching this interface:
+                { "documentType": string, "summary": string, "extractedFields": object, "confidenceScore": number }
+                `,
+              },
+              {
+                type: 'image_url',
+                image_url: {
+                  url: imageBase64, // Expects data:image/jpeg;base64,...
+                },
+              },
+            ],
+          },
+        ],
+        response_format: { type: 'json_object' },
+      });
+
+      const content = response.choices[0].message.content;
+      if (!content) throw new Error('Empty AI response');
+      
+      return JSON.parse(content) as ExtractedDocumentData;
+    } catch (error) {
+      this.logger.error('Document Extraction Error:', error);
+      throw error;
+    }
+  }
+
+  /**
    * TAX CALCULATION FEATURE
-   * Attempts AI calculation first, falls back to local logic on failure.
    */
   async calculateTax(
     taxYear: number,
     incomeDetails: IncomeDetailsDto,
     deductions: DeductionsDto,
+    documentContext?: string,
   ): Promise<AiResult> {
     if (!incomeDetails || !deductions) {
       return { success: false, error: 'Missing input data.' };
     }
 
-    // Attempt AI first
     if (this.client) {
       try {
-        return await this.aiCalculation(taxYear, incomeDetails, deductions);
+        return await this.aiCalculation(taxYear, incomeDetails, deductions, documentContext);
       } catch (error) {
         this.logger.error(
           `Groq AI Error: ${error.message}. Falling back to local logic.`,
@@ -71,7 +126,6 @@ export class AiService {
       }
     }
 
-    // Fallback to deterministic local calculation
     return this.localCalculation(taxYear, incomeDetails, deductions);
   }
 
@@ -79,19 +133,25 @@ export class AiService {
     taxYear: number,
     incomeDetails: IncomeDetailsDto,
     deductions: DeductionsDto,
+    documentContext?: string,
   ): Promise<AiResult> {
     const client = this.client;
-    if (!client) {
-      throw new Error('AI client is not initialized.');
-    }
+    if (!client) throw new Error('AI client not initialized.');
+
+    const contextPrompt = documentContext 
+      ? `\n\nAdditional Context from User Documents:\n${documentContext}\n\nUse this context to cross-verify the numbers provided.`
+      : '';
 
     const prompt = `
       You are a US Tax Professional.
       Calculate ${taxYear} US Federal Income Tax for:
       Income: ${JSON.stringify(incomeDetails)}
       Deductions: ${JSON.stringify(deductions)}
+      ${contextPrompt}
       
-      Return JSON: { "success": boolean, "amount": number, "error": "string or null" }
+      Determine if this is a Federal or State tax calculation based on the data. Default to Federal if unspecified.
+      
+      Return JSON: { "success": boolean, "amount": number, "error": "string or null", "taxType": "string (e.g., 'Federal', 'State - CA')" }
     `;
 
     const response = await client.chat.completions.create({
@@ -107,60 +167,56 @@ export class AiService {
 
   /**
    * CHAT FEATURE
-   * Handles generic conversation for the "Chat with AI" feature.
    */
-  async chat(userMessage: string): Promise<string> {
-    if (!this.client) {
-      return "I'm sorry, the AI service is currently offline. Please try again later.";
-    }
+  async chat(userMessage: string, history: ChatMessage[] = []): Promise<string> {
+    if (!this.client) return "I'm sorry, the AI service is offline.";
 
     try {
+      const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
+        {
+          role: 'system',
+          content: 'You are a helpful Tax Assistant...',
+        },
+        ...history,
+        { role: 'user', content: userMessage }
+      ];
+
       const response = await this.client.chat.completions.create({
         model: 'llama-3.1-8b-instant',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a helpful Tax Assistant for a tax filing platform. You answer questions about tax laws, filing procedures, and help users organize their financial data. Be concise and professional.',
-          },
-          { role: 'user', content: userMessage },
-        ],
+        messages: messages,
       });
 
       return response.choices[0].message.content || "I couldn't generate a response.";
     } catch (error) {
       this.logger.error('Chat AI Error:', error);
-      return "Sorry, I encountered an error processing your request. Please try again.";
+      return "Sorry, encountered an error.";
     }
   }
 
   /**
    * LOCAL CALCULATOR
-   * Uses imported TAX_DATA for accurate, offline calculations.
    */
   private async localCalculation(
     taxYear: number,
     incomeDetails: IncomeDetailsDto,
     deductions: DeductionsDto,
   ): Promise<AiResult> {
-    await new Promise((r) => setTimeout(r, 100)); // Minimal delay for UI feel
+    await new Promise((r) => setTimeout(r, 100));
 
     try {
       const grossIncome = parseFloat(String(incomeDetails.grossIncome || '0'));
-      const taxPaid = parseFloat(
-        String(incomeDetails.withholdingAmount || '0'),
-      );
+      const taxPaid = parseFloat(String(incomeDetails.withholdingAmount || '0'));
 
       if (isNaN(grossIncome) || grossIncome <= 0) {
         return { success: false, error: 'Valid Gross Income required' };
       }
 
-      // Retrieve config from imported constant
       const config = TAX_DATA[taxYear] || TAX_DATA[2024];
 
       let totalDeductions = config.standardDeduction;
 
       if (deductions.hasDeductibleExpenses === 'Yes') {
-        totalDeductions += 5000; // Simplified estimation
+        totalDeductions += 5000;
       }
       if (deductions.donationAmount) {
         totalDeductions += parseFloat(String(deductions.donationAmount));
@@ -177,11 +233,13 @@ export class AiService {
         }
       }
 
+      // FIX: Define finalAmount before using it
       const finalAmount = taxPaid - taxOwed;
 
       return {
         success: true,
         amount: Math.round(finalAmount * 100) / 100,
+        taxType: 'Federal'
       };
     } catch (err) {
       this.logger.error('Local calculation failed', err);

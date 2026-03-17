@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Bell, Search } from 'lucide-react';
+import { useRouter } from 'next/navigation'; // Added this
 
 // Interface for the Profile response
 interface UserProfile {
@@ -13,15 +14,16 @@ interface UserProfile {
 
 const TopBar = () => {
   const [user, setUser] = useState<UserProfile | null>(null);
+  const router = useRouter(); // Initialize router
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem('access_token'); // Adjust key if needed
+      const token = localStorage.getItem('access_token');
       
       if (!token) return;
 
       try {
-        const response = await fetch('http://localhost:3000/auth/profile', {
+        const response = await fetch('https://backend-production-c062.up.railway.app/auth/profile', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -41,12 +43,10 @@ const TopBar = () => {
     fetchProfile();
   }, []);
 
-  // Determine display name: FirstName LastName fallback to Username
   const displayName = user?.firstName && user?.lastName 
     ? `${user.firstName} ${user.lastName}` 
     : user?.username || 'User';
 
-  // Generate initials for the Avatar fallback
   const getInitials = () => {
     if (user?.firstName && user?.lastName) {
       return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
@@ -58,9 +58,9 @@ const TopBar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6">
+    <header className="sticky top-0 z-30 bg-white border-b border-gray-100 h-16 flex items-center justify-between px-6">
       {/* Search Bar */}
-      <div className="hidden md:flex items-center bg-gray-50 rounded-lg px-3 py-2 w-64 border border-gray-200">
+      <div className="hidden md:flex items-center bg-gray-50 rounded-lg px-3 py-2 w-64 border border-gray-100">
         <Search className="w-5 h-5 text-gray-400 mr-2" />
         <input 
           type="text" 
@@ -71,34 +71,40 @@ const TopBar = () => {
 
       {/* Right Section */}
       <div className="flex items-center space-x-4 ml-auto">
-        {/* Notification Bell */}
-        <button className="relative p-2 text-gray-500 hover:bg-gray-100 rounded-full">
+        {/* Notification Bell - Clickable Navigation */}
+        <button 
+          onClick={() => router.push('/notifications')}
+          className="relative p-2 text-gray-400 hover:text-[#0D23AD] hover:bg-blue-50 rounded-full transition-all duration-200"
+        >
           <Bell className="w-5 h-5" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+          {/* Notification Dot */}
+          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
         </button>
 
         {/* Divider */}
-        <div className="h-8 w-px bg-gray-200"></div>
+        <div className="h-6 w-px bg-gray-200"></div>
 
         {/* User Profile */}
         <div className="flex items-center space-x-3">
           <div className="text-right hidden sm:block">
-            <p className="text-sm font-semibold text-gray-800">{displayName}</p>
-            <p className="text-xs text-gray-500">{user?.email || 'Loading...'}</p>
+            <p className="text-sm font-bold text-gray-800 leading-none mb-1">{displayName}</p>
+            <p className="text-[10px] text-gray-400 font-medium">{user?.email || 'Loading...'}</p>
           </div>
           
           {/* Avatar */}
-          {user?.profilePicture ? (
-            <img 
-              src={user.profilePicture} 
-              alt="Profile" 
-              className="w-9 h-9 rounded-full object-cover border-2 border-gray-200"
-            />
-          ) : (
-            <div className="w-9 h-9 rounded-full bg-[#0D23AD] flex items-center justify-center text-white font-bold text-sm">
-              {getInitials()}
-            </div>
-          )}
+          <div className="cursor-pointer hover:opacity-80 transition-opacity">
+            {user?.profilePicture ? (
+              <img 
+                src={user.profilePicture} 
+                alt="Profile" 
+                className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-[#0D23AD] flex items-center justify-center text-white font-bold text-xs shadow-sm">
+                {getInitials()}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>

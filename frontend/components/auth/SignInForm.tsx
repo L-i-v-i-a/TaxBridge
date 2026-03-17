@@ -19,7 +19,7 @@ export default function SignInForm() {
 
     try {
       // Replace with your actual API URL if different
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://backend-production-c062.up.railway.app";
       
       const response = await fetch(`${apiUrl}/auth/login`, {
         method: "POST",
@@ -57,7 +57,7 @@ export default function SignInForm() {
 
   const handleGoogleLogin = () => {
     // Redirect to the backend endpoint which handles the Google OAuth flow
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://backend-production-c062.up.railway.app";
     window.location.href = `${apiUrl}/auth/google`;
   };
 

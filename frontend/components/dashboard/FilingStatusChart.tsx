@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
-import { ChartData } from '@/types/dashboard';
+import { ChartData } from '../../types/dashboard';
 
 interface Props {
   data: ChartData[];
