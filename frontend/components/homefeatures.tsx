@@ -1,7 +1,7 @@
 
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { FileText, Sparkles,
   Upload,
   MessageSquare,
@@ -70,7 +70,7 @@ export default function HomeFeatures() {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.6 }
+      transition: { duration: 0.6, ease: "easeOut" }
     },
     hover: {
       y: -5,
@@ -84,7 +84,7 @@ export default function HomeFeatures() {
     visible: {
       scale: 1,
       rotate: 0,
-      transition: { duration: 0.5 }
+      transition: { duration: 0.5, ease: "easeOut" }
     },
     hover: {
       rotate: 360,

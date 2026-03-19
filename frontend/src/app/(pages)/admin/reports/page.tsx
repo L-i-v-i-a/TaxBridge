@@ -11,9 +11,9 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell 
 } from 'recharts';
-import Topbar from '../../../../components/admin/AdminTopbar';
-import Sidebar from '../../../../components/admin/AdminSidebar';
-import StatCard from '../../../../components/admin/StatCard';
+import Topbar from '../../../../../components/admin/AdminTopbar';
+import Sidebar from '../../../../../components/admin/AdminSidebar';
+import StatCard from '../../../../../components/admin/StatCard';
 
 interface Activity {
   id: string;
@@ -176,7 +176,7 @@ export default function AdminDashboard() {
         <main className="flex-1 mt-16 overflow-y-auto p-6">
           <div className="max-w-7xl mx-auto">
             
-            <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard Overview</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-6">Report Overview</h1>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Dashboard from '../../../../components/settings/Dashboard';
-import PersonalInfo from '../../../../components/settings/PersonalInfo';
-import FilingHistory from '../../../../components/settings/FilingHistory';
-import Documents from '../../../../components/settings/Documents';
-import PasswordModal from '../../../../components/settings/PasswordModal';
-import { getProfile, getStats } from '../../../../utilis/api';
-import Topbar from '../../../../components/dashboard/Topbar';
-import Sidebar from '../../../../components/dashboard/Sidebar';
+import Dashboard from '../../../../../components/settings/Dashboard';
+import PersonalInfo from '../../../../../components/settings/PersonalInfo';
+import FilingHistory from '../../../../../components/settings/FilingHistory';
+import Documents from '../../../../../components/settings/Documents';
+import PasswordModal from '../../../../../components/settings/PasswordModal';
+import { getProfile, getStats } from '../../../../../utilis/api';
+import Topbar from '../../../../../components/admin/AdminTopbar';
+import Sidebar from '../../../../../components/admin/AdminSidebar';
 
 // 1. Define specific types to avoid 'any'
 interface UserProfile {

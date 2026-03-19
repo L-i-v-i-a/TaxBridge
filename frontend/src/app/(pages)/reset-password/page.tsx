@@ -41,8 +41,13 @@ function ResetPasswordContent() {
       alert("Password reset successful! Please login.");
       router.push("/signin");
       
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      // ✅ Fix: Type guard instead of 'any'
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
     }
@@ -57,7 +62,6 @@ function ResetPasswordContent() {
         </p>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {/* Email field is required by API but can be hidden if passed via URL */}
           <div>
             <label className="text-sm text-[#5B5B5B]">Email</label>
             <input
@@ -66,7 +70,7 @@ function ResetPasswordContent() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-2 h-12 w-full rounded-[10px] border border-[#E5E5E5] px-4 text-sm text-[#1C1C1C] focus:outline-none"
+              className="mt-2 h-12 w-full rounded-[10px] border border-[#E5E5E5] px-4 text-sm text-[#1C1C1C] focus:outline-none focus:border-[#0D23AD]"
             />
           </div>
 
@@ -79,7 +83,7 @@ function ResetPasswordContent() {
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
               required
-              className="mt-2 h-12 w-full rounded-[10px] border border-[#E5E5E5] px-4 text-sm text-[#1C1C1C] focus:outline-none"
+              className="mt-2 h-12 w-full rounded-[10px] border border-[#E5E5E5] px-4 text-sm text-[#1C1C1C] focus:outline-none focus:border-[#0D23AD]"
             />
           </div>
           
@@ -92,7 +96,7 @@ function ResetPasswordContent() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mt-2 h-12 w-full rounded-[10px] border border-[#E5E5E5] px-4 text-sm text-[#1C1C1C] focus:outline-none"
+              className="mt-2 h-12 w-full rounded-[10px] border border-[#E5E5E5] px-4 text-sm text-[#1C1C1C] focus:outline-none focus:border-[#0D23AD]"
             />
           </div>
 
@@ -101,7 +105,7 @@ function ResetPasswordContent() {
           <button
             type="submit"
             disabled={loading}
-            className="h-12 w-full rounded-[10px] bg-[#0D23AD] text-sm font-semibold text-white cursor-pointer disabled:opacity-50"
+            className="h-12 w-full rounded-[10px] bg-[#0D23AD] text-sm font-semibold text-white cursor-pointer disabled:opacity-50 transition-colors"
           >
             {loading ? "Resetting..." : "Reset password"}
           </button>
@@ -111,10 +115,9 @@ function ResetPasswordContent() {
   );
 }
 
-// Default export with Suspense boundary
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#E9EDFF]">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#E9EDFF]"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0D23AD]"></div></div>}>
       <ResetPasswordContent />
     </Suspense>
   );

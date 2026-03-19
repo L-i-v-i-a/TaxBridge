@@ -52,7 +52,7 @@ export default function AdminChatRoomPage() {
           setMessages(data.messages || []);
           setConversation(data);
         } else {
-          router.push('/admin/support');
+          router.push('/admin/communication');
         }
       } catch (err) {
         console.error(err);

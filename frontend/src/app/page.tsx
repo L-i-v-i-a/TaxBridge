@@ -29,7 +29,7 @@ export default function Home() {
     // Set a timer to navigate after 3 seconds
     const timer = setTimeout(() => {
       router.push('/home');
-    }, 3000);
+    }, 2000);
 
     // Cleanup the timer if the component unmounts early
     return () => clearTimeout(timer);
@@ -39,14 +39,14 @@ export default function Home() {
     <main
       className="flex min-h-screen  items-center justify-center"
       style={{
-        backgroundImage: "linear-gradient(rgba(13, 35, 173, 0.7), rgba(13, 35, 173, 0.7)), url('/hero.PNG')",
+        backgroundImage: "linear-gradient(rgba(13, 35, 173, 0.7), rgba(13, 35, 173, 0.7)), url('/hero.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
       <div className="text-center">
-        <h1 className={`text-6xl font-bold text-white transition-opacity duration-200 ${phase === 'fadeout' ? 'opacity-0' : 'opacity-100'}`}>
+        <h1 className={`text-4xl font-bold text-white transition-opacity duration-200 ${phase === 'fadeout' ? 'opacity-0' : 'opacity-100'}`}>
           {phase === 'full' ? (
             <>
               TAXBRIDGE

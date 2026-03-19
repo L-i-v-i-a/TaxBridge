@@ -28,11 +28,15 @@ export default function ForgotPasswordPage() {
         throw new Error(data.message || "Failed to send OTP.");
       }
 
-      // Redirect to reset password page with email in query params
       router.push(`/reset-password?email=${encodeURIComponent(email)}`);
       
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      // Use type guard to safely access .message
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
     } finally {
       setLoading(false);
     }

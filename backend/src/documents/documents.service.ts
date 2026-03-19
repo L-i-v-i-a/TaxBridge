@@ -1,12 +1,9 @@
 // src/documents/documents.service.ts
-import { Injectable, NotFoundException, ForbiddenException, Logger, InternalServerErrorException } from '@nestjs/common';
-
-import { join } from 'path';
-
-import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs';
-
+import { Injectable, NotFoundException, ForbiddenException, Logger, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { AiService } from '../ai/ai.service';
+import { join } from 'path';
+import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class DocumentsService {
@@ -21,10 +18,10 @@ export class DocumentsService {
     this.logger.log(`Processing document for user ${userId}: ${file.originalname}`);
 
     if (!file.buffer) {
-      throw new InternalServerErrorException('File buffer is missing');
+      throw new BadRequestException('File buffer is missing. Ensure memoryStorage is used.');
     }
 
-    // 1. Prepare Base64 for AI
+    // 1. Convert buffer to Base64 for Vision AI
     const base64 = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
 
     // 2. Call AI for OCR & Extraction
@@ -60,7 +57,7 @@ export class DocumentsService {
         name: file.originalname,
         url: `uploads/documents/${filename}`,
         type: file.mimetype,
-        size: file.size, // This now matches the schema
+        size: file.size,
         userId: userId,
         documentType: extractionResult.documentType,
         summary: extractionResult.summary,
@@ -91,7 +88,7 @@ export class DocumentsService {
   }
 
   async deleteDocument(id: string, userId: string) {
-    const doc = await this.getDocumentById(id, userId); // Checks existence & ownership
+    const doc = await this.getDocumentById(id, userId);
 
     // Delete file from disk
     const filePath = join(process.cwd(), doc.url);

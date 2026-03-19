@@ -33,6 +33,33 @@ export class FilingsService {
     private notifications: NotificationsService,
   ) {}
 
+  /**
+   * Helper method to validate if a user has access to filing features.
+   */
+  private async validateUserAccess(userId: string): Promise<void> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { 
+        isAdmin: true, 
+        subscriptions: { 
+          where: { status: 'active' },
+          select: { id: true } 
+        } 
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const isAdmin = user.isAdmin;
+    const hasActiveSubscription = user.subscriptions.length > 0;
+
+    if (!isAdmin && !hasActiveSubscription) {
+      throw new ForbiddenException('Access denied. You must be an admin or have an active subscription plan to create filings.');
+    }
+  }
+
   async createFiling(
     userId: string,
     dto: CreateFilingDto,
@@ -43,33 +70,32 @@ export class FilingsService {
       throw new UnauthorizedException('User ID is missing. Authentication failed.');
     }
 
-    // 1. Generate ID and Extract Year
+    // 1. Validate Access
+    await this.validateUserAccess(userId);
+
+    // 2. Generate ID and Extract Year
     const count = await this.prisma.taxFiling.count();
     const filingId = `F${new Date().getFullYear()}-${String(count + 1).padStart(3, '0')}`;
     
     const taxYear = dto.taxYear || new Date().getFullYear();
 
-    // 2. --- NEW: PROCESS DOCUMENTS & EXTRACT CONTEXT ---
+    // 3. PROCESS DOCUMENTS & EXTRACT CONTEXT
     let documentContext = '';
     const documentsData: any[] = [];
 
     if (files && files.length > 0) {
       for (const file of files) {
         try {
-          // Construct file path
           const filePath = join(process.cwd(), 'uploads', file.filename);
           
           if (existsSync(filePath)) {
-            // Read file and convert to Base64
             const fileBuffer = readFileSync(filePath);
             const base64 = `data:${file.mimetype};base64,${fileBuffer.toString('base64')}`;
             
             this.logger.log(`Analyzing document: ${file.originalname}`);
 
-            // Call Vision AI
             const extraction = await this.ai.extractFromDocument(base64);
 
-            // Prepare data for DB (Assumes schema has documentType and extractedData)
             documentsData.push({
               name: file.originalname,
               url: `uploads/${file.filename}`,
@@ -78,7 +104,6 @@ export class FilingsService {
               extractedData: extraction.extractedFields,
             });
 
-            // Append to context string for Calculation AI
             documentContext += `\n--- Document: ${file.originalname} (${extraction.documentType}) ---\n`;
             documentContext += `Summary: ${extraction.summary}\n`;
             documentContext += `Extracted Fields: ${JSON.stringify(extraction.extractedFields)}\n`;
@@ -88,12 +113,11 @@ export class FilingsService {
           }
         } catch (err) {
           this.logger.error(`Failed to process file ${file.originalname}`, err);
-          // Continue without this file's context rather than failing the whole request
         }
       }
     }
 
-    // 3. Prepare Base Filing Data
+    // 4. Prepare Base Filing Data
     const filingData: Prisma.TaxFilingCreateInput = {
       user: { connect: { id: userId } },
       filingId: filingId,
@@ -105,14 +129,11 @@ export class FilingsService {
       deductions: dto.deductions as any,
     };
 
-    // Map processed documents
     if (documentsData.length > 0) {
       filingData.documents = {
         create: documentsData,
       };
     }
-
-    // 4. --- LOGIC HANDLERS ---
 
     const aiDeductions: DeductionsDto = {
       ...dto.deductions,
@@ -121,7 +142,6 @@ export class FilingsService {
 
     // A. CALCULATION ONLY
     if (serviceType === ServiceType.CALCULATION_ONLY) {
-      // Pass documentContext to AI
       const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, aiDeductions, documentContext);
 
       if (aiResult.success) {
@@ -194,7 +214,6 @@ export class FilingsService {
 
     // C. FULL FILING
     if (serviceType === ServiceType.FULL_FILING) {
-      // Pass documentContext to AI
       const aiResult = await this.ai.calculateTax(taxYear, dto.incomeDetails, aiDeductions, documentContext);
 
       if (aiResult.success) {
@@ -246,13 +265,15 @@ export class FilingsService {
 
   // Admin Update Method
   async updateFiling(adminId: string, filingId: string, dto: UpdateFilingDto) {
-    const admin = await this.prisma.user.findUnique({ where: { id: adminId } });
+    const admin = await this.prisma.user.findUnique({ 
+      where: { id: adminId },
+      select: { isAdmin: true }
+    });
 
     if (!admin || !admin.isAdmin) {
       throw new ForbiddenException('Only administrators can update filings');
     }
 
-    // 1. Update the filing
     const filing = await this.prisma.taxFiling.update({
       where: { id: filingId },
       data: {
@@ -261,11 +282,9 @@ export class FilingsService {
       },
     });
 
-    // 2. Create Notification for the User
     if (dto.status) {
       let title = 'Filing Update';
       let message = `Your filing status changed to ${dto.status}.`;
-      
       let priority: NotificationPriority = NotificationPriority.LOW; 
 
       if (dto.status === FilingStatus.COMPLETED) {
@@ -347,7 +366,10 @@ export class FilingsService {
       throw new NotFoundException('Filing not found');
     }
 
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.user.findUnique({ 
+      where: { id: userId },
+      select: { isAdmin: true }
+    });
 
     if (!user) {
       throw new UnauthorizedException('User not found');

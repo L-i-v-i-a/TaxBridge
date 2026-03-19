@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 export default function TaxFiling() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,7 +10,8 @@ export default function TaxFiling() {
   const videoId = "qDXaWY4H0Es";
 
   // Animation variants
-  const containerVariants = {
+  // Explicitly typing this as Variants solves the "ease" type error
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -21,7 +22,7 @@ export default function TaxFiling() {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
@@ -86,7 +87,7 @@ export default function TaxFiling() {
             className="font-bold text-7xl lg:text-5xl leading-[1.1] tracking-tight"
             variants={itemVariants}
           >
-            Tax filing shouldn't <br className="hidden lg:block" />
+            Tax filing shouldn&apos;t <br className="hidden lg:block" />
             be stressful or <br className="hidden lg:block" />
             confusing
           </motion.h1>

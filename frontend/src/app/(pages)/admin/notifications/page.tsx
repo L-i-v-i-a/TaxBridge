@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Bell, Check, FileText, MessageSquare, AlertTriangle, Loader2 } from 'lucide-react';
-import Topbar from '../../../../components/dashboard/Topbar';
-import Sidebar from '../../../../components/dashboard/Sidebar';
+import Topbar from '../../../../../components/dashboard/Topbar';
+import Sidebar from '../../../../../components/dashboard/Sidebar';
 
 type NotificationType = 'FILING' | 'CHAT' | 'SYSTEM';
 type StatusFilter = 'ALL' | 'UNREAD' | 'READ';

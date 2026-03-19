@@ -1,5 +1,5 @@
 // src/admin/admin.controller.ts
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -32,5 +32,10 @@ export class AdminController {
   @ApiOperation({ summary: 'Get all users with subscription and filing info' })
   async getUsers() {
     return this.adminService.getAllUsers();
+  }
+
+  @Get('users/:id')
+  async getUserDetails(@Param('id') id: string) {
+    return this.adminService.getUserDetails(id);
   }
 }
