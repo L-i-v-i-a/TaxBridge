@@ -6,7 +6,7 @@ export default function AboutHeroSection() {
     <section className="mx-auto w-full max-w-5xl px-6 py-16 lg:px-12">
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         {/* Image */}
-        <div className="order-2 flex justify-center lg:order-1">
+        <div className="order-2 flex justify-center animate-slide-in-right lg:order-1" style={{ animationDelay: "100ms" }}>
           <div className="w-full max-w-[420px] overflow-hidden rounded-3xl bg-white p-3 shadow-md">
             <Image
               src="/about-hero.png"
@@ -19,7 +19,7 @@ export default function AboutHeroSection() {
         </div>
 
         {/* Text */}
-        <div className="order-1 mx-auto max-w-xl lg:order-2 lg:mx-0">
+        <div className="order-1 mx-auto max-w-xl animate-slide-in-left lg:order-2 lg:mx-0">
           <h1 className="text-3xl font-semibold text-[#0D23AD] sm:text-4xl">
             About Us
           </h1>

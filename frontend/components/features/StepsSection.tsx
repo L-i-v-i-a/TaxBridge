@@ -40,7 +40,7 @@ export default function StepsSection() {
       {/* Content */}
       <div className="mt-12 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         {/* Image */}
-        <div className="flex justify-center">
+        <div className="flex justify-center animate-slide-in-left">
           <div className="w-full max-w-[542px] overflow-hidden rounded-3xl bg-[#EDF2FF] p-3 transition-transform duration-500 hover:scale-[0.98]">
             <Image
               src="/feature-steps.png"
@@ -53,7 +53,7 @@ export default function StepsSection() {
         </div>
 
         {/* Steps */}
-        <div className="space-y-6 max-w-xl mx-auto lg:mx-0">
+        <div className="space-y-6 max-w-xl mx-auto animate-slide-in-right lg:mx-0" style={{ animationDelay: "100ms" }}>
           {steps.map((step, index) => (
             <div key={step.title} className="flex gap-4">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0D23AD] text-xs font-semibold text-white">

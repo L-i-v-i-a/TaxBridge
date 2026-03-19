@@ -3,13 +3,14 @@ import Link from "next/link";
 export default function SiteFooter() {
   return (
     <footer className="bg-[#0E1224] text-white/70">
-      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 md:grid-cols-[1.2fr_repeat(4,1fr)]">
+      <div className="mx-auto grid grid-cols-2 max-w-6xl gap-10 px-6 py-14 md:grid-cols-[1.2fr_repeat(4,1fr)]">
         <div className="animate-fade-up" style={{ animationDelay: "60ms" }}>
           <Link className="text-lg font-semibold text-white" href="/home">
             Taxbridge
           </Link>
           <p className="mt-3 text-xs text-white/60">
-            The TaxBridge is designed for simplicity and control. Every tool you need.
+            The TaxBridge is designed for simplicity and control. Every tool you
+            need.
           </p>
           <div className="mt-4 flex items-center gap-3 text-white/60">
             <a
@@ -79,7 +80,10 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div className="space-y-2 text-xs animate-fade-up" style={{ animationDelay: "120ms" }}>
+        <div
+          className="space-y-2 text-xs animate-fade-up"
+          style={{ animationDelay: "120ms" }}
+        >
           <p className="text-sm font-semibold text-white">Company</p>
           <Link className="block transition hover:text-white" href="/about">
             About us
@@ -94,7 +98,10 @@ export default function SiteFooter() {
             Press
           </Link>
         </div>
-        <div className="space-y-2 text-xs animate-fade-up" style={{ animationDelay: "180ms" }}>
+        <div
+          className="space-y-2 text-xs animate-fade-up"
+          style={{ animationDelay: "180ms" }}
+        >
           <p className="text-sm font-semibold text-white">Product</p>
           <Link className="block transition hover:text-white" href="/features">
             Features
@@ -112,7 +119,10 @@ export default function SiteFooter() {
             Support
           </Link>
         </div>
-        <div className="space-y-2 text-xs animate-fade-up" style={{ animationDelay: "240ms" }}>
+        <div
+          className="space-y-2 text-xs animate-fade-up"
+          style={{ animationDelay: "240ms" }}
+        >
           <p className="text-sm font-semibold text-white">Services</p>
           <Link className="block transition hover:text-white" href="/signin">
             AI Chatbot
@@ -127,15 +137,27 @@ export default function SiteFooter() {
             Live Chat
           </Link>
         </div>
-        <div className="space-y-2 text-xs animate-fade-up" style={{ animationDelay: "300ms" }}>
+        <div
+          className="space-y-2 text-xs animate-fade-up"
+          style={{ animationDelay: "300ms" }}
+        >
           <p className="text-sm font-semibold text-white">Legal</p>
-          <Link className="block transition hover:text-white" href="/privacy-policy">
+          <Link
+            className="block transition hover:text-white"
+            href="/privacy-policy"
+          >
             Privacy Policy
           </Link>
-          <Link className="block transition hover:text-white" href="/terms-and-conditions">
+          <Link
+            className="block transition hover:text-white"
+            href="/terms-and-conditions"
+          >
             Terms &amp; Conditions
           </Link>
-          <Link className="block transition hover:text-white" href="/return-policy">
+          <Link
+            className="block transition hover:text-white"
+            href="/return-policy"
+          >
             Return Policy
           </Link>
         </div>

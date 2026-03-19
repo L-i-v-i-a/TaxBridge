@@ -49,7 +49,7 @@ export default function MissionVisionSection() {
     <section className="mx-auto w-full max-w-5xl bg-white px-6 py-16 lg:px-12">
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         {/* Text Section */}
-        <div className="mx-auto max-w-xl lg:mx-0">
+        <div className="mx-auto max-w-xl animate-slide-in-left lg:mx-0">
           <h2 className="text-3xl font-bold text-[#0D23AD] sm:text-4xl">
             We Make Complex Tax Processes Easy For Everyone.
           </h2>
@@ -79,7 +79,7 @@ export default function MissionVisionSection() {
         </div>
 
         {/* Image Section */}
-        <div className="flex justify-center">
+        <div className="flex justify-center animate-slide-in-right" style={{ animationDelay: "100ms" }}>
           <Image
             src="/about-team.png"
             alt="TaxBridge team meeting"

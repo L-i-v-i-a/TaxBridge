@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { getDocuments, getFilings, uploadDocument, downloadDocument, deleteDocument } from '../../utilis/api';
+import { getDocuments, getFilings, uploadDocument, downloadFilingDocument, deleteDocument } from '../../utilis/api';
 import { Loader2, Upload, Download, Trash2, FileText, AlertCircle } from 'lucide-react';
 
 export default function Documents() {
@@ -43,7 +43,7 @@ export default function Documents() {
 
   const handleDownload = async (doc: any) => {
     try {
-      const blob = await downloadDocument(doc.id);
+      const blob = await downloadFilingDocument(doc.id);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
