@@ -25,7 +25,7 @@ const steps = [
 
 export default function StepsSection() {
   return (
-    <section className="mx-auto w-full max-w-4xl px-6 lg:px-12 py-16">
+    <section className="mx-auto w-full max-w-4xl px-6 lg:px-12 py-16 animate-fade-up">
       {/* Section Header */}
       <div className="text-center max-w-2xl mx-auto">
         <h2 className="text-3xl font-bold text-[#0B0F1F] sm:text-4xl">

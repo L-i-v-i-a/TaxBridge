@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function FeatureHighlightSection() {
   return (
-    <section className="relative overflow-hidden bg-[#0D23AD] text-white">
+    <section className="relative overflow-hidden bg-[#0D23AD] text-white animate-fade-up">
       <div className="absolute inset-0 bg-[url('/image.png')] bg-cover bg-center opacity-10" />
 
       <div className="relative mx-auto w-full max-w-7xl px-6 py-16 lg:px-12">

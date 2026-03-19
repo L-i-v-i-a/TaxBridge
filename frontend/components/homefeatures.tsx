@@ -70,7 +70,7 @@ export default function HomeFeatures() {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: { duration: 0.6 }
     },
     hover: {
       y: -5,
@@ -84,7 +84,7 @@ export default function HomeFeatures() {
     visible: {
       scale: 1,
       rotate: 0,
-      transition: { duration: 0.5, ease: "easeOut" }
+      transition: { duration: 0.5 }
     },
     hover: {
       rotate: 360,

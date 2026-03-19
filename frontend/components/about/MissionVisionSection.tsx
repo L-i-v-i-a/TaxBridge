@@ -46,7 +46,7 @@ const highlights = [
 
 export default function MissionVisionSection() {
   return (
-    <section className="mx-auto w-full max-w-5xl bg-white px-6 py-16 lg:px-12">
+    <section className="mx-auto w-full max-w-5xl bg-white px-6 py-16 lg:px-12 animate-fade-up">
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         {/* Text Section */}
         <div className="mx-auto max-w-xl animate-slide-in-left lg:mx-0">
