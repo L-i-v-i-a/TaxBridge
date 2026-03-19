@@ -1,46 +1,47 @@
-
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { FileText, Sparkles,
+import {
+  FileText,
+  Sparkles,
   Upload,
   MessageSquare,
   PlayCircle,
-  Files  } from 'lucide-react';
-
+  Files,
+} from "lucide-react";
 
 export default function HomeFeatures() {
   const features = [
     {
       title: "Smart Filing Assistant",
       desc: "Personalized guidance based on your job type, deductions, and previous returns.",
-      icon: <FileText className="w-6 h-6 fill-current" />
+      icon: <FileText className="w-6 h-6 fill-current" />,
     },
     {
       title: "AI Tax Analyzer",
       desc: "Detects missing data, errors, or unclaimed credits instantly.",
-      icon: <Sparkles className="w-6 h-6 fill-current" />
+      icon: <Sparkles className="w-6 h-6 fill-current" />,
     },
     {
       title: "Document Upload & OCR",
       desc: "Scan or upload tax documents — the system automatically extracts relevant info.",
-      icon: <Upload className="w-6 h-6 stroke-[3px]" />
+      icon: <Upload className="w-6 h-6 stroke-[3px]" />,
     },
     {
       title: "Chat with Experts",
       desc: "Real humans available via live chat or video call 24/7.",
-      icon: <MessageSquare className="w-6 h-6 fill-current" />
+      icon: <MessageSquare className="w-6 h-6 fill-current" />,
     },
     {
       title: "Progress Tracker",
-      desc: "Visual timeline showing your filing status from \"Preparing\" to \"Refund Received.\"",
-      icon: <PlayCircle className="w-6 h-6 fill-current" />
+      desc: 'Visual timeline showing your filing status from "Preparing" to "Refund Received."',
+      icon: <PlayCircle className="w-6 h-6 fill-current" />,
     },
     {
       title: "Multi-Year Filing",
       desc: "File for multiple years at once or fix past returns easily.",
-      icon: <Files className="w-6 h-6 fill-current" />
-    }
+      icon: <Files className="w-6 h-6 fill-current" />,
+    },
   ];
 
   // Animation variants
@@ -60,7 +61,7 @@ export default function HomeFeatures() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6 }
+      transition: { duration: 0.6 },
     },
   };
 
@@ -70,12 +71,12 @@ export default function HomeFeatures() {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.6 }
+      transition: { duration: 0.6 },
     },
     hover: {
       y: -5,
       scale: 1.02,
-      transition: { duration: 0.3 }
+      transition: { duration: 0.3 },
     },
   };
 
@@ -84,11 +85,11 @@ export default function HomeFeatures() {
     visible: {
       scale: 1,
       rotate: 0,
-      transition: { duration: 0.5 }
+      transition: { duration: 0.5 },
     },
     hover: {
       rotate: 360,
-      transition: { duration: 0.6 }
+      transition: { duration: 0.6 },
     },
   };
 
@@ -102,10 +103,7 @@ export default function HomeFeatures() {
     >
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <motion.div
-          className="text-center mb-16"
-          variants={headerVariants}
-        >
+        <motion.div className="text-center mb-16" variants={headerVariants}>
           <motion.h2
             className="text-4xl font-bold text-[#0D153B] mb-4"
             variants={headerVariants}
@@ -116,7 +114,8 @@ export default function HomeFeatures() {
             className="text-gray-600 max-w-2xl mx-auto"
             variants={headerVariants}
           >
-            Get to know some of our Features at Taxbridge which provide the best service for our Users.
+            Get to know some of our Features at Taxbridge which provide the best
+            service for our Users.
           </motion.p>
         </motion.div>
 
@@ -143,9 +142,7 @@ export default function HomeFeatures() {
               </motion.div>
 
               {/* Text Content */}
-              <motion.div
-                variants={cardVariants}
-              >
+              <motion.div variants={cardVariants}>
                 <motion.h3
                   className="text-xl font-bold text-[#0D153B] mb-2"
                   variants={cardVariants}

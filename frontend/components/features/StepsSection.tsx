@@ -53,7 +53,10 @@ export default function StepsSection() {
         </div>
 
         {/* Steps */}
-        <div className="space-y-6 max-w-xl mx-auto animate-slide-in-right lg:mx-0" style={{ animationDelay: "100ms" }}>
+        <div
+          className="space-y-6 max-w-xl mx-auto animate-slide-in-right lg:mx-0"
+          style={{ animationDelay: "100ms" }}
+        >
           {steps.map((step, index) => (
             <div key={step.title} className="flex gap-4">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0D23AD] text-xs font-semibold text-white">

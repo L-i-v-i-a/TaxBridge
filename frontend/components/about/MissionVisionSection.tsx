@@ -79,7 +79,10 @@ export default function MissionVisionSection() {
         </div>
 
         {/* Image Section */}
-        <div className="flex justify-center animate-slide-in-right" style={{ animationDelay: "100ms" }}>
+        <div
+          className="flex justify-center animate-slide-in-right"
+          style={{ animationDelay: "100ms" }}
+        >
           <Image
             src="/about-team.png"
             alt="TaxBridge team meeting"
