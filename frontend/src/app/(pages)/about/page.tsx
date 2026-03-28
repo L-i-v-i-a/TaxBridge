@@ -1,11 +1,11 @@
 import Nav from "../../../../components/nav";
-import AboutHeroSection from "../../../../components/about/AboutHeroSection";
-import MissionVisionSection from "../../../../components/about/MissionVisionSection";
-import NewsletterSection from "../../../../components/NewsletterSection";
-import ReadyToStartSection from "../../../../components/ReadyToStartSection";
-import SiteFooter from "../../../../components/SiteFooter";
-import PricingBottomSection from "../../../../components/PricingBottomSection";
-import MarketingPageShell from "../../../../components/marketing/MarketingPageShell";
+import AboutHeroSection from "@/components/about/AboutHeroSection";
+import MissionVisionSection from "@/components/about/MissionVisionSection";
+import NewsletterSection from "@/components/NewsletterSection";
+import ReadyToStartSection from "@/components/ReadyToStartSection";
+import SiteFooter from "@/components/SiteFooter";
+import PricingBottomSection from "@/components/PricingBottomSection";
+import MarketingPageShell from "@/components/marketing/MarketingPageShell";
 
 const faqs = [
   {
