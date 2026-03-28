@@ -1,7 +1,14 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { FileText, Sparkles, Upload, MessageSquare, PlayCircle, Files } from 'lucide-react';
+import {
+  FileText,
+  Sparkles,
+  Upload,
+  MessageSquare,
+  PlayCircle,
+  Files,
+} from "lucide-react";
 
 export default function HomeFeatures() {
   const features = [
@@ -27,7 +34,7 @@ export default function HomeFeatures() {
     },
     {
       title: "Progress Tracker",
-      desc: "Visual timeline showing your filing status from \"Preparing\" to \"Refund Received.\"",
+      desc: 'Visual timeline showing your filing status from "Preparing" to "Refund Received."',
       icon: <PlayCircle className="w-6 h-6 fill-current" />,
     },
     {
@@ -37,8 +44,8 @@ export default function HomeFeatures() {
     },
   ];
 
-  // Animation variants – Explicitly typed as Variants
-  const containerVariants: Variants = {
+  // Animation variants
+  const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -49,28 +56,22 @@ export default function HomeFeatures() {
     },
   };
 
-  const headerVariants: Variants = {
+  const headerVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "circOut",
-      },
+      transition: { duration: 0.6 },
     },
   };
 
-  const cardVariants: Variants = {
+  const cardVariants = {
     hidden: { opacity: 0, y: 40, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: "circOut",
-      },
+      transition: { duration: 0.6 },
     },
     hover: {
       y: -5,
@@ -79,15 +80,12 @@ export default function HomeFeatures() {
     },
   };
 
-  const iconVariants: Variants = {
+  const iconVariants = {
     hidden: { scale: 0, rotate: -180 },
     visible: {
       scale: 1,
       rotate: 0,
-      transition: {
-        duration: 0.5,
-        ease: "circOut",
-      },
+      transition: { duration: 0.5 },
     },
     hover: {
       rotate: 360,
@@ -116,7 +114,8 @@ export default function HomeFeatures() {
             className="text-gray-600 max-w-2xl mx-auto"
             variants={headerVariants}
           >
-            Get to know some of our Features at Taxbridge which provide the best service for our Users.
+            Get to know some of our Features at Taxbridge which provide the best
+            service for our Users.
           </motion.p>
         </motion.div>
 
@@ -143,14 +142,20 @@ export default function HomeFeatures() {
               </motion.div>
 
               {/* Text Content */}
-              <div>
-                <h3 className="text-xl font-bold text-[#0D153B] mb-2">
+              <motion.div variants={cardVariants}>
+                <motion.h3
+                  className="text-xl font-bold text-[#0D153B] mb-2"
+                  variants={cardVariants}
+                >
                   {item.title}
-                </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
+                </motion.h3>
+                <motion.p
+                  className="text-gray-500 text-sm leading-relaxed"
+                  variants={cardVariants}
+                >
                   {item.desc}
-                </p>
-              </div>
+                </motion.p>
+              </motion.div>
             </motion.div>
           ))}
         </motion.div>

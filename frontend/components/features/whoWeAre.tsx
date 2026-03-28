@@ -27,7 +27,7 @@ const containerVariants: Variants = {
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55 } },
 };
 
 const WhoWeAre: React.FC = () => {
@@ -42,7 +42,7 @@ const WhoWeAre: React.FC = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* Left Side: Image */}
-        <motion.div variants={itemVariants} className="relative h-[260px] w-full overflow-hidden rounded-3xl shadow-xl sm:h-[320px] lg:h-[400px]">
+        <motion.div variants={itemVariants} className="relative h-[260px] w-full overflow-hidden rounded-3xl shadow-xl sm:h-[320px] lg:h-[400px] animate-slide-in-left">
           <Image
             src="/cpa.png" // Replace with your actual image path
             alt="TaxBridge team working"
@@ -53,7 +53,7 @@ const WhoWeAre: React.FC = () => {
         </motion.div>
 
         {/* Right Side: Content */}
-        <motion.div variants={itemVariants} className="flex flex-col space-y-6">
+        <motion.div variants={itemVariants} className="flex flex-col space-y-6 animate-slide-in-right" style={{ animationDelay: "100ms" }}>
           <h2 className="text-4xl font-bold text-gray-900">Who We Are</h2>
           
           <p className="text-lg text-gray-700 leading-relaxed">

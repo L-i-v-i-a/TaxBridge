@@ -58,18 +58,17 @@ export default function KeyFeaturesSection() {
     visible: {
       opacity: 1,
       y: 0,
-      // Fix: Use 'as const' or explicit typing to satisfy Easing type
-      transition: { duration: 0.6, ease: "easeOut" } as const, 
+      transition: { duration: 0.6, ease: "easeOut" },
     },
   };
 
-  const cardVariants: Variants = {
+  const cardVariants = {
     hidden: { opacity: 0, y: 40, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.6, ease: "easeOut" } as const,
+      transition: { duration: 0.6 },
     },
     hover: {
       y: -6,
